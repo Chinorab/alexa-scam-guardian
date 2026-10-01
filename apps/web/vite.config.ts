@@ -11,6 +11,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         site: "src/styles/site.css",
+        echo: "echo/src/main.tsx",
       },
       output: {
         entryFileNames: "[name].js",

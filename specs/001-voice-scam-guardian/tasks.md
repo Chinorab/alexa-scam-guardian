@@ -86,13 +86,13 @@ before this phase is done.
 - [X] T031 Create Hono app with strict CSP, base layout (20 px body, high contrast tokens, light and dark), skip link and footer privacy link in apps/web/src/app.tsx and apps/web/src/views/layout.tsx
 - [X] T032 [P] Write the privacy page (what is stored, why, retention, deletion, browser speech note, no call audio) in apps/web/src/views/privacy.tsx
 - [X] T033 [P] Add favicon (SVG shield icon and ICO fallback) in apps/web/public/favicon.svg and apps/web/public/favicon.ico
-- [ ] T034 Implement MCP client wrapper that lists tools and resources and calls them with the household token in apps/web/src/agent/mcp-client.ts
-- [ ] T035 Implement Bedrock Converse loop with MCP tools, max 3 tool rounds, system prompt from the Conversation Design rules in apps/web/src/agent/bedrock-agent.ts
-- [ ] T036 Implement simplified mode engine (state machine over check states, uses matcher and phrase catalog) in packages/core/src/dialogue/engine.ts
-- [ ] T037 Implement turn orchestrator: redact input, run full mode with 3 s deadline, fall back to simplified mode, pass every line through the guard in apps/web/src/agent/turn.ts
-- [ ] T038 Implement POST /api/device/start (demo household per visitor, 24 h TTL) and POST /api/converse in apps/web/src/routes/api.ts
-- [ ] T039 Create minimal Echo client (typed input, large captions, answer text) to exercise the API in apps/web/echo/src/main.tsx
-- [ ] T040 Add local web entry on port 8787 serving pages, API and built Echo assets in apps/web/src/local.ts
+- [X] T034 Implement MCP client wrapper that lists tools and resources and calls them with the household token in apps/web/src/agent/mcp-client.ts
+- [X] T035 Implement Bedrock Converse loop with MCP tools, max 3 tool rounds, system prompt from the Conversation Design rules in apps/web/src/agent/bedrock-agent.ts
+- [X] T036 Implement simplified mode engine (state machine over check states, uses matcher and phrase catalog) in packages/core/src/dialogue/engine.ts
+- [X] T037 Implement turn orchestrator: redact input, run full mode with 3 s deadline, fall back to simplified mode, pass every line through the guard in apps/web/src/agent/turn.ts
+- [X] T038 Implement POST /api/device/start (demo household per visitor, 24 h TTL) and POST /api/converse in apps/web/src/routes/api.ts
+- [X] T039 Create minimal Echo client (typed input, large captions, answer text) to exercise the API in apps/web/echo/src/main.tsx
+- [X] T040 Add local web entry on port 8787 serving pages, API and built Echo assets in apps/web/src/local.ts
 
 **Checkpoint**: typed turn goes browser, web, Bedrock or simplified mode, MCP server and back.
 

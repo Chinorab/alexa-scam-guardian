@@ -7,10 +7,15 @@ import { createLogger } from "@asg/core/log/logger";
 import { MemoryStore } from "@asg/core/ports/memory-store";
 import { Outbox } from "@asg/core/ports/outbox";
 import { systemClock } from "@asg/core/ports/index";
+import { bedrockConverse } from "./agent/bedrock-agent";
 import { createWebApp } from "./app";
+import { MemoryDeviceSessions } from "./device/sessions";
 
 const port = Number(process.env.WEB_PORT ?? 8787);
 const outbox = new Outbox();
+const webUrl = process.env.WEB_URL ?? `http://localhost:${port}`;
+const mode = process.env.AGENT_MODE === "full" ? "full" : "simplified";
+const region = process.env.AWS_REGION ?? "us-east-1";
 
 const app = createWebApp({
   deps: {
@@ -20,13 +25,20 @@ const app = createWebApp({
     clock: systemClock,
     newId: () => newId("check"),
     logger: createLogger({ strict: true }),
-    webUrl: process.env.WEB_URL ?? `http://localhost:${port}`,
+    webUrl,
     tokenSecret: process.env.HOUSEHOLD_TOKEN_SECRET || randomBytes(32).toString("base64url"),
   },
+  sessions: new MemoryDeviceSessions(),
+  agent: {
+    mode,
+    modelId: process.env.BEDROCK_MODEL_ID ?? "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    ...(mode === "full" ? { converse: bedrockConverse(region) } : {}),
+  },
+  mcpUrl: process.env.MCP_URL ?? `${webUrl}/mcp`,
   mountMcp: true,
   staticFiles: [serveStatic({ root: "./dist" }), serveStatic({ root: "./public" })],
 });
 
 serve({ fetch: app.fetch, port }, () => {
-  console.warn(`Web app on http://localhost:${port} (MCP at /mcp)`);
+  console.warn(`Web app on http://localhost:${port} (MCP at /mcp, agent mode ${mode})`);
 });

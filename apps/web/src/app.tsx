@@ -1,11 +1,18 @@
 import { Hono, type MiddlewareHandler } from "hono";
 import { secureHeaders } from "hono/secure-headers";
 import { createMcpApp, type Deps } from "@asg/mcp-server";
+import type { DeviceSessions } from "./device/sessions";
+import { apiRoutes, type ApiContext } from "./routes/api";
+import { EchoPage } from "./views/echo";
 import { HomePage } from "./views/home";
 import { PrivacyPage } from "./views/privacy";
 
 export interface WebAppOptions {
   deps: Deps;
+  sessions: DeviceSessions;
+  agent: ApiContext["agent"];
+  mcpUrl: string;
+  mcpFetch?: typeof fetch;
   /** Serves /assets, /favicon.* from disk (local) or the bundle (Lambda). */
   staticFiles?: MiddlewareHandler[];
   /** Local runs mount the MCP server on the same origin at /mcp. */
@@ -43,8 +50,18 @@ export function createWebApp(options: WebAppOptions) {
   app.use("*", csp);
   for (const handler of options.staticFiles ?? []) app.use("*", handler);
 
+  const api: ApiContext = {
+    deps: options.deps,
+    sessions: options.sessions,
+    agent: options.agent,
+    mcpUrl: options.mcpUrl,
+  };
+  if (options.mcpFetch) api.mcpFetch = options.mcpFetch;
+  app.route("/api", apiRoutes(api));
+
   app.get("/", (c) => c.html(<HomePage />));
   app.get("/privacy", (c) => c.html(<PrivacyPage />));
+  app.get("/echo", (c) => c.html(<EchoPage />));
 
   return app;
 }
