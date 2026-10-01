@@ -1,0 +1,10 @@
+{
+  "name": "@asg/tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Contract, red team and end to end suites",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

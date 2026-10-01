@@ -1,0 +1,10 @@
+{
+  "name": "@asg/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Self-hosted MCP server (Streamable HTTP) for the voice scam guardian",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

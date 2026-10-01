@@ -1,0 +1,10 @@
+{
+  "name": "@asg/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Safety core: redaction, output guard, matcher, confirmation parser, simplified mode",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

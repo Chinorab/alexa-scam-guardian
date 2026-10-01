@@ -1,0 +1,10 @@
+{
+  "name": "@asg/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Simulated Echo Show, family page and reply page",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

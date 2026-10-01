@@ -1,0 +1,10 @@
+{
+  "name": "@asg/scam-patterns",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Scam patterns from official FTC and FBI alerts, each with its source",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

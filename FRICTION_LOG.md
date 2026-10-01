@@ -42,3 +42,18 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Low (about 10 minutes, no blocker).
 - **Workaround:** Trusted the npm `latest` dist tag and chose v2.
 - **Suggestion:** Add a release status badge and "latest stable" line to the top of the v2 docs, and an update note on the beta blog post pointing to the GA release.
+
+---
+
+## #3 — TypeScript `latest` (7.0) is not supported by typescript-eslint
+
+- **Date:** 2026-10-01
+- **Task attempted:** Install the TypeScript toolchain for the monorepo (task T001 to T003).
+- **Steps:**
+  1. `npm view typescript version` returned 7.0.2 (the `latest` tag).
+  2. `npm view typescript-eslint peerDependencies` showed `typescript >=4.8.4 <6.1.0`.
+- **Expected:** The `latest` compiler works with the most used TypeScript lint stack.
+- **Actual:** Installing `latest` would break linting with a peer dependency conflict.
+- **Severity:** Low (caught before install, about 5 minutes).
+- **Workaround:** Pinned `typescript@6.0.3`, the newest version inside the supported range.
+- **Suggestion:** typescript-eslint could print the supported range and the reason in its install warning; TypeScript release notes could link the lint compatibility status.

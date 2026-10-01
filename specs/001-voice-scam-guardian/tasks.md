@@ -34,14 +34,14 @@ entry the moment a friction happens. PROGRESS.md is updated at the end of each t
 
 **Purpose**: Monorepo, tooling, configuration
 
-- [ ] T001 Create pnpm workspace with `packages/scam-patterns`, `packages/core`, `apps/mcp-server`, `apps/web`, `infra`, `tests` in pnpm-workspace.yaml and root package.json (Node 24 engines, scripts dev, test, test:e2e, test:a11y, test:redteam:live, deploy, token:demo)
-- [ ] T002 [P] Add shared strict TypeScript config in tsconfig.base.json and per package tsconfig.json files
-- [ ] T003 [P] Configure ESLint and Prettier in eslint.config.js and .prettierrc
-- [ ] T004 [P] Configure Vitest workspace in vitest.workspace.ts
-- [ ] T005 [P] Create .env.example documenting every variable (AGENT_MODE, BEDROCK_MODEL_ID, AWS_REGION, TABLE_NAME, SES_FROM, HOUSEHOLD_TOKEN_SECRET, SESSION_SECRET, MCP_URL, WEB_URL, POLLY_VOICE) and .gitignore excluding .env, dist, cdk.out
-- [ ] T006 [P] Write copy lint script that fails on emojis, en or em dashes, spaced hyphens and the standalone word "AI" in user facing strings in scripts/lint-copy.ts
-- [ ] T007 [P] Add GitHub Actions workflow running lint, lint-copy, typecheck and pnpm test on every push and pull request in .github/workflows/ci.yml
-- [ ] T008 Add README skeleton (what it is, local run, architecture placeholder, links to spec) in README.md
+- [X] T001 Create pnpm workspace with `packages/scam-patterns`, `packages/core`, `apps/mcp-server`, `apps/web`, `infra`, `tests` in pnpm-workspace.yaml and root package.json (Node 24 engines, scripts dev, test, test:e2e, test:a11y, test:redteam:live, deploy, token:demo)
+- [X] T002 [P] Add shared strict TypeScript config in tsconfig.base.json and per package tsconfig.json files
+- [X] T003 [P] Configure ESLint and Prettier in eslint.config.js and .prettierrc
+- [X] T004 [P] Configure Vitest projects (unit, contract) in vitest.config.ts
+- [X] T005 [P] Create .env.example documenting every variable (AGENT_MODE, BEDROCK_MODEL_ID, AWS_REGION, TABLE_NAME, SES_FROM, HOUSEHOLD_TOKEN_SECRET, SESSION_SECRET, MCP_URL, WEB_URL, POLLY_VOICE) and .gitignore excluding .env, dist, cdk.out
+- [X] T006 [P] Write copy lint script that fails on emojis, en or em dashes, spaced hyphens and the standalone word "AI" in user facing strings in scripts/lint-copy.ts
+- [X] T007 [P] Add GitHub Actions workflow running lint, lint-copy, typecheck and pnpm test on every push and pull request in .github/workflows/ci.yml
+- [X] T008 Add README skeleton (what it is, local run, architecture placeholder, links to spec) in README.md
 - [ ] T009 Create the public GitHub repository, add the MIT LICENSE, push, and protect main so the CI checks (lint, lint-copy, typecheck, test including red team) are required before merge, in LICENSE and repository settings
 
 ---
