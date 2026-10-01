@@ -82,10 +82,10 @@ before this phase is done.
 
 ### Web and agent shell
 
-- [ ] T030 Load the design skills and set the design direction for the Echo Show and the family page (tokens, type scale, icon set, no pills, no gradients) before any page is built in apps/web/src/styles/tokens.css
-- [ ] T031 Create Hono app with strict CSP, base layout (20 px body, high contrast tokens, light and dark), skip link and footer privacy link in apps/web/src/app.tsx and apps/web/src/views/layout.tsx
-- [ ] T032 [P] Write the privacy page (what is stored, why, retention, deletion, browser speech note, no call audio) in apps/web/src/views/privacy.tsx
-- [ ] T033 [P] Add favicon (SVG shield icon and ICO fallback) in apps/web/public/favicon.svg and apps/web/public/favicon.ico
+- [X] T030 Load the design skills and set the design direction for the Echo Show and the family page (tokens, type scale, icon set, no pills, no gradients) before any page is built in apps/web/src/styles/tokens.css
+- [X] T031 Create Hono app with strict CSP, base layout (20 px body, high contrast tokens, light and dark), skip link and footer privacy link in apps/web/src/app.tsx and apps/web/src/views/layout.tsx
+- [X] T032 [P] Write the privacy page (what is stored, why, retention, deletion, browser speech note, no call audio) in apps/web/src/views/privacy.tsx
+- [X] T033 [P] Add favicon (SVG shield icon and ICO fallback) in apps/web/public/favicon.svg and apps/web/public/favicon.ico
 - [ ] T034 Implement MCP client wrapper that lists tools and resources and calls them with the household token in apps/web/src/agent/mcp-client.ts
 - [ ] T035 Implement Bedrock Converse loop with MCP tools, max 3 tool rounds, system prompt from the Conversation Design rules in apps/web/src/agent/bedrock-agent.ts
 - [ ] T036 Implement simplified mode engine (state machine over check states, uses matcher and phrase catalog) in packages/core/src/dialogue/engine.ts

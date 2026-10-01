@@ -7,7 +7,7 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-Phase 2 in progress: T010-T029 done (199 tests; MCP server shell answers official v2 client over Streamable HTTP, 401 + RFC 9728 metadata). NEXT: T030 design direction (load design skills first), then T031-T033 web shell, T034-T040 agent. Owner answers pending: AWS+Bedrock, SES domain.
+Phase 2 in progress: T010-T033 done. Design direction = US road signs (owner choice, docs/design/direction.md), tokens.css, site.css (Vite), layout, privacy, favicon; local web on 8787 mounts MCP at /mcp (preview config "scam-guardian-web" in D:/claude/.claude/launch.json). NEXT: T034 MCP client wrapper, T035 Bedrock loop, T036 simplified engine, T037 turn orchestrator, T038 api, T039 minimal Echo client, T040. Product name shown in UI: "Scam Guardian" (working, to confirm). Owner answers pending: AWS+Bedrock, SES domain.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
