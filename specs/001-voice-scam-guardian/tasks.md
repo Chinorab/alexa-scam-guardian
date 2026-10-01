@@ -42,7 +42,7 @@ entry the moment a friction happens. PROGRESS.md is updated at the end of each t
 - [X] T006 [P] Write copy lint script that fails on emojis, en or em dashes, spaced hyphens and the standalone word "AI" in user facing strings in scripts/lint-copy.ts
 - [X] T007 [P] Add GitHub Actions workflow running lint, lint-copy, typecheck and pnpm test on every push and pull request in .github/workflows/ci.yml
 - [X] T008 Add README skeleton (what it is, local run, architecture placeholder, links to spec) in README.md
-- [ ] T009 Create the public GitHub repository, add the MIT LICENSE, push, and protect main so the CI checks (lint, lint-copy, typecheck, test including red team) are required before merge, in LICENSE and repository settings
+- [X] T009 Create the public GitHub repository, add the MIT LICENSE, push, and protect main so the CI checks (lint, lint-copy, typecheck, test including red team) are required before merge, in LICENSE and repository settings
 
 ---
 
@@ -53,19 +53,19 @@ before this phase is done.
 
 ### Safety tests first
 
-- [ ] T010 [P] Write redaction tests (spoken digits, card, SSN, routing, account, dollar amounts kept, caller number context) in packages/core/src/redact/redact.test.ts
-- [ ] T011 [P] Write output guard tests (approval phrases, digit runs, password echo, "AI", dashes, over three sentences, two questions) in packages/core/src/guard/guard.test.ts
-- [ ] T012 [P] Write confirmation parser tests (yes variants, no, stop, cancel, silence, unclear, "just Michael" subset) in packages/core/src/confirm/confirm.test.ts
+- [X] T010 [P] Write redaction tests (spoken digits, card, SSN, routing, account, dollar amounts kept, caller number context) in packages/core/src/redact/redact.test.ts
+- [X] T011 [P] Write output guard tests (approval phrases, digit runs, password echo, "AI", dashes, over three sentences, two questions) in packages/core/src/guard/guard.test.ts
+- [X] T012 [P] Write confirmation parser tests (yes variants, no, stop, cancel, silence, unclear, "just Michael" subset) in packages/core/src/confirm/confirm.test.ts
 
 ### Core and dataset
 
-- [ ] T013 [P] Define ports (Store, Mailer, TextChannel, Clock, IdGen) and shared domain types from data-model.md in packages/core/src/ports/index.ts
-- [ ] T014 [P] Implement in memory Store with TTL handling in packages/core/src/ports/memory-store.ts
-- [ ] T015 [P] Implement outbox Mailer and demo phone TextChannel (in memory) in packages/core/src/ports/outbox.ts
-- [ ] T016 [P] Implement a structured logger that only accepts typed, already redacted fields and rejects free text, with tests, in packages/core/src/log/logger.ts and packages/core/src/log/logger.test.ts
-- [ ] T017 Implement spoken digit normalization and redaction (research R6) in packages/core/src/redact/redact.ts
-- [ ] T018 Implement output guard with per state safe replacement lines in packages/core/src/guard/guard.ts
-- [ ] T019 Implement confirmation parser in packages/core/src/confirm/confirm.ts
+- [X] T013 [P] Define ports (Store, Mailer, TextChannel, Clock, IdGen) and shared domain types from data-model.md in packages/core/src/ports/index.ts
+- [X] T014 [P] Implement in memory Store with TTL handling in packages/core/src/ports/memory-store.ts
+- [X] T015 [P] Implement outbox Mailer and demo phone TextChannel (in memory) in packages/core/src/ports/outbox.ts
+- [X] T016 [P] Implement a structured logger that only accepts typed, already redacted fields and rejects free text, with tests, in packages/core/src/log/logger.ts and packages/core/src/log/logger.test.ts
+- [X] T017 Implement spoken digit normalization and redaction (research R6) in packages/core/src/redact/redact.ts
+- [X] T018 Implement output guard with per state safe replacement lines in packages/core/src/guard/guard.ts
+- [X] T019 Implement confirmation parser in packages/core/src/confirm/confirm.ts
 - [ ] T020 [P] Write the scam pattern JSON Schema (pattern, warning sign, source, resource) in packages/scam-patterns/schema/pattern.schema.json
 - [ ] T021 Research and write at least 8 patterns from FTC and FBI or IC3 pages (family emergency, government impersonation, tech support, bank impersonation, romance, prize, cash courier, crypto investment) with source URL and retrieval date, plus DOJ hotline resource, in packages/scam-patterns/data/patterns.json
 - [ ] T022 [P] Write source check script failing on missing source, non official publisher or unreachable URL in packages/scam-patterns/scripts/check-sources.ts

@@ -11,7 +11,9 @@ import { extname, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
 
-export type Rule = "emoji" | "dash" | "spaced-hyphen" | "ai-word";
+import { checkCopy, type CopyRule } from "../packages/core/src/copy/rules";
+
+export type Rule = CopyRule;
 
 export interface Violation {
   file: string;
@@ -25,13 +27,6 @@ interface Snippet {
   line: number;
 }
 
-const RULES: { rule: Rule; pattern: RegExp }[] = [
-  { rule: "emoji", pattern: /\p{Extended_Pictographic}/u },
-  { rule: "dash", pattern: /[‒–—―−]/u },
-  { rule: "spaced-hyphen", pattern: /(^|\s)-{1,2}(\s|$)|\w--\w/u },
-  { rule: "ai-word", pattern: /\bA\.?I\.?(?=[\s,.;:!?)'"]|$)/u },
-];
-
 /** Directories whose strings reach users (pages, Echo, cards, messages, phrases, dataset). */
 export const COPY_ROOTS = [
   "apps/web/src",
@@ -44,9 +39,7 @@ export const COPY_ROOTS = [
 const LABELLED_ATTRIBUTES = ["alt", "title", "aria-label", "placeholder", "aria-description"];
 const JSON_SKIPPED_KEYS = new Set(["url", "id", "$schema", "$id", "sourceRef", "retrievedOn"]);
 
-export function checkText(text: string): Rule[] {
-  return RULES.filter(({ pattern }) => pattern.test(text)).map(({ rule }) => rule);
-}
+export const checkText = checkCopy;
 
 function isModuleSpecifier(node: ts.Node): boolean {
   const parent = node.parent;
