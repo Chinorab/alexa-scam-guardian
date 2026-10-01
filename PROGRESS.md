@@ -33,4 +33,5 @@ Phase 3 (US1) DONE (T041-T051): assess_call + close_check tools, warning-signs M
 - Install: `pnpm install` | Checks: `pnpm lint && pnpm lint:copy && pnpm typecheck && pnpm test`
 
 ## Pitfalls
+- CI broke twice because checks ran without gating the commit. Always: `pnpm check && git commit ...`.
 - Alexa+ quickstart page reads as open to all; only the docs home page states "select partners only". See FRICTION_LOG.md #1.
