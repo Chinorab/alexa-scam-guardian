@@ -50,7 +50,7 @@ const SIGN_PRIORITY = [
 
 /** Immediate danger is a 911 rule from the constitution, not a scam pattern. */
 const DANGER =
-  /\b((at|outside) (my|the) (door|front door|house|window)|(is|are|he'?s|she'?s|they'?re|someone'?s) (here|outside)|threaten(ed|ing)? (me|to hurt|to kill)|(hurt|kill|shoot) (me|you)|break(ing)? in|gun|knife|weapon|chest pain|can'?t breathe|heart attack|stroke|i fell|bleeding|in danger|scared for my (life|safety)|following me)\b/i;
+  /\b((at|outside) (my|the) (door|front door|house|window)|(is|are|he'?s|she'?s|they'?re|someone'?s) (here|outside)|threaten(ed|ing)? (me|to hurt|to kill)|(hurt|harm|kill|shoot) (me|you|my \w+|him|her|them)|break(ing)? in|gun|knife|weapon|chest pain|can'?t breathe|heart attack|stroke|i fell|bleeding|in danger|scared for my (life|safety)|following me)\b/i;
 
 const ON_LINE =
   /\b((still|is|he'?s|she'?s|they'?re|caller'?s) (still )?on the (line|phone|other phone|other line)|on hold|waiting on the (phone|line)|hasn'?t hung up)\b/i;

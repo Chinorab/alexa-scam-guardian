@@ -5,6 +5,7 @@ import type { DeviceSessions } from "./device/sessions";
 import { openMcpSession } from "./agent/mcp-client";
 import { apiRoutes, type ApiContext } from "./routes/api";
 import { frameRoutes } from "./routes/frame";
+import { replyRoutes } from "./routes/reply";
 import { EchoPage } from "./views/echo";
 import { HomePage } from "./views/home";
 import { PrivacyPage } from "./views/privacy";
@@ -72,6 +73,8 @@ export function createWebApp(options: WebAppOptions) {
   };
   if (options.mcpFetch) api.mcpFetch = options.mcpFetch;
   app.route("/api", apiRoutes(api));
+
+  app.route("/", replyRoutes(options.deps));
 
   app.get("/", (c) => c.html(<HomePage />));
   app.get("/privacy", (c) => c.html(<PrivacyPage />));

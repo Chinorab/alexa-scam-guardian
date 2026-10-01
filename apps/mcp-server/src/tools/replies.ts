@@ -101,3 +101,25 @@ export async function unreadCount(deps: Deps, householdId: string): Promise<numb
   await sweepNoAnswer(deps, householdId);
   return (await deps.store.listEvents(householdId, { unreadOnly: true })).length;
 }
+
+export type ReplyLinkState =
+  | { status: "open" | "answered"; olderAdultFirstName: string; memberName: string; reply: Reply }
+  | { status: "unknown" | "expired" };
+
+/** What the reply page shows. Reads only: link scanners open links, so GET never records. */
+export async function describeReplyLink(deps: Deps, token: string): Promise<ReplyLinkState> {
+  const request = await deps.store.findVerificationByToken(hashToken(token));
+  if (!request) return { status: "unknown" };
+  if (request.replyExpiresAt < epochSeconds(deps.clock.now())) return { status: "expired" };
+  const [household, member] = await Promise.all([
+    deps.store.getHousehold(request.householdId),
+    deps.store.getMember(request.householdId, request.memberId),
+  ]);
+  if (!household || !member) return { status: "unknown" };
+  return {
+    status: request.reply === "none" ? "open" : "answered",
+    olderAdultFirstName: household.olderAdultFirstName,
+    memberName: member.name,
+    reply: request.reply,
+  };
+}

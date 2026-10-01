@@ -69,10 +69,10 @@ export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller
       const failed = updates.some((u) => u.kind === "delivery_failed");
       if (anyNoAnswer || failed) {
         const available = (m: FamilyMember) => !m.optedOut && !contacted.has(m.memberId);
-        const next =
-          members.find((m) => available(m) && m.canVerify) ??
-          members.find((m) => available(m) && m.getsHeadsUp);
-        if (next) structured.nextMemberToTry = publicMember(next);
+        const verifier = members.find((m) => available(m) && m.canVerify);
+        const helper = members.find((m) => available(m) && m.getsHeadsUp);
+        if (verifier) structured.nextMemberToTry = { ...publicMember(verifier), role: "verify" };
+        else if (helper) structured.nextMemberToTry = { ...publicMember(helper), role: "heads_up" };
       }
       const summary =
         updates.length > 0

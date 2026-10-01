@@ -235,3 +235,25 @@ main {
   border-radius: var(--radius-sign);
   background: var(--ground-raised);
 }
+
+.button-warning {
+  background: var(--sign-warning);
+  color: var(--sign-warning-ink);
+}
+
+.reply-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.reply-actions form {
+  flex: 1 1 14rem;
+}
+
+.reply-actions .button {
+  width: 100%;
+  min-height: 4.5rem;
+  font-size: var(--text-lg);
+}

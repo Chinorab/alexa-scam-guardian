@@ -48,6 +48,7 @@ function allLines(): string[] {
     phrases.cannotFile(sarah),
     phrases.cannotFile(),
     phrases.backToCheck(),
+    `${phrases.cantHelpHere()} ${phrases.backToCheck()} ${phrases.offerVerify(michael)}`,
     phrases.closing(),
   ];
   for (const person of people) {

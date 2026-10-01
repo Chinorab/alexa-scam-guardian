@@ -5,7 +5,7 @@ import { initialState } from "@asg/core/dialogue/engine";
 import { phrases } from "@asg/core/dialogue/phrases";
 import { startsSensitiveNumber } from "@asg/core/redact/redact";
 import { seedDemoHousehold } from "@asg/core/demo/seed";
-import type { Deps } from "@asg/mcp-server";
+import { unreadCount, type Deps } from "@asg/mcp-server";
 import type { DeviceSession, DeviceSessions } from "../device/sessions";
 import { openMcpSession } from "../agent/mcp-client";
 import { runTurn, type TurnDeps } from "../agent/turn";
@@ -75,6 +75,34 @@ export function apiRoutes(ctx: ApiContext) {
     });
     await ctx.sessions.put(updated);
     return c.json(result);
+  });
+
+  /** Polled every 3 s: quiet notification state (FR-009). Content is spoken only when asked. */
+  api.get("/device/:deviceId/events", async (c) => {
+    const device = await ctx.sessions.get(c.req.param("deviceId"));
+    if (!device) return c.json({ error: "unknown_device" }, 404);
+    const unread = await unreadCount(ctx.deps, device.householdId);
+    return c.json({ unread, light: unread > 0 ? "notification" : "idle" });
+  });
+
+  /** The on screen demo phone: messages for this household, newest first (FR-014, FR-032). */
+  api.get("/device/:deviceId/demo-phone", async (c) => {
+    const device = await ctx.sessions.get(c.req.param("deviceId"));
+    if (!device) return c.json({ error: "unknown_device" }, 404);
+    const members = await ctx.deps.store.listMembers(device.householdId);
+    const messages = (await ctx.deps.demoOutbox.list(device.householdId)).map((m) => {
+      const replyPath = m.body.match(/\/r\/[A-Za-z0-9_-]+/)?.[0];
+      return {
+        id: m.messageId,
+        kind: m.kind,
+        to: members.find((member) => member.memberId === m.memberId)?.name ?? "Family",
+        subject: m.subject,
+        body: m.body,
+        at: m.at,
+        ...(replyPath ? { replyPath } : {}),
+      };
+    });
+    return c.json({ messages });
   });
 
   /** Interim speech: interrupt as soon as a sensitive number starts (FR-017). Stores nothing. */

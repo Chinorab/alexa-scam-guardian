@@ -165,6 +165,8 @@ export const phrases = {
 
   backToCheck: () => "Let's get back to the call you told me about.",
 
+  cantHelpHere: () => "I can't help with that here.",
+
   closing: () => "Okay. I'm here if you need me again.",
 };
 

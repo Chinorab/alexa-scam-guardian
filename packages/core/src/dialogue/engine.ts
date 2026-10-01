@@ -6,6 +6,8 @@
 import type { Channel, PaymentMethod, Relationship } from "../ports/index";
 import { phrases, type Person } from "./phrases";
 
+export type Member = Person & { memberId: string };
+
 /** What assess_call returns (contracts/mcp-tools.md), as the engine needs it. */
 export interface AssessCallResult {
   checkId: string;
@@ -20,18 +22,54 @@ export interface AssessCallResult {
     | "paid_guidance"
     | "no_signs_found"
     | "advise_wait";
-  familyMatches: (Person & { memberId: string })[];
-  headsUpCandidate?: Person & { memberId: string };
+  familyMatches: Member[];
+  headsUpCandidate?: Member;
   alreadyPaid?: { method: PaymentMethod };
   interrupt: boolean;
 }
 
+export interface PrepareResult {
+  pendingId: string;
+  question: string;
+}
+
+export interface ConfirmResult {
+  sent: {
+    memberId: string;
+    name: string;
+    kind: "verify" | "heads_up";
+    delivery: "sent" | "failed";
+  }[];
+  nothingSent: boolean;
+  reason?: "declined" | "unclear" | "expired" | "rate_limited";
+}
+
+export interface UpdatesResult {
+  updates: {
+    checkId: string;
+    memberName: string;
+    kind: "it_was_me" | "it_wasnt_me" | "no_answer" | "delivery_failed";
+  }[];
+  waitingOn: { memberName: string; minutesWaiting: number }[];
+  nextMemberToTry?: Member & { role: "verify" | "heads_up" };
+}
+
+export type PasswordResult = "matches" | "does_not_match" | "not_set" | "locked";
+
 /** The tools the engine can call. Backed by an MCP session in the web app. */
 export interface EngineTools {
   assessCall(description: string, checkId?: string): Promise<AssessCallResult>;
+  prepareOutreach(
+    checkId: string,
+    verifyMemberId?: string,
+    headsUpMemberIds?: string[],
+  ): Promise<PrepareResult>;
+  confirmOutreach(pendingId: string, userReply: string): Promise<ConfirmResult>;
+  getUpdates(checkId?: string): Promise<UpdatesResult>;
+  checkFamilyPassword(checkId: string, phraseHeard: string): Promise<PasswordResult>;
 }
 
-export type Stage = "idle" | "assessed";
+export type Stage = "idle" | "assessed" | "pick_member" | "awaiting_confirmation" | "waiting";
 
 export interface EngineState {
   stage: Stage;
@@ -40,8 +78,18 @@ export interface EngineState {
   lastSay?: string;
   /** Phrases heard in a family password check; the guard never lets them be repeated. */
   phrasesHeard: string[];
-  /** The member offered in the last question, if any. */
-  offered?: Person & { memberId: string };
+  /** The relative to verify with, once known. */
+  offered?: Member;
+  /** The trusted contact to tell, once known. */
+  headsUp?: Member;
+  /** Candidates when two relatives match ("which grandson?"). */
+  candidates?: Member[];
+  pendingId?: string;
+  question?: string;
+  /** People already messaged in this check, for names and pronouns in later news. */
+  contacted?: Member[];
+  /** One sentence to share while waiting, from the top warning sign. */
+  waitingFact?: string;
 }
 
 export interface EngineReply {
@@ -61,8 +109,12 @@ export type Intent =
   | "pay_question"
   | "call_back"
   | "say_password"
+  | "password_heard"
   | "closing"
   | "file_for_me"
+  | "off_topic"
+  | "bare_yes"
+  | "bare_no"
   | "describe";
 
 const INTENTS: [Intent, RegExp][] = [
@@ -72,22 +124,29 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "whats_new",
-    /\b(what'?s new|any news|did \w+ (answer|reply|write back|text back|call back))\b/i,
+    /\b(what'?s new|any news|did \w+ (answer|reply|write back|text back|call back)|has \w+ (answered|replied))\b/i,
   ],
   ["file_for_me", /\b(send|file|submit) (it|the report|a report) for me\b/i],
   [
     "say_password",
-    /\b(what'?s|what is|tell me|say|remind me of) (our|the|my) (family )?(password|secret word)\b/i,
+    /\b(what'?s|what is|tell me|say|read me|remind me(?: of| what)?)\s+(?:is\s+)?(our|the|my) (family )?(password|secret word|code word)\b/i,
   ],
+  ["password_heard", /\b(password|secret word|code word) (is|was)\b/i],
   [
     "call_back",
-    /\b(call|text|ring|phone) (back )?(the|that) (number|caller)|\b(call|ring) (him|her|them) back\b/i,
+    /\b(call|text|ring|phone) (back )?(the|that) (number|caller)|\b(call|ring) (the )?(lawyer|attorney|officer|police|sergeant|caller|him|her|them) back\b/i,
   ],
   [
     "pay_question",
     /\b((can|should|may|do) i (just )?(pay|send|wire|buy)|is it (safe|ok|okay|fine) to (pay|send)|so i can pay|go ahead and pay)\b/i,
   ],
-  ["closing", /^(ok(ay)? )?(thanks|thank you|bye|goodbye|that'?s all|never mind)\b/i],
+  [
+    "off_topic",
+    /\b(weather|what time is it|play (some )?music|set a timer|tell me a joke|recipe|turn (on|off) the)\b/i,
+  ],
+  ["bare_yes", /^(yes|yeah|yep|sure|ok|okay|please|please do|go ahead|do it|yes please)[.!]?$/i],
+  ["bare_no", /^(no|nope|no thanks|not now|stop|cancel|never mind)[.!]?$/i],
+  ["closing", /^(ok(ay)? )?(thanks|thank you|bye|goodbye|that'?s all)\b/i],
 ];
 
 export function classify(text: string): Intent {
@@ -97,12 +156,60 @@ export function classify(text: string): Intent {
 
 const DOOR = /\b(door|outside|here at|at my house|on my porch)\b/i;
 
-function verifyTarget(result: AssessCallResult) {
-  return result.familyMatches.length === 1 ? result.familyMatches[0] : undefined;
+/** What the caller said the password was: the words after "password is". */
+export function phraseAfterPassword(text: string): string | undefined {
+  const match = text.match(
+    /\b(?:password|secret word|code word) (?:is|was)\s+["']?([^"'.!?]{2,60})/i,
+  );
+  return match?.[1]?.trim();
 }
 
 function relationshipWord(relationship: Relationship): string {
   return relationship === "other" ? "person" : relationship;
+}
+
+function named(text: string, members: Member[]): Member | undefined {
+  const lower = text.toLowerCase();
+  return members.find((m) => new RegExp(`\\b${m.name.toLowerCase()}\\b`).test(lower));
+}
+
+type Reply = (
+  say: string,
+  opts?: { expectReply?: boolean; cards?: string[]; state?: Partial<EngineState> },
+) => EngineReply;
+
+function replier(state: EngineState): Reply {
+  return (say, opts = {}) => ({
+    say,
+    state: { ...state, ...opts.state, lastSay: say },
+    cardsFrom: opts.cards ?? [],
+    expectReply: opts.expectReply ?? false,
+  });
+}
+
+/** Asks the server for the exact question, then asks it. */
+async function offer(
+  state: EngineState,
+  tools: EngineTools,
+  lead: string,
+  verify?: Member,
+  headsUp?: Member,
+): Promise<EngineReply> {
+  if (!state.checkId) throw new Error("No open check.");
+  const prepared = await tools.prepareOutreach(
+    state.checkId,
+    verify?.memberId,
+    headsUp ? [headsUp.memberId] : undefined,
+  );
+  const say = lead ? `${lead} ${prepared.question}` : prepared.question;
+  const next: Partial<EngineState> = {
+    stage: "awaiting_confirmation",
+    pendingId: prepared.pendingId,
+    question: prepared.question,
+  };
+  if (verify) next.offered = verify;
+  if (headsUp) next.headsUp = headsUp;
+  return replier(state)(say, { expectReply: true, state: next });
 }
 
 async function describe(
@@ -111,14 +218,9 @@ async function describe(
   tools: EngineTools,
 ): Promise<EngineReply> {
   const result = await tools.assessCall(text, state.checkId);
-  const next: EngineState = { ...state, stage: "assessed", checkId: result.checkId };
-  delete next.offered;
-  const reply = (say: string, expectReply = false): EngineReply => ({
-    say,
-    state: { ...next, lastSay: say },
-    cardsFrom: ["assess_call"],
-    expectReply,
-  });
+  const base: EngineState = { ...state, stage: "assessed", checkId: result.checkId };
+  const reply = (say: string, extra: Partial<EngineState> = {}, expectReply = false) =>
+    replier(base)(say, { cards: ["assess_call"], state: extra, expectReply });
 
   if (result.interrupt) return reply(phrases.sensitiveStop());
   if (result.danger) return reply(DOOR.test(text) ? phrases.dangerAtDoor() : phrases.danger());
@@ -127,27 +229,162 @@ async function describe(
   // A familiar voice is context: shown on screen, but not read aloud as a sign.
   const spoken = result.matchedSigns.filter((sign) => sign.id !== "family-voice");
   const labels = spoken.map((sign) => sign.label);
-  if (labels.length === 0) return reply(phrases.noSigns());
+  if (labels.length === 0) {
+    // During an open check, details without new signs keep the current question going.
+    if (state.stage === "waiting" && state.offered)
+      return reply(phrases.stillWaiting(state.offered));
+    return reply(phrases.noSigns());
+  }
+  const waitingFact = spoken.find((sign) => !sign.explanation.includes(". "))?.explanation;
+  if (waitingFact) base.waitingFact = waitingFact;
+  const lead = `${phrases.thanks()} ${phrases.signs(labels)}`;
+  const helper = result.headsUpCandidate;
 
-  const target = verifyTarget(result);
   if (result.nextStep === "pick_member" && result.familyMatches.length > 1) {
     const first = result.familyMatches[0];
+    const extra: Partial<EngineState> = { stage: "pick_member", candidates: result.familyMatches };
+    if (helper) extra.headsUp = helper;
     return reply(
-      `${phrases.thanks()} ${phrases.signs(labels)} ${phrases.pickMember(
+      `${lead} ${phrases.pickMember(
         relationshipWord(first?.relationship ?? "other"),
-        result.familyMatches.map((member) => member.name),
+        result.familyMatches.map((m) => m.name),
       )}`,
+      extra,
       true,
     );
   }
+  const target = result.familyMatches.length === 1 ? result.familyMatches[0] : undefined;
   if (target && result.nextStep === "offer_verify") {
-    next.offered = target;
-    return reply(
-      `${phrases.thanks()} ${phrases.signs(labels)} ${phrases.offerVerify(target, result.headsUpCandidate)}`,
-      true,
-    );
+    const offered = await offer(base, tools, lead, target, helper);
+    return { ...offered, cardsFrom: ["assess_call"] };
   }
-  return reply(`${phrases.thanks()} ${phrases.signs(labels)} ${phrases.waitBeforePaying()}`);
+  if (helper && result.nextStep === "offer_heads_up") {
+    const offered = await offer(base, tools, lead, undefined, helper);
+    return { ...offered, cardsFrom: ["assess_call"] };
+  }
+  return reply(`${lead} ${phrases.waitBeforePaying()}`);
+}
+
+async function confirm(text: string, state: EngineState, tools: EngineTools): Promise<EngineReply> {
+  const reply = replier(state);
+  if (!state.pendingId) return reply(phrases.nothingSent(), { state: { stage: "assessed" } });
+  const result = await tools.confirmOutreach(state.pendingId, text);
+  const cleared: Partial<EngineState> = { stage: "assessed" };
+  const withoutPending = { ...state };
+  delete withoutPending.pendingId;
+  delete withoutPending.question;
+  const done = replier(withoutPending);
+
+  if (result.nothingSent) {
+    if (result.reason === "unclear" && state.question) {
+      return reply(phrases.unclearConfirm(state.question), { expectReply: true });
+    }
+    return done(phrases.nothingSent(), { state: cleared });
+  }
+  const delivered = result.sent.filter((s) => s.delivery === "sent");
+  const verified = delivered.find((s) => s.kind === "verify");
+  const failed = result.sent.find((s) => s.delivery === "failed");
+  const contacted = [
+    ...(state.contacted ?? []),
+    ...[state.offered, state.headsUp].filter(
+      (m): m is Member => m !== undefined && delivered.some((s) => s.memberId === m.memberId),
+    ),
+  ];
+  if (failed && !verified) {
+    const person = [state.offered, state.headsUp].find((m) => m?.memberId === failed.memberId);
+    if (person) return done(phrases.deliveryFailed(person), { state: { ...cleared, contacted } });
+  }
+  const headsUpNames = delivered.filter((s) => s.kind === "heads_up").map((s) => s.name);
+  const sentLine = phrases.sent(verified?.name, verified ? [] : headsUpNames);
+  const fact = verified && state.waitingFact ? ` ${phrases.whileWaiting(state.waitingFact)}` : "";
+  return done(`${sentLine}${fact}`, {
+    cards: ["confirm_outreach"],
+    state: { stage: verified ? "waiting" : "assessed", contacted },
+  });
+}
+
+async function news(state: EngineState, tools: EngineTools): Promise<EngineReply> {
+  const reply = replier(state);
+  const result = await tools.getUpdates(state.checkId);
+  const people = [...(state.contacted ?? []), ...(state.offered ? [state.offered] : [])];
+  const personNamed = (name: string): Member =>
+    people.find((p) => p.name === name) ?? {
+      memberId: "",
+      name,
+      relationship: "other",
+      channel: "text",
+    };
+
+  const priority = ["it_wasnt_me", "it_was_me", "no_answer", "delivery_failed"] as const;
+  const update = priority.map((kind) => result.updates.find((u) => u.kind === kind)).find(Boolean);
+  if (update) {
+    const person = personNamed(update.memberName);
+    const opts = { cards: ["get_updates"] };
+    switch (update.kind) {
+      case "it_wasnt_me":
+        return reply(phrases.replyDenied(person), {
+          ...opts,
+          expectReply: true,
+          state: { stage: "assessed" },
+        });
+      case "it_was_me":
+        return reply(phrases.replyConfirmed(person), { ...opts, state: { stage: "assessed" } });
+      case "no_answer":
+      case "delivery_failed": {
+        const next = result.nextMemberToTry;
+        const lead =
+          update.kind === "no_answer"
+            ? phrases.noAnswer(person)
+            : phrases.deliveryFailed(person).split(". ")[0] + ".";
+        if (next && state.checkId) {
+          const asVerify = next.role === "verify";
+          const offered = await offer(
+            { ...state, stage: "assessed" },
+            tools,
+            lead,
+            asVerify ? next : undefined,
+            asVerify ? undefined : next,
+          );
+          return { ...offered, cardsFrom: ["get_updates"] };
+        }
+        return reply(
+          update.kind === "no_answer" ? phrases.noAnswer(person) : phrases.deliveryFailed(person),
+          opts,
+        );
+      }
+    }
+  }
+  const waiting = result.waitingOn[0];
+  if (waiting)
+    return reply(phrases.stillWaiting(personNamed(waiting.memberName)), { cards: ["get_updates"] });
+  return reply(phrases.noNews());
+}
+
+async function password(
+  text: string,
+  state: EngineState,
+  tools: EngineTools,
+): Promise<EngineReply> {
+  const phrase = phraseAfterPassword(text);
+  if (!phrase) return replier(state)(phrases.passwordRefuse());
+  let current = state;
+  if (!current.checkId) {
+    const assessed = await tools.assessCall(text);
+    current = { ...current, checkId: assessed.checkId, stage: "assessed" };
+  }
+  const heard = { phrasesHeard: [...current.phrasesHeard, phrase] };
+  const result = await tools.checkFamilyPassword(current.checkId as string, phrase);
+  const reply = replier({ ...current, ...heard });
+  switch (result) {
+    case "matches":
+      return reply(phrases.passwordMatches(current.offered));
+    case "does_not_match":
+      return reply(phrases.passwordNoMatch());
+    case "not_set":
+      return reply(phrases.passwordNotSet());
+    case "locked":
+      return reply(phrases.passwordLocked());
+  }
 }
 
 export async function simplifiedTurn(
@@ -156,31 +393,72 @@ export async function simplifiedTurn(
   tools: EngineTools,
 ): Promise<EngineReply> {
   const intent = classify(text);
-  const say = (line: string, expectReply = false): EngineReply => ({
-    say: line,
-    state: { ...state, lastSay: line },
-    cardsFrom: [],
-    expectReply,
-  });
+  const reply = replier(state);
 
   switch (intent) {
     case "repeat":
-      return say(state.lastSay ?? phrases.closing());
+      return reply(state.lastSay ?? phrases.closing());
     case "whats_new":
-      return say(phrases.noNews());
+      return news(state, tools);
     case "pay_question":
-      return say(phrases.canIPay(state.offered));
-    case "call_back":
-      return say(phrases.callBackRefusal(state.offered), state.offered !== undefined);
+      return reply(phrases.canIPay(state.offered));
+    case "call_back": {
+      const person = state.offered;
+      if (!person || !state.checkId) return reply(phrases.callBackRefusal());
+      if (state.stage === "awaiting_confirmation") {
+        return reply(phrases.callBackRefusal(person), { expectReply: true });
+      }
+      const offered = await offer(state, tools, "", person, state.headsUp);
+      return {
+        ...offered,
+        say: phrases.callBackRefusal(person),
+        state: { ...offered.state, lastSay: phrases.callBackRefusal(person) },
+      };
+    }
     case "say_password":
-      return say(phrases.passwordRefuse());
+      return reply(phrases.passwordRefuse());
+    case "password_heard":
+      return password(text, state, tools);
     case "file_for_me":
-      return say(phrases.cannotFile());
+      return reply(phrases.cannotFile());
+    case "off_topic": {
+      const resume =
+        state.stage === "awaiting_confirmation" && state.question ? ` ${state.question}` : "";
+      return reply(`${phrases.cantHelpHere()} ${phrases.backToCheck()}${resume}`, {
+        expectReply: resume !== "",
+      });
+    }
     case "closing":
-      return say(phrases.closing());
+      return reply(phrases.closing());
+    case "bare_yes":
+    case "bare_no":
     case "describe":
-      return describe(text, state, tools);
+      break;
   }
+
+  if (state.stage === "awaiting_confirmation") return confirm(text, state, tools);
+  if (state.stage === "pick_member" && state.candidates) {
+    const chosen = named(text, state.candidates);
+    if (chosen) return offer({ ...state, stage: "assessed" }, tools, "", chosen, state.headsUp);
+    if (intent === "bare_no") return reply(phrases.nothingSent(), { state: { stage: "assessed" } });
+    const first = state.candidates[0];
+    return reply(
+      phrases.pickMember(
+        relationshipWord(first?.relationship ?? "other"),
+        state.candidates.map((m) => m.name),
+      ),
+      { expectReply: true },
+    );
+  }
+  if (intent === "bare_no") return reply(phrases.closing());
+  if (intent === "bare_yes") {
+    return reply(
+      state.stage === "waiting" && state.offered
+        ? phrases.stillWaiting(state.offered)
+        : phrases.closing(),
+    );
+  }
+  return describe(text, state, tools);
 }
 
 export type { Channel };

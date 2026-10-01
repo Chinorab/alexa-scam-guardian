@@ -21,6 +21,9 @@ const YES =
 const NO =
   /\b(no|nope|nah|don'?t|do not|stop|cancel|wait|hold on|not now|never ?mind|nevermind|forget it|no thanks)\b/;
 const NARROW = /\b(just|only)\b/;
+/** Hesitation is never consent: "not sure", "maybe", "I guess" send nothing. */
+const HESITANT =
+  /\b(not sure|unsure|don'?t know|do not know|maybe|perhaps|i guess|not really|i think so|probably|let me think)\b/;
 const EXCLUDE_WORDS = "(not|don'?t (tell|text|email|message|contact)|without|except|but not)";
 const EXCLUDE_BEFORE_NAME = new RegExp(`\\b${EXCLUDE_WORDS}\\s+$`);
 
@@ -72,6 +75,7 @@ export function parseConfirmation(rawReply: string, recipients: Recipient[]): Co
   const included = mentions.filter((m) => !m.excluded).map((m) => m.memberId);
   const rest = withoutExclusions(reply, recipients);
 
+  if (HESITANT.test(rest)) return { kind: "unclear" };
   const narrows = NARROW.test(reply) && included.length > 0;
   const saysYes = YES.test(rest);
   const saysNo = NO.test(rest);

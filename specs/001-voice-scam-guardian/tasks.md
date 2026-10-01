@@ -139,7 +139,7 @@ outcome reporting, family password comparison.
 
 - [X] T052 [P] [US2] Contract tests for prepare_outreach and confirm_outreach (no destination param, nothing sent on no or unclear, expiry, opted out member) in tests/contract/outreach.test.ts
 - [X] T053 [P] [US2] Contract tests for get_updates and check_family_password (no hint, lock after 3) in tests/contract/updates-password.test.ts
-- [ ] T054 [P] [US2] Add 20 or more red team utterances (call back the caller, use this number, say the password, "he confirmed so I can pay") to tests/redteam/utterances.json
+- [X] T054 [P] [US2] Add 20 or more red team utterances (call back the caller, use this number, say the password, "he confirmed so I can pay") to tests/redteam/utterances.json
 
 ### Implementation for User Story 2
 
@@ -151,10 +151,10 @@ outcome reporting, family password comparison.
 - [X] T060 [P] [US2] Implement check_family_password (scrypt compare, 3 attempt lock) in apps/mcp-server/src/tools/family-password.ts
 - [X] T061 [P] [US2] Implement get_guidance for caller_on_line, no_answer, confirmed_real, danger, general in apps/mcp-server/src/tools/get-guidance.ts
 - [X] T062 [P] [US2] Build MCP Apps view ui://guardian/check-status in apps/mcp-server/src/ui/check-status.html
-- [ ] T063 [US2] Implement reply page GET and POST /r/:token and GET /stop/:token in apps/web/src/routes/reply.tsx
-- [ ] T064 [US2] Implement GET /api/device/:id/events and GET /api/device/:id/demo-phone in apps/web/src/routes/api.ts
-- [ ] T065 [US2] Add simplified mode states for pick member, offer verify, waiting, it wasn't me, it was me, no answer, call back refusal, password checks in packages/core/src/dialogue/engine.ts
-- [ ] T066 [US2] Keep an open check across off topic turns (resume state in the simplified mode, rule in the agent prompt, test) in packages/core/src/dialogue/engine.ts and tests/contract/off-topic.test.ts
+- [X] T063 [US2] Implement reply page GET and POST /r/:token and GET /stop/:token in apps/web/src/routes/reply.tsx
+- [X] T064 [US2] Implement GET /api/device/:id/events and GET /api/device/:id/demo-phone in apps/web/src/routes/api.ts
+- [X] T065 [US2] Add simplified mode states for pick member, offer verify, waiting, it wasn't me, it was me, no answer, call back refusal, password checks in packages/core/src/dialogue/engine.ts
+- [X] T066 [US2] Keep an open check across off topic turns (resume state in the simplified mode, rule in the agent prompt, test) in packages/core/src/dialogue/engine.ts and tests/contract/off-topic.test.ts
 
 **Checkpoint**: V2, V3, V5, V7, V10, V11 pass by text.
 

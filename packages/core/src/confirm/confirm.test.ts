@@ -20,12 +20,21 @@ describe("parseConfirmation", () => {
     },
   );
 
-  it.each(["", "   ", "hmm", "what did you say", "maybe later I guess"])(
-    "'%s' is unclear and sends nothing",
-    (reply) => {
-      expect(parseConfirmation(reply, both).kind).toBe("unclear");
-    },
-  );
+  it.each([
+    "",
+    "   ",
+    "hmm",
+    "what did you say",
+    "maybe later I guess",
+    "I'm not sure",
+    "hmm I am not sure what to do",
+    "yes maybe",
+    "I guess so",
+    "sure, I think so",
+    "probably",
+  ])("'%s' is unclear and sends nothing", (reply) => {
+    expect(parseConfirmation(reply, both).kind).toBe("unclear");
+  });
 
   it("sends only to the named people when the reply narrows the list", () => {
     expect(parseConfirmation("Just Michael", both)).toEqual({ kind: "subset", memberIds: ["m1"] });

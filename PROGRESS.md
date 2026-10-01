@@ -7,7 +7,7 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-Phase 3 (US1) DONE (T041-T051): assess_call + close_check tools, warning-signs MCP Apps view (hand written view runtime, 56 KB with font), Echo MCP Apps host (AppBridge, sandboxed iframe via /frame route with own CSP), /api/interim, red team 34 utterances green. NOTE: Claude in-app browser blocks sandboxed iframes (ERR_BLOCKED_BY_CLIENT); protocol verified by manual handshake; visual check pending Playwright (T067). NEXT: Phase 4 US2 (T052-T066): outreach tools, demo seed, reply page, events, password. Owner answers pending: AWS+Bedrock, SES domain, UI product name.
+Phase 3 (US1) and Phase 4 (US2) DONE (T041-T066). 338 tests, red team 56 utterances. V2 V3 V5 V10 V11 + off topic pass end to end via web API. NEXT: Phase 5 US6 simulated Echo (T067-T075): Playwright e2e, Echo Show frame, speech in/out (Polly), light ring, notifications polling, demo phone UI, repeat, demo reset. NOTE: in-app browser blocks sandboxed iframes; visual check via Playwright. Owner answers pending: AWS+Bedrock, SES domain, UI product name.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
@@ -33,5 +33,7 @@ Phase 3 (US1) DONE (T041-T051): assess_call + close_check tools, warning-signs M
 - Install: `pnpm install` | Checks: `pnpm lint && pnpm lint:copy && pnpm typecheck && pnpm test`
 
 ## Pitfalls
+- Python string replacements turned  into backspace characters in regexes. Use raw strings (r'''...''') or the Edit tool for regex edits.
+- The red team caught a real safety bug: "I am not sure" was read as yes (word "sure"). Hesitation now always parses as unclear.
 - CI broke twice because checks ran without gating the commit. Always: `pnpm check && git commit ...`.
 - Alexa+ quickstart page reads as open to all; only the docs home page states "select partners only". See FRICTION_LOG.md #1.

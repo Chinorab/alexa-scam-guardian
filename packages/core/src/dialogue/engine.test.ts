@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { findViolations } from "../guard/guard";
+import { phrases } from "./phrases";
 import { assess } from "../match/match";
 import {
   classify,
@@ -24,7 +25,35 @@ const sarah = {
 
 /** Fake assess_call built on the real matcher, like the MCP tool. */
 function fakeTools(family: (typeof michael)[] = [], headsUp?: typeof sarah): EngineTools {
+  const everyone = [...family, ...(headsUp ? [headsUp] : [])];
+  const byId = (id?: string) => everyone.find((m) => m.memberId === id);
   return {
+    async prepareOutreach(_checkId, verifyMemberId, headsUpMemberIds = []) {
+      const verify = byId(verifyMemberId);
+      const helpers = headsUpMemberIds.map(byId).filter((m) => m !== undefined);
+      return {
+        pendingId: "pend_1",
+        question: verify ? phrases.offerVerify(verify, helpers) : phrases.offerHeadsUp(helpers),
+      };
+    },
+    async confirmOutreach(_pendingId, userReply) {
+      if (!/^yes/i.test(userReply)) return { sent: [], nothingSent: true, reason: "declined" };
+      return {
+        sent: family.map((m) => ({
+          memberId: m.memberId,
+          name: m.name,
+          kind: "verify" as const,
+          delivery: "sent" as const,
+        })),
+        nothingSent: false,
+      };
+    },
+    async getUpdates() {
+      return { updates: [], waitingOn: [] };
+    },
+    async checkFamilyPassword() {
+      return "not_set";
+    },
     async assessCall(description, checkId) {
       const result = assess(description);
       const familyMatches = result.claimedRelationship

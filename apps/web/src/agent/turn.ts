@@ -6,7 +6,15 @@
  * 4. Every line passes the output guard before it is spoken.
  */
 import type { Message } from "@aws-sdk/client-bedrock-runtime";
-import { simplifiedTurn, type AssessCallResult, type EngineTools } from "@asg/core/dialogue/engine";
+import {
+  simplifiedTurn,
+  type AssessCallResult,
+  type ConfirmResult,
+  type EngineTools,
+  type PasswordResult,
+  type PrepareResult,
+  type UpdatesResult,
+} from "@asg/core/dialogue/engine";
 import { phrases } from "@asg/core/dialogue/phrases";
 import { guardLine } from "@asg/core/guard/guard";
 import type { Logger } from "@asg/core/log/logger";
@@ -44,14 +52,26 @@ const HISTORY_LIMIT = 20;
 
 /** The simplified mode's port, backed by the real MCP tools. */
 export function engineTools(session: McpSession): EngineTools {
+  const call = async <T>(name: string, args: Record<string, unknown>): Promise<T> => {
+    const outcome = await session.call(name, args);
+    if (outcome.isError || !outcome.structured) throw new Error(`${name} failed`);
+    return outcome.structured as unknown as T;
+  };
   return {
-    async assessCall(description, checkId) {
-      const args: Record<string, unknown> = { description };
-      if (checkId) args.checkId = checkId;
-      const outcome = await session.call("assess_call", args);
-      if (outcome.isError || !outcome.structured) throw new Error("assess_call failed");
-      return outcome.structured as unknown as AssessCallResult;
+    assessCall: (description, checkId) =>
+      call<AssessCallResult>("assess_call", checkId ? { description, checkId } : { description }),
+    prepareOutreach: (checkId, verifyMemberId, headsUpMemberIds) => {
+      const args: Record<string, unknown> = { checkId };
+      if (verifyMemberId) args.verifyMemberId = verifyMemberId;
+      if (headsUpMemberIds?.length) args.headsUpMemberIds = headsUpMemberIds;
+      return call<PrepareResult>("prepare_outreach", args);
     },
+    confirmOutreach: (pendingId, userReply) =>
+      call<ConfirmResult>("confirm_outreach", { pendingId, userReply }),
+    getUpdates: (checkId) => call<UpdatesResult>("get_updates", checkId ? { checkId } : {}),
+    checkFamilyPassword: async (checkId, phraseHeard) =>
+      (await call<{ result: PasswordResult }>("check_family_password", { checkId, phraseHeard }))
+        .result,
   };
 }
 
