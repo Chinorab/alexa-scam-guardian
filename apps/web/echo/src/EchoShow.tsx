@@ -204,7 +204,7 @@ export function EchoShow(props: { pollMs: number }) {
           class="echo-device"
           aria-label={`Simulated Echo Show for ${device?.olderAdultFirstName ?? "the family"}`}
         >
-          <div class="echo-screen">
+          <div class="echo-screen" role="region" aria-label="Echo screen" tabindex={0}>
             <p class="echo-heard" aria-live="off">
               {heard ? `You said: ${heard}` : `Hi ${device?.olderAdultFirstName ?? ""}`}
             </p>

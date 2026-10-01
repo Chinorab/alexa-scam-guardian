@@ -137,8 +137,10 @@ function roleText(member: FamilyMember): string[] {
   return roles;
 }
 
+const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
 const relationshipLabel = (m: FamilyMember) =>
-  m.relationship === "other" ? (m.relationshipOther ?? "Other") : m.relationship;
+  capitalize(m.relationship === "other" ? (m.relationshipOther ?? "Other") : m.relationship);
 
 const contactLabel = (m: FamilyMember) =>
   m.channel === "text"
@@ -269,7 +271,7 @@ export function FamilyHome(props: {
         </a>
       </p>
 
-      <h2 id="password">Family password</h2>
+      <h2 id="family-password">Family password</h2>
       <p>
         A secret word or phrase a real relative can say to prove who they are.{" "}
         <a href="https://www.ic3.gov/PSA/2024/PSA241203">The FBI suggests families agree on one.</a>{" "}

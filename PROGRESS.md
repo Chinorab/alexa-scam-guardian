@@ -7,7 +7,7 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-Phases 3, 4, 5 DONE (US1, US2, US6): MVP complete. 344 unit/contract tests + 8 Playwright scenarios (V1 to V4, repeat, start over) in real Chromium. Echo Show UI: device frame, captions, MCP Apps cards, light bar, Talk (browser speech), Polly TTS route with browser fallback, demo phone, quiet notifications with chime, auto announce in open conversation. Playwright browsers in D:/Anas/playwright-browsers (tests/e2e/run.mjs). NEXT: Phase 6 Cloud foundation (needs AWS answers) or Phase 7 US3 / Phase 8 US4 family page / Phase 9 US5 report. Owner answers pending: AWS+Bedrock, SES domain, UI product name.
+Phases 3 to 5 and 7 to 9 DONE (US1, US2, US3, US4, US5, US6). 384 unit/contract tests, red team 59 utterances, 18 Playwright scenarios (Echo V1 to V4, family V13 V14, axe WCAG 2.2 AA light and dark, keyboard). Family page: email sign in links, people, password hash, test messages, activity, delete all; signed in organizer Echo uses their household. NEXT: Phase 6 Cloud (blocked on owner answers: AWS account with Bedrock us-east-1, SES domain) then Phase 10 polish (home page design, README, open source dataset repo, demo script, number audit, timed runs). Product name in UI "Scam Guardian" still to confirm.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
