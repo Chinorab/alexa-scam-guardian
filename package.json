@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --parallel --filter ./apps/* dev",
+    "dev": "pnpm --filter @asg/web dev",
     "build": "pnpm -r build",
     "lint": "eslint .",
     "lint:copy": "tsx scripts/lint-copy.ts",
@@ -24,7 +24,9 @@
     "check": "pnpm lint && pnpm format:check && pnpm lint:copy && pnpm typecheck && pnpm test",
     "measure": "tsx scripts/measure.ts",
     "synth": "pnpm --filter @asg/infra synth",
-    "export:dataset": "tsx scripts/export-dataset.ts"
+    "export:dataset": "tsx scripts/export-dataset.ts",
+    "start": "pnpm --filter @asg/web start",
+    "dev:mcp": "pnpm --filter @asg/mcp-server dev"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

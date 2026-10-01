@@ -8,8 +8,11 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p echo/tsconfig.json",
     "token:demo": "tsx --env-file-if-exists=../../.env scripts/token-demo.ts",
     "build:assets": "vite build",
-    "dev": "vite build --watch & tsx watch --env-file-if-exists=../../.env src/local.ts",
-    "favicons": "tsx scripts/build-favicons.ts"
+    "dev": "pnpm run --parallel \"/^dev:/\"",
+    "favicons": "tsx scripts/build-favicons.ts",
+    "dev:assets": "vite build --watch",
+    "dev:server": "node --watch --env-file-if-exists=../../.env --import tsx src/local.ts",
+    "start": "vite build && tsx --env-file-if-exists=../../.env src/local.ts"
   },
   "dependencies": {
     "@asg/core": "workspace:^",

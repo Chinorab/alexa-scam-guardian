@@ -44,6 +44,12 @@ async function bundle(name: string, entry: string, tsconfig: string) {
   return dir;
 }
 
+if (process.argv.includes("--container")) {
+  // AgentCore Runtime image only (apps/mcp-server/Dockerfile).
+  await bundle("container", "apps/mcp-server/src/container.ts", "apps/mcp-server/tsconfig.json");
+  process.exit(0);
+}
+
 execSync("pnpm --filter @asg/web build:assets", { cwd: root, stdio: "inherit" });
 
 await bundle("mcp", "apps/mcp-server/src/lambda.ts", "apps/mcp-server/tsconfig.json");

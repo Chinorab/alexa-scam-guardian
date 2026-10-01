@@ -7,7 +7,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "e2e": "node e2e/run.mjs",
-    "redteam:live": "vitest run -c redteam/vitest.live.config.ts"
+    "redteam:live": "vitest run -c redteam/vitest.live.config.ts",
+    "a11y": "node e2e/run.mjs a11y"
   },
   "dependencies": {
     "@asg/core": "workspace:^",

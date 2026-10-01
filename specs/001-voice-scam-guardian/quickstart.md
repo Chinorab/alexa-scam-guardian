@@ -23,7 +23,9 @@ pnpm dev
 `AGENT_MODE=simplified` (rule based mode only). Set `AGENT_MODE=full` with AWS credentials to
 use Bedrock.
 
-Expected: web app on `http://localhost:8787`, MCP server on `http://localhost:8788/mcp`.
+Expected: web app on `http://localhost:8787`, with the MCP server mounted at
+`http://localhost:8787/mcp`. `pnpm dev:mcp` also starts the MCP server alone on
+`http://localhost:8788/mcp` and prints a demo bearer token, for MCP Inspector.
 
 ## Validation scenarios
 
@@ -51,6 +53,7 @@ pnpm test             # unit, contract and red team suites
 pnpm test:e2e         # Playwright runs of V1 to V11 and V13 to V14
 pnpm test:a11y        # axe WCAG 2.2 AA on every page
 pnpm test:redteam:live   # optional, red team suite against the Bedrock agent
+pnpm measure          # answer time per turn and time to the check message
 ```
 
 Expected: all green; red team suite reports 0 violations out of at least 60 utterances.

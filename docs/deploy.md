@@ -88,3 +88,20 @@ pnpm --filter @asg/infra destroy
   answers, so a person is never refused mid call.
 - Outreach messages are limited to 10 per household per hour, sign in links to 5 per email
   per hour, test messages to 3 per person per hour.
+
+## Optional: the MCP server on Amazon Bedrock AgentCore Runtime
+
+AgentCore Runtime hosts MCP servers as arm64 containers serving stateless Streamable HTTP on
+`0.0.0.0:8000/mcp`. The same server ships that way:
+
+```bash
+pnpm --filter @asg/infra bundle:container
+docker buildx build --platform linux/arm64 -f apps/mcp-server/Dockerfile -t scam-guardian-mcp .
+```
+
+Push the image to Amazon ECR and create an AgentCore Runtime with the MCP protocol. Give its
+role the same table, secret and SES access as the `McpServer` function and set `TABLE_NAME`,
+`APP_SECRET_ARN` and `WEB_URL`. Without those variables the container runs in memory with
+`HOUSEHOLD_TOKEN_SECRET`, which is how the bundle was checked locally (8 tools listed, 401
+without a token). Callers still need a household bearer token. Not yet run on AgentCore.
+

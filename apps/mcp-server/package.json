@@ -6,7 +6,7 @@
   "description": "Self-hosted MCP server (Streamable HTTP) for the voice scam guardian",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ui-src/tsconfig.json",
-    "dev": "tsx watch src/local.ts",
+    "dev": "node --watch --env-file-if-exists=../../.env --import tsx src/local.ts",
     "build:views": "tsx scripts/build-views.ts"
   },
   "dependencies": {

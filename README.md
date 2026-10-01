@@ -48,8 +48,7 @@ heads up, an optional family password, and a history of checks. One button delet
 
 ```bash
 pnpm install
-pnpm --filter @asg/web build:assets
-pnpm --filter @asg/web exec tsx src/local.ts
+pnpm dev
 ```
 
 Open http://localhost:8787/echo, then type or say:

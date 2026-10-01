@@ -285,7 +285,7 @@ on the family page with both links and no submission.
 - [X] T107 Review FEEDBACK.md and FRICTION_LOG.md for completeness (every tool used has a section), without rewriting past friction entries
 - [X] T108 Audit every number in README.md, docs/demo-script.md and the Devpost draft: each statistic links to an FTC, FBI or IC3 publication, otherwise remove it (FR-035, SC-006)
 - [ ] T109 Run quickstart.md end to end from a clean clone and fix gaps
-- [ ] T110 Stretch: container image for AgentCore Runtime (0.0.0.0:8000/mcp, arm64) in apps/mcp-server/Dockerfile
+- [X] T110 Stretch: container image for AgentCore Runtime (0.0.0.0:8000/mcp, arm64) in apps/mcp-server/Dockerfile
 
 ---
 
