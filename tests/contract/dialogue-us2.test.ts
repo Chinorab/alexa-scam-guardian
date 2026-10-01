@@ -215,3 +215,17 @@ describe("reply page", () => {
     expect((await d.app.request("http://web.test/r/nothing-here")).status).toBe(404);
   });
 });
+
+describe("user story 3: let a trusted contact know", () => {
+  it("offers a heads up when nobody can be verified, and confirms it", async () => {
+    const d = demo();
+    await d.start();
+    const first = await d.say(
+      "Someone from Medicare called and said my benefits are suspended unless I pay with gift cards",
+    );
+    expect(first.say).toMatch(/Should I tell Sarah you got this call, so she can help\?$/);
+    const done = await d.say("Yes");
+    expect(done.say).toBe("Done. I let Sarah know.");
+    expect((await d.phone()).map((m) => m.to)).toEqual(["Sarah"]);
+  });
+});

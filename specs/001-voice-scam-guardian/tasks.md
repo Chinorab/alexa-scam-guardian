@@ -211,13 +211,13 @@ message arrives with no sensitive numbers.
 
 ### Tests for User Story 3
 
-- [ ] T081 [P] [US3] Contract tests for combined question, "just Michael" subset and heads up content without digits in tests/contract/heads-up.test.ts
+- [X] T081 [P] [US3] Contract tests for combined question, "just Michael" subset and heads up content without digits in tests/contract/heads-up.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T082 [US3] Extend prepare_outreach and confirm_outreach with headsUpMemberIds and combined question wording in apps/mcp-server/src/tools/outreach.ts
-- [ ] T083 [P] [US3] Write heads up templates (time, claimed identity, what was asked, signs, advice, report link) in apps/mcp-server/src/messages/heads-up.ts
-- [ ] T084 [US3] Add simplified mode states for offer heads up and combined offer in packages/core/src/dialogue/engine.ts
+- [X] T082 [US3] Extend prepare_outreach and confirm_outreach with headsUpMemberIds and combined question wording in apps/mcp-server/src/tools/outreach.ts
+- [X] T083 [P] [US3] Write heads up templates (time, claimed identity, what was asked, signs, advice, report link) in apps/mcp-server/src/messages/heads-up.ts
+- [X] T084 [US3] Add simplified mode states for offer heads up and combined offer in packages/core/src/dialogue/engine.ts
 
 **Checkpoint**: main dialogue from spec runs word for word in intent.
 

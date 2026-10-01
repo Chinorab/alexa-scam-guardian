@@ -65,6 +65,8 @@ export function headsUpMessage(args: {
   check: Check;
   signLabels: string[];
   stopUrl: string;
+  /** The family page, where the check and any report summary can be read. */
+  detailsUrl: string;
 }): Rendered {
   const older = args.household.olderAdultFirstName;
   const claimed = args.check.claimedIdentity
@@ -80,6 +82,7 @@ export function headsUpMessage(args: {
     signs,
     `We advised ${older} not to send any money and to check with family first.`,
     `Please give ${older} a call when you can.`,
+    `Details and any report summary are on the family page: ${args.detailsUrl}`,
     `To stop all messages from ${PRODUCT_NAME}: ${args.stopUrl}`,
   ].join("\n");
   return { subject: `${older} got a suspicious ${args.check.contactKind}`, text };

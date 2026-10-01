@@ -203,7 +203,14 @@ export function registerOutreach(server: McpServer, deps: Deps, caller: Caller) 
             .map((s) => labelOf(s.signId))
             .filter((l): l is string => l !== undefined && l !== "family member asking for money")
             .slice(0, 3);
-          const message = headsUpMessage({ household, member, check, signLabels: labels, stopUrl });
+          const message = headsUpMessage({
+            household,
+            member,
+            check,
+            signLabels: labels,
+            stopUrl,
+            detailsUrl: `${deps.webUrl}/family/activity`,
+          });
           const delivery = await deliver(deps, household, member, message);
           await deps.store.putHeadsUp({
             headsUpId: newId("headsUp"),
