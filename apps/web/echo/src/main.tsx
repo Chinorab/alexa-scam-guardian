@@ -56,7 +56,7 @@ function Echo() {
         <div class="echo-cards">
           {cards.map((card) => (
             <McpAppFrame
-              key={`${card.uri}-${String(card.data.checkId)}`}
+              key={`${card.uri}#${String(card.data.checkId)}`}
               deviceId={device.deviceId}
               card={card}
             />
