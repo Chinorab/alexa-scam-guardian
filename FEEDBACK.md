@@ -16,9 +16,9 @@ One section per tool, SDK or API used. Updated as the project goes.
 
 ## Vitest 5
 
-- **Used for:** Unit, contract and red team suites, one root config with `projects`.
-- **What worked well:** Zero config TypeScript, fast first run, clear output.
-- **What needs work:** Nothing so far.
+- **Used for:** Unit, contract and red team suites, one root config with `projects`; the same contract suite runs a second time on the DynamoDB store through a project level `env`; the live Bedrock red team has its own config so it never runs by accident.
+- **What worked well:** Zero config TypeScript, fast first run, clear output. `it.each` over a JSON file turned the red team list into one named test per phrase, which made each safety gap easy to read in CI.
+- **What needs work:** A project's `exclude` replaces the default excludes instead of adding to them; easy to miss.
 - **Onboarding:** Smooth.
 - **Would I build with it again:** Yes.
 
@@ -80,5 +80,45 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **What worked well:** Same command pattern in every client. `removeUndefinedValues` on the document client avoids a whole class of marshalling errors. `ReturnValues: "ALL_OLD"` on delete gives single use sign in links in one call.
 - **What needs work:** Each client pulls many small packages; bundles are fine with esbuild (about 2 MB per function) but installs are slow. Testing without an account needs DynamoDB Local (Java or Docker); a pure JavaScript local table for tests would help.
 - **Onboarding:** Smooth; the types document every input.
+- **Would I build with it again:** Yes.
+
+---
+
+## GitHub Spec Kit (speckit skills, spec-kit 0.16.5.dev0)
+
+- **Used for:** The whole method before code: constitution, specify, clarify, plan, tasks, analyze; then the task list as the build checklist (110 tasks).
+- **What worked well:** `analyze` caught a real contradiction between the constitution and the plan before any code existed. The clarify step's one question at a time format fit a solo builder. Tasks with file paths made progress easy to track across sessions.
+- **What needs work:** The generated plan template assumes a team; a solo, three week hackathon needed the schedule added by hand.
+- **Onboarding:** Smooth; each step says what to run next.
+- **Would I build with it again:** Yes.
+
+---
+
+## Hono 4.13 (with Hono JSX and `@hono/aws-lambda`)
+
+- **Used for:** The web app and the MCP server's HTTP layer: server rendered pages with Hono JSX, secure headers with a strict CSP, signed cookies, and Lambda Function URL handlers.
+- **What worked well:** `app.request()` lets contract tests drive the real app in process, including the MCP endpoint through the official client. The same app runs on Node locally and on Lambda unchanged.
+- **What needs work:** The built in Lambda adapter is deprecated in favor of a separate package, which the guide does not say yet (FRICTION_LOG.md #4).
+- **Onboarding:** Fast.
+- **Would I build with it again:** Yes.
+
+---
+
+## axe-core with Playwright (`@axe-core/playwright` 4.13)
+
+- **Used for:** WCAG 2.2 AA checks on every page in light and dark, including a family form with errors and the Echo after a turn.
+- **What worked well:** It found two real problems on the first run: a heading whose id collided with an input, which left the family password field without a label, and a scrollable Echo screen that the keyboard could not reach.
+- **What needs work:** Results name CSS selectors only; a short "why it matters" line per rule in the default output would help non specialists.
+- **Onboarding:** Five lines of code.
+- **Would I build with it again:** Yes.
+
+---
+
+## Vite 8 and Preact 10
+
+- **Used for:** The simulated Echo Show client (speech in and out, light ring, MCP Apps host, demo phone) and the shared stylesheet, built to fixed names so server rendered pages can link them under a strict CSP.
+- **What worked well:** Fast builds; Preact keeps the Echo client at about 69 KB gzipped including the MCP Apps bridge.
+- **What needs work:** Nothing blocking.
+- **Onboarding:** Smooth.
 - **Would I build with it again:** Yes.
 

@@ -241,20 +241,8 @@ async function describe(
   if (result.danger) return reply(DOOR.test(text) ? phrases.dangerAtDoor() : phrases.danger());
   if (result.nextStep === "hang_up_first") return reply(phrases.hangUpFirst());
 
-  // A familiar voice is context: shown on screen, but not read aloud as a sign.
-  const spoken = result.matchedSigns.filter((sign) => sign.id !== "family-voice");
-  const labels = spoken.map((sign) => sign.label);
-  if (labels.length === 0) {
-    // During an open check, details without new signs keep the current question going.
-    if (state.stage === "waiting" && state.offered)
-      return reply(phrases.stillWaiting(state.offered));
-    return reply(phrases.noSigns());
-  }
-  const waitingFact = spoken.find((sign) => !sign.explanation.includes(". "))?.explanation;
-  if (waitingFact) base.waitingFact = waitingFact;
-  const lead = `${phrases.thanks()} ${phrases.signs(labels)}`;
   const helper = result.headsUpCandidate;
-
+  // Money already gone comes first, signs or not: one official first step, no blame.
   if (result.nextStep === "paid_guidance") {
     const guidance = await tools.getGuidance("already_paid", result.alreadyPaid?.method);
     const step = guidance.steps[0] ?? phrases.waitBeforePaying();
@@ -270,6 +258,19 @@ async function describe(
     }
     return reply(phrases.thankForTelling(step), { paid: true });
   }
+
+  // A familiar voice is context: shown on screen, but not read aloud as a sign.
+  const spoken = result.matchedSigns.filter((sign) => sign.id !== "family-voice");
+  const labels = spoken.map((sign) => sign.label);
+  if (labels.length === 0) {
+    // During an open check, details without new signs keep the current question going.
+    if (state.stage === "waiting" && state.offered)
+      return reply(phrases.stillWaiting(state.offered));
+    return reply(phrases.noSigns());
+  }
+  const waitingFact = spoken.find((sign) => !sign.explanation.includes(". "))?.explanation;
+  if (waitingFact) base.waitingFact = waitingFact;
+  const lead = `${phrases.thanks()} ${phrases.signs(labels)}`;
 
   if (result.nextStep === "pick_member" && result.familyMatches.length > 1) {
     const first = result.familyMatches[0];

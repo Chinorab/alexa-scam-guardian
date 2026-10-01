@@ -247,6 +247,15 @@ describe("user story 5: already paid and reporting", () => {
     );
   });
 
+  it("treats money already sent as the first thing, even with no other warning sign", async () => {
+    const d = demo();
+    await d.start();
+    const first = await d.say("I already bought the cards and read him the numbers.");
+    expect(first.say).toBe(
+      "Thank you for telling me. Call the company that sold the gift card right away. Should I tell Sarah you got this call, so she can help?",
+    );
+  });
+
   it("still gives the hotline when the heads up is declined", async () => {
     const d = demo();
     await d.start();

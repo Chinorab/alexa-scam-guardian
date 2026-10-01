@@ -281,9 +281,9 @@ on the family page with both links and no submission.
 - [ ] T103 Timed runs before the freeze: SC-002 (turns and seconds to send a check message), SC-005 (family setup on a phone), SC-009 (two first time visitors without instructions); record in docs/measurements.md
 - [X] T104 [P] Write README: architecture diagram, local run, deploy, AWS integration section (Lambda, DynamoDB, Bedrock, SES, Polly, CDK), safety design, Alexa+ readiness in README.md
 - [X] T105 [P] Split packages/scam-patterns into a separate public MIT repository with README, schema and source check; link it from README.md
-- [ ] T106 [P] Write the demo video script (under 3 minutes, strongest moment in the first 30 s, English) in docs/demo-script.md
-- [ ] T107 Review FEEDBACK.md and FRICTION_LOG.md for completeness (every tool used has a section), without rewriting past friction entries
-- [ ] T108 Audit every number in README.md, docs/demo-script.md and the Devpost draft: each statistic links to an FTC, FBI or IC3 publication, otherwise remove it (FR-035, SC-006)
+- [X] T106 [P] Write the demo video script (under 3 minutes, strongest moment in the first 30 s, English) in docs/demo-script.md
+- [X] T107 Review FEEDBACK.md and FRICTION_LOG.md for completeness (every tool used has a section), without rewriting past friction entries
+- [X] T108 Audit every number in README.md, docs/demo-script.md and the Devpost draft: each statistic links to an FTC, FBI or IC3 publication, otherwise remove it (FR-035, SC-006)
 - [ ] T109 Run quickstart.md end to end from a clean clone and fix gaps
 - [ ] T110 Stretch: container image for AgentCore Runtime (0.0.0.0:8000/mcp, arm64) in apps/mcp-server/Dockerfile
 
