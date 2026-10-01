@@ -38,6 +38,11 @@ const app = createWebApp({
   },
   mcpUrl: process.env.MCP_URL ?? `${webUrl}/mcp`,
   mountMcp: true,
+  session: {
+    secret: process.env.SESSION_SECRET || randomBytes(32).toString("base64url"),
+    secure: webUrl.startsWith("https://"),
+  },
+  showSignInLink: !process.env.SES_FROM,
   ...(process.env.POLLY_VOICE ? { speech: pollySpeech(region, process.env.POLLY_VOICE) } : {}),
   pollMs: Number(process.env.DEMO_POLL_MS ?? 3000),
   staticFiles: [serveStatic({ root: "./dist" }), serveStatic({ root: "./public" })],

@@ -10,3 +10,4 @@ export {
   type ReplyLinkState,
 } from "./tools/replies";
 export { PRODUCT_NAME } from "./messages/messages";
+export { deliver } from "./tools/delivery";

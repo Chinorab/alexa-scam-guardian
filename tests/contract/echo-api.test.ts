@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import type { SpeechSynth } from "../../apps/web/src/routes/tts";
-import { makeDeps } from "./helpers";
+import { makeDeps, SESSION } from "./helpers";
 
 function web(speech?: SpeechSynth) {
   const { deps } = makeDeps();
@@ -17,6 +17,7 @@ function web(speech?: SpeechSynth) {
     mcpUrl: "http://web.test/mcp",
     mcpFetch,
     mountMcp: true,
+    session: SESSION,
     ...(speech ? { speech } : {}),
   });
   const post = (path: string, body: unknown) =>

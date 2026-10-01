@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
 import { z } from "zod";
 import { epochSeconds } from "@asg/core/ports/index";
 import { initialState } from "@asg/core/dialogue/engine";
@@ -17,6 +17,8 @@ export interface ApiContext {
   mcpUrl: string;
   /** Tests reach an in process MCP server through this. */
   mcpFetch?: typeof fetch;
+  /** The signed in family organizer's household, if any (T093). */
+  householdFromRequest?: (c: Context) => Promise<string | undefined>;
 }
 
 const DAY_SECONDS = 24 * 60 * 60;
@@ -36,6 +38,26 @@ export function apiRoutes(ctx: ApiContext) {
 
   /** A private demo household per visitor, so judges never see each other's data. */
   api.post("/device/start", async (c) => {
+    // A signed in organizer gets their own household's Echo; everyone else a demo family.
+    const ownId = await ctx.householdFromRequest?.(c);
+    const own = ownId ? await ctx.deps.store.getHousehold(ownId) : undefined;
+    if (own && own.olderAdultFirstName) {
+      const device: DeviceSession = {
+        deviceId: crypto.randomUUID(),
+        householdId: own.householdId,
+        kind: "real",
+        olderAdultFirstName: own.olderAdultFirstName,
+        history: [],
+        engine: initialState(),
+        expiresAt: epochSeconds(ctx.deps.clock.now()) + DAY_SECONDS,
+      };
+      await ctx.sessions.put(device);
+      return c.json({
+        deviceId: device.deviceId,
+        householdKind: device.kind,
+        olderAdultFirstName: device.olderAdultFirstName,
+      });
+    }
     const household = await seedDemoHousehold(ctx.deps.store, ctx.deps.clock.now());
     const device: DeviceSession = {
       deviceId: crypto.randomUUID(),

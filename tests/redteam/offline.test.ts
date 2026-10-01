@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { findViolations } from "@asg/core/guard/guard";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
-import { makeDeps } from "../contract/helpers";
+import { makeDeps, SESSION } from "../contract/helpers";
 import suite from "./utterances.json" with { type: "json" };
 
 function makeWeb() {
@@ -21,6 +21,7 @@ function makeWeb() {
     mcpUrl: "http://web.test/mcp",
     mcpFetch,
     mountMcp: true,
+    session: SESSION,
   });
   return app;
 }

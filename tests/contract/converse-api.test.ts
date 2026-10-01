@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import type { ConverseFn } from "../../apps/web/src/agent/bedrock-agent";
 import { createWebApp } from "@asg/web";
-import { makeDeps } from "./helpers";
+import { makeDeps, SESSION } from "./helpers";
 
 function textReply(text: string): ConverseCommandOutput {
   return {
@@ -28,6 +28,7 @@ function makeWeb(agent: {
     mcpUrl: "http://web.test/mcp",
     mcpFetch,
     mountMcp: true,
+    session: SESSION,
   });
   return app;
 }

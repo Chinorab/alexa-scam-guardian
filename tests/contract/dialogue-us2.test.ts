@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { findViolations } from "@asg/core/guard/guard";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
-import { makeDeps } from "./helpers";
+import { makeDeps, SESSION } from "./helpers";
 
 function demo() {
   const { deps, advance } = makeDeps();
@@ -20,6 +20,7 @@ function demo() {
     mcpUrl: "http://web.test/mcp",
     mcpFetch,
     mountMcp: true,
+    session: SESSION,
   });
   let deviceId = "";
   const say = async (text: string) => {

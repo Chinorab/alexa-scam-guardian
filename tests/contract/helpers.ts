@@ -7,6 +7,8 @@ import type { Clock } from "@asg/core/ports/index";
 import { createMcpApp, type Deps } from "@asg/mcp-server";
 
 export const SECRET = "contract-test-secret-0123456789abcdef";
+/** Family page sessions in tests. */
+export const SESSION = { secret: "contract-session-secret-0123456789abcdef", secure: false };
 
 /** A controllable clock for wait times and expiry. */
 export function fakeClock(start = new Date("2026-10-05T15:00:00Z")) {

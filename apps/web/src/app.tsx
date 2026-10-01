@@ -7,6 +7,8 @@ import { apiRoutes, type ApiContext } from "./routes/api";
 import { frameRoutes } from "./routes/frame";
 import { replyRoutes } from "./routes/reply";
 import { ttsRoutes, type SpeechSynth } from "./routes/tts";
+import { familyRoutes } from "./routes/family";
+import { readSession, type FamilySessionConfig } from "./family/session";
 import { EchoPage } from "./views/echo";
 import { HomePage } from "./views/home";
 import { PrivacyPage } from "./views/privacy";
@@ -21,6 +23,10 @@ export interface WebAppOptions {
   speech?: SpeechSynth;
   /** How often the Echo polls for news, in milliseconds. */
   pollMs?: number;
+  /** Family page sessions: cookie signing secret and whether cookies need HTTPS. */
+  session: FamilySessionConfig;
+  /** Local runs without an email service: show the sign in link on screen. */
+  showSignInLink?: boolean;
   /** Serves /assets, /favicon.* from disk (local) or the bundle (Lambda). */
   staticFiles?: MiddlewareHandler[];
   /** Local runs mount the MCP server on the same origin at /mcp. */
@@ -75,12 +81,21 @@ export function createWebApp(options: WebAppOptions) {
     sessions: options.sessions,
     agent: options.agent,
     mcpUrl: options.mcpUrl,
+    householdFromRequest: (c) => readSession(c, options.session),
   };
   if (options.mcpFetch) api.mcpFetch = options.mcpFetch;
   app.route("/api", apiRoutes(api));
   app.route("/api", ttsRoutes(options.sessions, options.speech));
 
   app.route("/", replyRoutes(options.deps));
+  app.route(
+    "/",
+    familyRoutes({
+      deps: options.deps,
+      session: options.session,
+      ...(options.showSignInLink ? { showSignInLink: true } : {}),
+    }),
+  );
 
   app.get("/", (c) => c.html(<HomePage />));
   app.get("/privacy", (c) => c.html(<PrivacyPage />));

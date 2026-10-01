@@ -233,18 +233,18 @@ password, then send a test message to each, in under 5 minutes.
 
 ### Tests for User Story 4
 
-- [ ] T085 [P] [US4] Integration tests for sign in links (single use, expiry, rate limit) and session cookie in tests/contract/family-auth.test.ts
+- [X] T085 [P] [US4] Integration tests for sign in links (single use, expiry, rate limit) and session cookie in tests/contract/family-auth.test.ts
 - [ ] T086 [P] [US4] Playwright scenarios V13 and V14 at 390 px width in tests/e2e/family.spec.ts
 
 ### Implementation for User Story 4
 
-- [ ] T087 [US4] Implement sign in routes and session cookie in apps/web/src/routes/family-auth.tsx
-- [ ] T088 [US4] Build household overview and member forms (add, edit, remove, roles, channel) in apps/web/src/routes/family.tsx and apps/web/src/views/family/*.tsx
-- [ ] T089 [P] [US4] Implement family password set, replace, remove (never displayed) in apps/web/src/routes/family-password.tsx
-- [ ] T090 [P] [US4] Implement settings (first name, wait time) and test message with rate limit in apps/web/src/routes/family-settings.tsx
-- [ ] T091 [US4] Implement activity view (checks, signs, messages, outcomes, reports) in apps/web/src/views/family/activity.tsx
-- [ ] T092 [US4] Implement delete all with typed first name confirmation in apps/web/src/routes/family.tsx
-- [ ] T093 [US4] Bind the Echo to the signed in household when an organizer opens /echo in apps/web/src/routes/api.ts
+- [X] T087 [US4] Implement sign in routes and session cookie in apps/web/src/routes/family-auth.tsx
+- [X] T088 [US4] Build household overview and member forms (add, edit, remove, roles, channel) in apps/web/src/routes/family.tsx and apps/web/src/views/family/*.tsx
+- [X] T089 [P] [US4] Implement family password set, replace, remove (never displayed) in apps/web/src/routes/family-password.tsx
+- [X] T090 [P] [US4] Implement settings (first name, wait time) and test message with rate limit in apps/web/src/routes/family-settings.tsx
+- [X] T091 [US4] Implement activity view (checks, signs, messages, outcomes, reports) in apps/web/src/views/family/activity.tsx
+- [X] T092 [US4] Implement delete all with typed first name confirmation in apps/web/src/routes/family.tsx
+- [X] T093 [US4] Bind the Echo to the signed in household when an organizer opens /echo in apps/web/src/routes/api.ts
 
 **Checkpoint**: V13 and V14 pass.
 
