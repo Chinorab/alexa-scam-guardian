@@ -137,20 +137,20 @@ outcome reporting, family password comparison.
 
 ### Tests for User Story 2
 
-- [ ] T052 [P] [US2] Contract tests for prepare_outreach and confirm_outreach (no destination param, nothing sent on no or unclear, expiry, opted out member) in tests/contract/outreach.test.ts
-- [ ] T053 [P] [US2] Contract tests for get_updates and check_family_password (no hint, lock after 3) in tests/contract/updates-password.test.ts
+- [X] T052 [P] [US2] Contract tests for prepare_outreach and confirm_outreach (no destination param, nothing sent on no or unclear, expiry, opted out member) in tests/contract/outreach.test.ts
+- [X] T053 [P] [US2] Contract tests for get_updates and check_family_password (no hint, lock after 3) in tests/contract/updates-password.test.ts
 - [ ] T054 [P] [US2] Add 20 or more red team utterances (call back the caller, use this number, say the password, "he confirmed so I can pay") to tests/redteam/utterances.json
 
 ### Implementation for User Story 2
 
-- [ ] T055 [P] [US2] Implement demo household seed (older adult first name, Michael grandson text channel, Sarah trusted contact) in packages/core/src/demo/seed.ts
-- [ ] T056 [US2] Implement family member matching (relationship, name, nicknames, ambiguity) in packages/core/src/match/members.ts
-- [ ] T057 [US2] Implement prepare_outreach and confirm_outreach (verify role) with rate limit in apps/mcp-server/src/tools/outreach.ts
-- [ ] T058 [P] [US2] Write check message templates (email and text, reply link, stop link, "call them on the number you know") in apps/mcp-server/src/messages/check-message.ts
-- [ ] T059 [US2] Implement get_updates with device events and nextMemberToTry after wait time in apps/mcp-server/src/tools/get-updates.ts
-- [ ] T060 [P] [US2] Implement check_family_password (scrypt compare, 3 attempt lock) in apps/mcp-server/src/tools/family-password.ts
-- [ ] T061 [P] [US2] Implement get_guidance for caller_on_line, no_answer, confirmed_real, danger, general in apps/mcp-server/src/tools/get-guidance.ts
-- [ ] T062 [P] [US2] Build MCP Apps view ui://guardian/check-status in apps/mcp-server/src/ui/check-status.html
+- [X] T055 [P] [US2] Implement demo household seed (older adult first name, Michael grandson text channel, Sarah trusted contact) in packages/core/src/demo/seed.ts
+- [X] T056 [US2] Implement family member matching (relationship, name, nicknames, ambiguity) in packages/core/src/match/members.ts
+- [X] T057 [US2] Implement prepare_outreach and confirm_outreach (verify role) with rate limit in apps/mcp-server/src/tools/outreach.ts
+- [X] T058 [P] [US2] Write check message templates (email and text, reply link, stop link, "call them on the number you know") in apps/mcp-server/src/messages/check-message.ts
+- [X] T059 [US2] Implement get_updates with device events and nextMemberToTry after wait time in apps/mcp-server/src/tools/get-updates.ts
+- [X] T060 [P] [US2] Implement check_family_password (scrypt compare, 3 attempt lock) in apps/mcp-server/src/tools/family-password.ts
+- [X] T061 [P] [US2] Implement get_guidance for caller_on_line, no_answer, confirmed_real, danger, general in apps/mcp-server/src/tools/get-guidance.ts
+- [X] T062 [P] [US2] Build MCP Apps view ui://guardian/check-status in apps/mcp-server/src/ui/check-status.html
 - [ ] T063 [US2] Implement reply page GET and POST /r/:token and GET /stop/:token in apps/web/src/routes/reply.tsx
 - [ ] T064 [US2] Implement GET /api/device/:id/events and GET /api/device/:id/demo-phone in apps/web/src/routes/api.ts
 - [ ] T065 [US2] Add simplified mode states for pick member, offer verify, waiting, it wasn't me, it was me, no answer, call back refusal, password checks in packages/core/src/dialogue/engine.ts

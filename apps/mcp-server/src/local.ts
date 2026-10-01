@@ -21,6 +21,7 @@ const app = createMcpApp(
     store: new MemoryStore(),
     mailer: outbox,
     textChannel: outbox,
+    demoOutbox: outbox,
     clock: systemClock,
     newId: () => newId("check"),
     logger: createLogger({ strict: true }),

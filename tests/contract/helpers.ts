@@ -22,6 +22,7 @@ export function makeDeps(overrides: Partial<Deps> = {}) {
     store: new MemoryStore(clock),
     mailer: outbox,
     textChannel: outbox,
+    demoOutbox: outbox,
     clock,
     newId: () => newId("check"),
     logger: createLogger({ strict: true, sink: () => {} }),

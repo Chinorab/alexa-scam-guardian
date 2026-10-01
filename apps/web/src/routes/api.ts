@@ -4,7 +4,7 @@ import { epochSeconds } from "@asg/core/ports/index";
 import { initialState } from "@asg/core/dialogue/engine";
 import { phrases } from "@asg/core/dialogue/phrases";
 import { startsSensitiveNumber } from "@asg/core/redact/redact";
-import { newId } from "@asg/core/ids";
+import { seedDemoHousehold } from "@asg/core/demo/seed";
 import type { Deps } from "@asg/mcp-server";
 import type { DeviceSession, DeviceSessions } from "../device/sessions";
 import { openMcpSession } from "../agent/mcp-client";
@@ -20,7 +20,6 @@ export interface ApiContext {
 }
 
 const DAY_SECONDS = 24 * 60 * 60;
-const DEMO_FIRST_NAME = "Ruth";
 
 const converseBody = z.object({
   deviceId: z.string().min(1).max(64),
@@ -37,26 +36,15 @@ export function apiRoutes(ctx: ApiContext) {
 
   /** A private demo household per visitor, so judges never see each other's data. */
   api.post("/device/start", async (c) => {
-    const now = ctx.deps.clock.now();
-    const expiresAt = epochSeconds(now) + DAY_SECONDS;
-    const householdId = newId("household");
-    await ctx.deps.store.putHousehold({
-      householdId,
-      kind: "demo",
-      olderAdultFirstName: DEMO_FIRST_NAME,
-      waitMinutes: 10,
-      createdAt: now.toISOString(),
-      updatedAt: now.toISOString(),
-      expiresAt,
-    });
+    const household = await seedDemoHousehold(ctx.deps.store, ctx.deps.clock.now());
     const device: DeviceSession = {
       deviceId: crypto.randomUUID(),
-      householdId,
+      householdId: household.householdId,
       kind: "demo",
-      olderAdultFirstName: DEMO_FIRST_NAME,
+      olderAdultFirstName: household.olderAdultFirstName,
       history: [],
       engine: initialState(),
-      expiresAt,
+      expiresAt: household.expiresAt ?? epochSeconds(ctx.deps.clock.now()) + DAY_SECONDS,
     };
     await ctx.sessions.put(device);
     return c.json({

@@ -8,6 +8,7 @@ export const REPORT_URI = "ui://guardian/report";
 
 const REGISTERED: { name: string; uri: string; view: ViewKey }[] = [
   { name: "Warning signs", uri: WARNING_SIGNS_URI, view: "warningSigns" },
+  { name: "Check status", uri: CHECK_STATUS_URI, view: "checkStatus" },
 ];
 
 /** Registers the MCP Apps views (text/html;profile=mcp-app) shown on Echo Show screens. */

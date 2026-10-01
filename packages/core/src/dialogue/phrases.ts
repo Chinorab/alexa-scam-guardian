@@ -45,15 +45,22 @@ export const phrases = {
 
   waitBeforePaying: () => "Let's not send any money for now.",
 
-  offerVerify(person: Person, headsUp?: Person): string {
-    if (headsUp) {
-      return `Should I ${verb(person.channel)} ${person.name} to check, and tell ${headsUp.name} you got this call?`;
+  offerVerify(person: Person, headsUp?: Person | Person[]): string {
+    const helpers = headsUp === undefined ? [] : Array.isArray(headsUp) ? headsUp : [headsUp];
+    if (helpers.length > 0) {
+      return `Should I ${verb(person.channel)} ${person.name} to check, and tell ${listWithAnd(helpers.map((h) => h.name))} you got this call?`;
     }
     return `Should I ${verb(person.channel)} ${person.name} on the number your family saved?`;
   },
 
-  offerHeadsUp: (person: Person) =>
-    `Should I tell ${person.name} you got this call, so ${pronouns(person).subject} can help?`,
+  offerHeadsUp: (people: Person | Person[]) => {
+    const list = Array.isArray(people) ? people : [people];
+    const first = list[0];
+    if (list.length === 1 && first) {
+      return `Should I tell ${first.name} you got this call, so ${pronouns(first).subject} can help?`;
+    }
+    return `Should I tell ${listWithAnd(list.map((p) => p.name))} you got this call, so they can help?`;
+  },
 
   pickMember: (relationshipWord: string, names: string[]) =>
     `Which ${relationshipWord}, ${names.slice(0, -1).join(", ")} or ${names.at(-1)}?`,

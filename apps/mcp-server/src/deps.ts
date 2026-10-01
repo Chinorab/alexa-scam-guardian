@@ -1,11 +1,14 @@
 import type { Clock, IdGen, Mailer, Store, TextChannel } from "@asg/core/ports/index";
 import type { Logger } from "@asg/core/log/logger";
+import type { DemoOutbox } from "@asg/core/ports/outbox";
 
 /** Everything a tool needs from the outside world. Swapped for in memory ones in tests. */
 export interface Deps {
   store: Store;
   mailer: Mailer;
   textChannel: TextChannel;
+  /** On screen demo phone: all text messages, and every message of a demo household. */
+  demoOutbox: DemoOutbox;
   clock: Clock;
   newId: IdGen;
   logger: Logger;

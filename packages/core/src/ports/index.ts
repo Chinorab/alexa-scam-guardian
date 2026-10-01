@@ -136,6 +136,8 @@ export interface VerificationRequest {
   replyTokenHash: string;
   /** Epoch seconds; the reply link works for 24 hours. */
   replyExpiresAt: number;
+  /** Set when the household wait time passed without a reply (FR-010). */
+  noAnswerAt?: string;
 }
 
 export interface HeadsUp {
@@ -182,6 +184,8 @@ export interface DeviceEvent {
   checkId: string;
   kind: DeviceEventKind;
   memberId?: string;
+  /** For reply_received: what the relative answered. */
+  reply?: Reply;
   at: string;
   read: boolean;
 }
@@ -248,6 +252,7 @@ export interface EmailMessage {
   html?: string;
   /** Lets the demo phone show email sent to demo households. */
   householdId?: string;
+  memberId?: string;
 }
 
 export interface Mailer {

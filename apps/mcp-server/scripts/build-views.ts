@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { build } from "esbuild";
 
-const VIEWS = { warningSigns: "warning-signs" } as const;
+const VIEWS = { warningSigns: "warning-signs", checkStatus: "check-status" } as const;
 
 const require = createRequire(import.meta.url);
 const fontDir = dirname(require.resolve("@fontsource-variable/overpass/package.json"));

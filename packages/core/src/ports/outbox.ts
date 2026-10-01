@@ -1,4 +1,4 @@
-import type { EmailMessage, Mailer, TextChannel, TextMessage } from "./index";
+import type { EmailMessage, TextMessage } from "./index";
 
 export interface OutboxEntry {
   messageId: string;
@@ -12,10 +12,18 @@ export interface OutboxEntry {
 }
 
 /**
- * Local and demo delivery. Email (when SES is not configured) and every text message land
- * here; the demo phone in the simulated Echo reads them per household.
+ * Messages that land on the on screen demo phone instead of a real inbox (FR-014): every text
+ * message, and every message of a demo household. In memory locally, DynamoDB in the cloud.
  */
-export class Outbox implements Mailer, TextChannel {
+export interface DemoOutbox {
+  send(message: EmailMessage | TextMessage): Promise<{ messageId: string }>;
+  /** Newest first, as a phone shows them. */
+  list(householdId: string): Promise<OutboxEntry[]>;
+  clear(householdId: string): Promise<void>;
+}
+
+/** In memory demo outbox. Also the Mailer for local runs without SES. */
+export class Outbox implements DemoOutbox {
   private entries: OutboxEntry[] = [];
   private counter = 0;
 
@@ -31,13 +39,15 @@ export class Outbox implements Mailer, TextChannel {
 
   async send(message: EmailMessage | TextMessage): Promise<{ messageId: string }> {
     if ("subject" in message) {
-      return this.push({
+      const entry: Omit<OutboxEntry, "messageId" | "at"> = {
         kind: "email",
-        householdId: message.householdId,
         to: message.to,
         subject: message.subject,
         body: message.text,
-      });
+      };
+      if (message.householdId) entry.householdId = message.householdId;
+      if (message.memberId) entry.memberId = message.memberId;
+      return this.push(entry);
     }
     return this.push({
       kind: "text",
@@ -48,12 +58,11 @@ export class Outbox implements Mailer, TextChannel {
     });
   }
 
-  /** Newest first, as a phone shows them. */
-  list(householdId: string): OutboxEntry[] {
+  async list(householdId: string): Promise<OutboxEntry[]> {
     return this.entries.filter((entry) => entry.householdId === householdId).reverse();
   }
 
-  clear(householdId: string): void {
+  async clear(householdId: string): Promise<void> {
     this.entries = this.entries.filter((entry) => entry.householdId !== householdId);
   }
 }
