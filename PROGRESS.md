@@ -7,7 +7,7 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-speckit-clarify done (3 Q: DOJ hotline exception, quiet notification, fixed phrase fallback). Constitution v1.1.0. Next: speckit-plan.
+speckit-plan done (plan, research, data-model, contracts, quickstart). Next: user validates plan, then speckit-tasks + analyze. Owner actions: AWS account + Bedrock access, domain for SES, SES production request on Oct 2.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
@@ -15,6 +15,7 @@ speckit-clarify done (3 Q: DOJ hotline exception, quiet notification, fixed phra
 - [x] Constitution v1.0.0 (8 principles) in .specify/memory/constitution.md; git init (branch main)
 - [x] spec.md v1 draft: 6 user stories, 35 FR, 9 SC, reference dialogues + hard cases
 - [x] speckit-clarify: 3 answers integrated (FR-009, FR-019, FR-021, FR-035, FR-036, SC-010)
+- [x] speckit-plan: TS monorepo, MCP SDK v2 (2026-07-28 + 2025-11-25), Lambda + DynamoDB + SES + Polly + Bedrock Haiku 4.5, CDK; schedule Oct 1-22 in plan.md
 
 ## To do
 - [ ] speckit: specify, clarify, plan, tasks, analyze (no code before spec validated together)

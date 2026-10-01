@@ -26,3 +26,19 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - https://developer.amazon.com/docs/alexaplus/add-ons/mcp-toolkit-quickstart.html
 - https://amazonappdev2026.devpost.com/resources
 - https://amazonappdev2026.devpost.com/rules
+
+---
+
+## #2 — MCP TypeScript SDK v2 release status hard to confirm from the docs
+
+- **Date:** 2026-10-01
+- **Task attempted:** Choose between MCP TypeScript SDK v1 and v2 for a server that must speak protocol 2025-11-25 (Alexa+) and ideally 2026-07-28.
+- **Steps:**
+  1. Read the v2 "Protocol versions" docs page: it explains eras and `createMcpHandler`, but does not say whether v2 is stable.
+  2. Read the SDK betas blog post: it says v2 has "no stable release yet" and recommends stable releases for critical workloads.
+  3. Checked npm: `@modelcontextprotocol/server` latest tag is 2.2.0, so v2 is in fact released.
+- **Expected:** The v2 docs home states the current release status and the latest version.
+- **Actual:** The most visible official post is outdated; the answer only came from the npm registry.
+- **Severity:** Low (about 10 minutes, no blocker).
+- **Workaround:** Trusted the npm `latest` dist tag and chose v2.
+- **Suggestion:** Add a release status badge and "latest stable" line to the top of the v2 docs, and an update note on the beta blog post pointing to the GA release.
