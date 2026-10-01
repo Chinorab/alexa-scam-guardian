@@ -7,7 +7,8 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-Phases 3 to 5 and 7 to 9 DONE (US1, US2, US3, US4, US5, US6). 384 unit/contract tests, red team 59 utterances, 18 Playwright scenarios (Echo V1 to V4, family V13 V14, axe WCAG 2.2 AA light and dark, keyboard). Family page: email sign in links, people, password hash, test messages, activity, delete all; signed in organizer Echo uses their household. NEXT: Phase 6 Cloud (blocked on owner answers: AWS account with Bedrock us-east-1, SES domain) then Phase 10 polish (home page design, README, open source dataset repo, demo script, number audit, timed runs). Product name in UI "Scam Guardian" still to confirm.
+All code tasks done except the ones that need the owner (2026-10-02). Phase 6 code done (DynamoDB store and outbox on one table, SES mailer, Lambda handlers, CDK stack validated by synth and assertions, docs/deploy.md); deploy blocked: no AWS CLI, account or Bedrock access on this machine yet. Phase 10 done: home page (road sign assembly), README with architecture and AWS, dataset published as github.com/Chinorab/us-scam-patterns (MIT, CI green), demo script, Devpost draft, number audit (IC3 2025 figures read in the PDF), FEEDBACK review, clean clone quickstart (found and fixed pnpm dev hanging on Windows), AgentCore container. 530 tests, 72 red team utterances, 24 Playwright runs.
+NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, install AWS CLI to D:, then `pnpm deploy` (T080); 2) SES sender/domain (production access request early); 3) confirm product name "Scam Guardian". Then T102 (Playwright on the deployed URL), T103 timed runs with people, `pnpm test:redteam:live`, update docs/measurements.md, record video Oct 21, Devpost Oct 22 from docs/devpost.md.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
@@ -33,6 +34,9 @@ Phases 3 to 5 and 7 to 9 DONE (US1, US2, US3, US4, US5, US6). 384 unit/contract 
 - Install: `pnpm install` | Checks: `pnpm lint && pnpm lint:copy && pnpm typecheck && pnpm test`
 
 ## Pitfalls
+- `pkill` does not exist in this Git Bash; stop dev servers with PowerShell (Get-CimInstance Win32_Process, Stop-Process).
+- `tsx watch` and `a & b` in npm scripts hang on Windows when started from tools; use `node --watch --import tsx` and pnpm's parallel `/^dev:/` scripts.
+- axe color contrast must run after animations settle (a11y.spec waits for document.getAnimations()).
 - Python string replacements turned  into backspace characters in regexes. Use raw strings (r'''...''') or the Edit tool for regex edits.
 - The red team caught a real safety bug: "I am not sure" was read as yes (word "sure"). Hesitation now always parses as unclear.
 - CI broke twice because checks ran without gating the commit. Always: `pnpm check && git commit ...`.

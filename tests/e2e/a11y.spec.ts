@@ -6,6 +6,10 @@ import { OPENING, caption, openEcho, say } from "./helpers";
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function expectNoViolations(page: Page, name: string) {
+  // Contrast is measured on the settled page, not halfway through a sign fading in.
+  await page.waitForFunction(() =>
+    document.getAnimations().every((animation) => animation.playState !== "running"),
+  );
   const results = await new AxeBuilder({ page }).withTags(TAGS).analyze();
   const summary = results.violations.map(
     (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`,
