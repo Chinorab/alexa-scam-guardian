@@ -7,7 +7,7 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-Phase 2 in progress: T010-T019 done (safety tests, ports, memory store, outbox, logger, redact, guard, confirm; 76 tests). Next: T020-T022 scam pattern dataset from FTC/FBI sources.
+Phase 2 in progress: T010-T024 done (safety core + dataset 16 signs/8 patterns/16 official sources all reachable + matcher + phrase catalog guarded; 190 tests). Next: T025-T029 MCP server shell (SDK v2).
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.

@@ -37,7 +37,18 @@ export const COPY_ROOTS = [
 ];
 
 const LABELLED_ATTRIBUTES = ["alt", "title", "aria-label", "placeholder", "aria-description"];
-const JSON_SKIPPED_KEYS = new Set(["url", "id", "$schema", "$id", "sourceRef", "retrievedOn"]);
+// "title" holds official source titles verbatim: citations, not product copy.
+const JSON_SKIPPED_KEYS = new Set([
+  "url",
+  "id",
+  "$schema",
+  "$id",
+  "sourceRefs",
+  "signIds",
+  "cues",
+  "retrievedOn",
+  "title",
+]);
 
 export const checkText = checkCopy;
 

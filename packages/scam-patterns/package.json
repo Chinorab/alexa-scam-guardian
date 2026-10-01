@@ -5,6 +5,16 @@
   "type": "module",
   "description": "Scam patterns from official FTC and FBI alerts, each with its source",
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
-  }
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check-sources": "tsx scripts/check-sources.ts"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "main": "./src/index.ts"
 }

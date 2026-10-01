@@ -66,11 +66,11 @@ before this phase is done.
 - [X] T017 Implement spoken digit normalization and redaction (research R6) in packages/core/src/redact/redact.ts
 - [X] T018 Implement output guard with per state safe replacement lines in packages/core/src/guard/guard.ts
 - [X] T019 Implement confirmation parser in packages/core/src/confirm/confirm.ts
-- [ ] T020 [P] Write the scam pattern JSON Schema (pattern, warning sign, source, resource) in packages/scam-patterns/schema/pattern.schema.json
-- [ ] T021 Research and write at least 8 patterns from FTC and FBI or IC3 pages (family emergency, government impersonation, tech support, bank impersonation, romance, prize, cash courier, crypto investment) with source URL and retrieval date, plus DOJ hotline resource, in packages/scam-patterns/data/patterns.json
-- [ ] T022 [P] Write source check script failing on missing source, non official publisher or unreachable URL in packages/scam-patterns/scripts/check-sources.ts
-- [ ] T023 Implement rule based warning sign matcher over the dataset in packages/core/src/match/match.ts with tests in packages/core/src/match/match.test.ts
-- [ ] T024 Define the fixed phrase catalog (every simplified mode line, three sentences max, no dashes) in packages/core/src/dialogue/phrases.ts
+- [X] T020 [P] Write the scam pattern JSON Schema (pattern, warning sign, source, resource) in packages/scam-patterns/schema/pattern.schema.json
+- [X] T021 Research and write at least 8 patterns from FTC and FBI or IC3 pages (family emergency, government impersonation, tech support, bank impersonation, romance, prize, cash courier, crypto investment) with source URL and retrieval date, plus DOJ hotline resource, in packages/scam-patterns/data/patterns.json
+- [X] T022 [P] Write source check script failing on missing source, non official publisher or unreachable URL in packages/scam-patterns/scripts/check-sources.ts
+- [X] T023 Implement rule based warning sign matcher over the dataset in packages/core/src/match/match.ts with tests in packages/core/src/match/match.test.ts
+- [X] T024 Define the fixed phrase catalog (every simplified mode line, three sentences max, no dashes) in packages/core/src/dialogue/phrases.ts
 
 ### MCP server shell
 

@@ -27,8 +27,8 @@ export interface GuardResult {
   violations: GuardViolation[];
 }
 
-/** Digit strings allowed in speech: 911 and the DOJ National Elder Fraud Hotline. */
-const ALLOWED_NUMBERS = new Set(["911", "8333728311", "833372831"]);
+/** Digit strings allowed in speech: 911, the DOJ Elder Fraud Hotline, the Postal Inspection Service. */
+const ALLOWED_NUMBERS = new Set(["911", "8333728311", "8778762455"]);
 
 const PAY_VERBS = "(pay|send|wire|transfer|buy|give|hand over|mail)";
 
@@ -90,8 +90,12 @@ const normalize = (text: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+/** Abbreviations whose dots do not end a sentence. */
+const ABBREVIATIONS = /\b(U\.S\.|a\.m\.|p\.m\.|Mr\.|Mrs\.|Ms\.|Dr\.|St\.|e\.g\.|i\.e\.)/g;
+
 export function sentences(line: string): string[] {
   return line
+    .replace(ABBREVIATIONS, (abbreviation) => abbreviation.replaceAll(".", ""))
     .split(/(?<=[.!?])\s+/)
     .map((part) => part.trim())
     .filter((part) => /\w/.test(part));

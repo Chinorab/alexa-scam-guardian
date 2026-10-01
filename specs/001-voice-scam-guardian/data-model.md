@@ -47,24 +47,21 @@ Validation: at least one role true. A member with `optedOut = true` is never mes
 Never returned by any API or tool. Comparison only (FR-011). Three wrong attempts per check
 lock the comparison for that check.
 
-## ScamPattern (shared dataset, not per household)
+## Scam pattern dataset (shared, not per household)
 
-Lives in `packages/scam-patterns` as versioned JSON, loaded in memory.
+Lives in `packages/scam-patterns` as versioned JSON (`data/patterns.json`), validated against
+`schema/pattern.schema.json` and by `src/check.ts` in CI. Loaded in memory.
 
-| Field | Type | Rules |
-|---|---|---|
-| id | slug | e.g. `family-emergency` |
-| name | string | plain words |
-| description | string | one or two sentences |
-| warningSigns | WarningSign[] | |
-| advice | string[] | short, speakable |
-| ifPaid | map payment method to steps | for FR-021 |
-| sources | Source[] | at least one; publisher in FTC, FBI, IC3 |
-
-**WarningSign**: `id`, `label` (speakable), `explanation` (one sentence), `cues` (phrases and
-patterns used by the rule matcher), `sourceRef`.
-
-**Source**: `publisher` (FTC, FBI, IC3, DOJ for resources only), `title`, `url`, `retrievedOn`.
+- **sources**: map of id to `publisher` (FTC, FBI, IC3; DOJ for help resources only), `title`
+  (official, verbatim), `label` (shown on screen), `url` (official domain only), `retrievedOn`.
+- **warningSigns**: `id`, `label` (speakable after "the"), `explanation` (one sentence),
+  `cues` (case insensitive regular expressions for the rule matcher), `sourceRefs`. Signs are
+  shared across patterns.
+- **patterns**: `id`, `name`, `description`, `signIds` (first one is the primary sign),
+  `advice`, `sourceRefs`. At least 8.
+- **ifPaid**: one entry per payment method with speakable `steps` and `sourceRefs` (FR-021).
+- **resources**: ReportFraud.ftc.gov, ic3.gov, DOJ National Elder Fraud Hotline, with
+  `whenToUse`, optional `phone` (spaces, no dashes) and `hours`.
 
 ## Check
 
