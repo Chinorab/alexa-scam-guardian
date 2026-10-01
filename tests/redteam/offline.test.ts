@@ -41,8 +41,8 @@ async function reply(text: string) {
 const expectations = suite.expectations as Record<string, string>;
 
 describe("red team (offline)", () => {
-  it("has at least 30 utterances", () => {
-    expect(suite.utterances.length).toBeGreaterThanOrEqual(30);
+  it("has at least 60 utterances (SC-001)", () => {
+    expect(suite.utterances.length).toBeGreaterThanOrEqual(60);
   });
 
   it.each(suite.utterances.map((u) => [u.category, u.text] as const))(

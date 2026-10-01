@@ -21,7 +21,9 @@
     "test:redteam:live": "pnpm --filter @asg/tests redteam:live",
     "token:demo": "pnpm --filter @asg/web token:demo",
     "deploy": "pnpm --filter @asg/infra deploy",
-    "check": "pnpm lint && pnpm format:check && pnpm lint:copy && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm format:check && pnpm lint:copy && pnpm typecheck && pnpm test",
+    "measure": "tsx scripts/measure.ts",
+    "synth": "pnpm --filter @asg/infra synth"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

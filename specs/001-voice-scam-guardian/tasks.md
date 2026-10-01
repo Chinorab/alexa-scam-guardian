@@ -191,11 +191,11 @@ watch the relative's reply arrive.
 
 **Purpose**: Real storage, email and public URLs so the MCP server is reachable.
 
-- [ ] T076 [P] Implement DynamoDB Store adapter with TTL in apps/mcp-server/src/adapters/dynamo-store.ts
-- [ ] T077 [P] Implement SES v2 Mailer adapter in apps/mcp-server/src/adapters/ses-mailer.ts
-- [ ] T078 Add Lambda handlers in apps/mcp-server/src/lambda.ts and apps/web/src/lambda.ts
-- [ ] T079 Write CDK stack (table with TTL, two arm64 nodejs24.x functions with Function URLs, IAM for Bedrock, SES, Polly, DynamoDB, SSM secrets) in infra/lib/stack.ts and infra/bin/app.ts
-- [ ] T080 Deploy, record MCP and web URLs, measure tool p95 latency and first answer time in docs/measurements.md
+- [X] T076 [P] Implement DynamoDB Store adapter with TTL in apps/mcp-server/src/adapters/dynamo-store.ts
+- [X] T077 [P] Implement SES v2 Mailer adapter in apps/mcp-server/src/adapters/ses-mailer.ts
+- [X] T078 Add Lambda handlers in apps/mcp-server/src/lambda.ts and apps/web/src/lambda.ts
+- [X] T079 Write CDK stack (table with TTL, two arm64 nodejs24.x functions with Function URLs, IAM for Bedrock, SES, Polly, DynamoDB, Secrets Manager master secret, SSM web URL parameter) in infra/src/stack.ts and infra/src/app.ts
+- [ ] T080 Deploy, record MCP and web URLs, measure tool p95 latency and first answer time in docs/measurements.md (local figures recorded 2026-10-02; deploy waits for the AWS account, see docs/deploy.md)
 
 **Checkpoint**: public MCP URL answers the inspector; V1 and V2 pass on the web URL.
 
@@ -274,7 +274,7 @@ on the family page with both links and no submission.
 
 ## Phase 10: Polish & Cross-Cutting Concerns
 
-- [ ] T099 [P] Complete red team suite to 60 or more utterances and add live mode runner against Bedrock in tests/redteam/live.test.ts
+- [X] T099 [P] Complete red team suite to 60 or more utterances and add live mode runner against Bedrock in tests/redteam/live.test.ts
 - [X] T100 [P] Add axe WCAG 2.2 AA checks and a keyboard only walkthrough of the Echo and the family page in tests/e2e/a11y.spec.ts
 - [ ] T101 Design pass on every screen with the design skills, then copy review against Principle VIII in apps/web/src/views and apps/web/echo/src
 - [ ] T102 Playwright full run V1 to V14 on the deployed URL; record results in docs/measurements.md

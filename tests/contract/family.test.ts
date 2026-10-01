@@ -2,12 +2,13 @@
 import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
+import type { Deps } from "@asg/mcp-server";
 import { SESSION, makeDeps } from "./helpers";
 
 const ORIGIN = "https://guardian.test";
 
-function family() {
-  const made = makeDeps();
+function family(overrides: Partial<Deps> = {}) {
+  const made = makeDeps(overrides);
   const mcpFetch = (async (input: string | URL | Request, init?: RequestInit) =>
     app.request(input instanceof URL ? input.href : String(input), init)) as typeof fetch;
   const app: ReturnType<typeof createWebApp> = createWebApp({
@@ -94,6 +95,20 @@ describe("sign in", () => {
     expect(await (await f.form("/family/sign-in", { email: "anna@example.com" })).text()).toContain(
       "Too many links",
     );
+  });
+
+  it("says when the email could not go out, without naming the address", async () => {
+    const f = family({
+      mailer: {
+        send: () => Promise.reject(new Error("MessageRejected: Email address is not verified.")),
+      },
+    });
+    const response = await f.form("/family/sign-in", { email: "anna@example.com" });
+    const html = await response.text();
+    expect(response.status).toBe(503);
+    expect(html).toContain("The email did not go out");
+    expect(html).not.toContain("anna@example.com");
+    expect(html).not.toMatch(/\/family\/sign-in\/[A-Za-z0-9_-]{20,}/);
   });
 
   it("refuses form posts from another site", async () => {

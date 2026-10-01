@@ -74,7 +74,7 @@ export const looksLikeEmail = (email: string) =>
 export async function sendSignInLink(
   deps: Deps,
   email: string,
-): Promise<{ link?: string; limited: boolean }> {
+): Promise<{ link?: string; limited: boolean; failed?: boolean }> {
   const now = deps.clock.now();
   const count = await deps.store.incrementRate(`signin#${email}`, 3600);
   if (count > SIGN_IN_LINKS_PER_HOUR) return { limited: true };
@@ -86,15 +86,21 @@ export async function sendSignInLink(
     expiresAt: epochSeconds(now) + LINK_SECONDS,
   });
   const link = `${deps.webUrl}/family/sign-in/${token}`;
-  await deps.mailer.send({
-    to: email,
-    subject: "Your Scam Guardian sign in link",
-    text: [
-      "Use this link to open your family page. It works once, for 15 minutes:",
-      link,
-      "If you did not ask for it, you can ignore this email.",
-    ].join("\n"),
-  });
+  try {
+    await deps.mailer.send({
+      to: email,
+      subject: "Your Scam Guardian sign in link",
+      text: [
+        "Use this link to open your family page. It works once, for 15 minutes:",
+        link,
+        "If you did not ask for it, you can ignore this email.",
+      ].join("\n"),
+    });
+  } catch {
+    // For example SES still in sandbox mode, or a short outage. Nothing names the address.
+    deps.logger.log({ event: "error", where: "sign_in_email", code: "send_failed" });
+    return { limited: false, failed: true };
+  }
   return { link, limited: false };
 }
 

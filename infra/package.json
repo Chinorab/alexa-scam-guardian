@@ -5,6 +5,19 @@
   "type": "module",
   "description": "AWS CDK app",
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "bundle": "tsx scripts/bundle.ts",
+    "synth": "pnpm bundle && cdk synth --quiet",
+    "deploy": "pnpm bundle && cdk deploy --require-approval broadening",
+    "destroy": "cdk destroy"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.272.0",
+    "constructs": "10.8.1"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1144.0",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15"
   }
 }

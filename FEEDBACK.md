@@ -61,3 +61,24 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **What needs work:** Clicking an element scrolls its container, which made a full page capture look like a layout bug until measured.
 - **Onboarding:** Smooth; browsers install to any folder with `PLAYWRIGHT_BROWSERS_PATH`.
 - **Would I build with it again:** Yes.
+
+---
+
+## AWS CDK 2.272 (`aws-cdk-lib`, CLI 2.1144)
+
+- **Used for:** The whole cloud stack in TypeScript: DynamoDB table with TTL and a secondary index, two arm64 Node.js 24 Lambda functions with Function URLs, a generated Secrets Manager secret, an SSM parameter and least privilege IAM for Bedrock, Polly and SES.
+- **What worked well:** `cdk synth` now runs CloudFormation validation locally and named a circular dependency precisely (function role policy, SSM parameter, Function URL, function), with the resource path for each link. The `assertions` module made it easy to test promises in CI: no secret value in the template, Bedrock limited to one model, logs kept one week. `Runtime.NODEJS_24_X` and `TableV2` were there.
+- **What needs work:** A common need, a function that knows its own Function URL, has no built in answer; the cycle forces an SSM parameter or a custom domain. A short pattern in the Lambda docs would save time. The first synth printed "83 feature flags are not configured" with no hint whether a new project should care.
+- **Onboarding:** Good for someone who knows CloudFormation; validated before any account was available.
+- **Would I build with it again:** Yes.
+
+---
+
+## AWS SDK for JavaScript v3 (DynamoDB document client, SES v2, Secrets Manager, SSM, Polly, Bedrock Runtime)
+
+- **Used for:** The DynamoDB store and demo phone, real email through SES v2, the master secret at cold start, the web URL parameter, Polly neural speech, and Bedrock Converse with tool use. Written and unit tested; not yet run against a real account (FRICTION_LOG.md #5), this section will be updated after the first deploy.
+- **What worked well:** Same command pattern in every client. `removeUndefinedValues` on the document client avoids a whole class of marshalling errors. `ReturnValues: "ALL_OLD"` on delete gives single use sign in links in one call.
+- **What needs work:** Each client pulls many small packages; bundles are fine with esbuild (about 2 MB per function) but installs are slow. Testing without an account needs DynamoDB Local (Java or Docker); a pure JavaScript local table for tests would help.
+- **Onboarding:** Smooth; the types document every input.
+- **Would I build with it again:** Yes.
+

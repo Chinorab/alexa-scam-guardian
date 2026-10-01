@@ -10,6 +10,7 @@ export default defineConfig({
           include: [
             "packages/*/src/**/*.test.ts",
             "apps/*/src/**/*.test.ts",
+            "infra/src/**/*.test.ts",
             "scripts/**/*.test.ts",
           ],
         },
@@ -18,6 +19,15 @@ export default defineConfig({
         test: {
           name: "contract",
           include: ["tests/contract/**/*.test.ts", "tests/redteam/offline.test.ts"],
+        },
+      },
+      {
+        // The same contract tests on the DynamoDB store, through an in memory table.
+        test: {
+          name: "contract-dynamo",
+          include: ["tests/contract/**/*.test.ts"],
+          exclude: ["tests/contract/store.test.ts"],
+          env: { TEST_STORE: "dynamo" },
         },
       },
     ],

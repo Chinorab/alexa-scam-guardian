@@ -5,6 +5,8 @@ import { MemoryStore } from "@asg/core/ports/memory-store";
 import { Outbox } from "@asg/core/ports/outbox";
 import type { Clock } from "@asg/core/ports/index";
 import { createMcpApp, type Deps } from "@asg/mcp-server";
+import { DynamoStore } from "../../apps/mcp-server/src/adapters/dynamo-store";
+import { MemoryTable } from "../../apps/mcp-server/src/adapters/table";
 
 export const SECRET = "contract-test-secret-0123456789abcdef";
 /** Family page sessions in tests. */
@@ -21,7 +23,11 @@ export function makeDeps(overrides: Partial<Deps> = {}) {
   const outbox = new Outbox();
   const { clock, advance } = fakeClock();
   const deps: Deps = {
-    store: new MemoryStore(clock),
+    // TEST_STORE=dynamo runs every contract test on the DynamoDB key design.
+    store:
+      process.env.TEST_STORE === "dynamo"
+        ? new DynamoStore(new MemoryTable(), clock)
+        : new MemoryStore(clock),
     mailer: outbox,
     textChannel: outbox,
     demoOutbox: outbox,

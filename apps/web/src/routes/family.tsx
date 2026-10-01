@@ -90,7 +90,14 @@ export function familyRoutes(options: FamilyOptions) {
     }
     const sent = await sendSignInLink(deps, email);
     const devLink = options.showSignInLink && sent.link ? sent.link : undefined;
-    return c.html(<LinkSentPage limited={sent.limited} {...(devLink ? { devLink } : {})} />);
+    return c.html(
+      <LinkSentPage
+        limited={sent.limited}
+        {...(sent.failed ? { failed: true } : {})}
+        {...(devLink ? { devLink } : {})}
+      />,
+      sent.failed ? 503 : 200,
+    );
   });
 
   // GET only shows a button: mail scanners open links on their own and must not use them up.

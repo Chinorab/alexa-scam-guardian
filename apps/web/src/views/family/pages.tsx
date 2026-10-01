@@ -82,15 +82,28 @@ export function SignInPage(props: { error?: string; email?: string }) {
   );
 }
 
-export function LinkSentPage(props: { devLink?: string; limited?: boolean }) {
+export function LinkSentPage(props: { devLink?: string; limited?: boolean; failed?: boolean }) {
+  const heading = props.failed
+    ? "The email did not go out"
+    : props.limited
+      ? "Too many links"
+      : "Check your email";
+  const lead = props.failed
+    ? "We could not send the sign in email just now. Please try again in a few minutes."
+    : props.limited
+      ? "We already sent several links this hour. Please use the latest one, or try again later."
+      : "If that address can use the family page, a sign in link is on its way. It works once, for 15 minutes.";
   return (
     <Layout title="Check your email" description="We sent you a sign in link." current="family">
-      <h1>{props.limited ? "Too many links" : "Check your email"}</h1>
-      <p class="lead">
-        {props.limited
-          ? "We already sent several links this hour. Please use the latest one, or try again later."
-          : "If that address can use the family page, a sign in link is on its way. It works once, for 15 minutes."}
-      </p>
+      <h1>{heading}</h1>
+      <p class="lead">{lead}</p>
+      {props.failed && (
+        <p>
+          <a class="button" href="/family/sign-in">
+            Try again
+          </a>
+        </p>
+      )}
       {props.devLink && (
         <div class="callout">
           <p>Local run without email: open your link here.</p>

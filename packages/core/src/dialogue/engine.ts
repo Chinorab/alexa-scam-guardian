@@ -144,12 +144,12 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "say_password",
-    /\b(what'?s|what is|tell me|say|read me|remind me(?: of| what)?)\s+(?:is\s+)?(our|the|my) (family )?(password|secret word|code word)\b/i,
+    /\b(what'?s|what is|tell|say|read|give|share|remind)(?: (?:me|him|her|them|the caller))?(?: of| what)?\s+(?:is\s+)?(our|the|my) (family )?(password|secret word|code word)\b/i,
   ],
   ["password_heard", /\b(password|secret word|code word) (is|was)\b/i],
   [
     "call_back",
-    /\b(call|text|ring|phone) (back )?(the|that) (number|caller)|\b(call|ring) (the )?(lawyer|attorney|officer|police|sergeant|caller|him|her|them) back\b/i,
+    /\b(call|text|ring|phone) (back )?(the|that) (number|caller)|\b(call|ring|dial|phone) (the )?(lawyer|attorney|officer|police|sergeant|caller|him|her|them) back\b/i,
   ],
   [
     "pay_question",

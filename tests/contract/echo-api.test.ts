@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import type { SpeechSynth } from "../../apps/web/src/routes/tts";
+import { FULL_TURNS_PER_HOUR, STARTS_PER_HOUR } from "../../apps/web/src/routes/api";
 import { makeDeps, SESSION } from "./helpers";
 
 function web(speech?: SpeechSynth) {
@@ -108,5 +109,60 @@ describe("POST /api/demo/reset", () => {
     const session = await w.sessions.get(deviceId);
     if (session) await w.sessions.put({ ...session, kind: "real" });
     expect((await w.post("/api/demo/reset", { deviceId })).status).toBe(403);
+  });
+});
+
+describe("public demo limits", () => {
+  it("limits new demo families per visitor address, behind the Function URL proxy", async () => {
+    const w = web();
+    const start = (ip: string) =>
+      w.app.request("http://web.test/api/device/start", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-forwarded-for": ip },
+        body: "{}",
+      });
+    for (let i = 0; i < STARTS_PER_HOUR; i++) expect((await start("203.0.113.9")).status).toBe(200);
+    expect((await start("203.0.113.9")).status).toBe(429);
+    expect((await start("198.51.100.4")).status).toBe(200);
+  });
+
+  it("answers in the rule based mode once the hourly model budget is spent", async () => {
+    const calls: number[] = [];
+    const { deps } = makeDeps();
+    const sessions = new MemoryDeviceSessions();
+    const mcpFetch = (async (input: string | URL | Request, init?: RequestInit) =>
+      app.request(input instanceof URL ? input.href : String(input), init)) as typeof fetch;
+    const app: ReturnType<typeof createWebApp> = createWebApp({
+      deps,
+      sessions,
+      agent: {
+        mode: "full",
+        modelId: "test-model",
+        converse: async () => {
+          calls.push(1);
+          throw new Error("model unavailable in this test");
+        },
+      },
+      mcpUrl: "http://web.test/mcp",
+      mcpFetch,
+      mountMcp: true,
+      session: SESSION,
+    });
+    const post = (path: string, body: unknown) =>
+      app.request(`http://web.test${path}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    const deviceId = ((await (await post("/api/device/start", {})).json()) as { deviceId: string })
+      .deviceId;
+    const household = (await sessions.get(deviceId))!.householdId;
+    for (let i = 0; i < FULL_TURNS_PER_HOUR; i++) {
+      await deps.store.incrementRate(`turns#${household}`, 3600);
+    }
+    const response = await post("/api/converse", { deviceId, text: "So can I pay him?" });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ mode: "simplified" });
+    expect(calls).toEqual([]);
   });
 });

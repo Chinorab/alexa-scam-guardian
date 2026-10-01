@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { Hono, type Context } from "hono";
 import { z } from "zod";
 import { epochSeconds } from "@asg/core/ports/index";
@@ -22,6 +23,21 @@ export interface ApiContext {
 }
 
 const DAY_SECONDS = 24 * 60 * 60;
+/** New demo families per visitor address per hour; keeps a public demo from being flooded. */
+export const STARTS_PER_HOUR = 20;
+/** Model backed turns per household per hour. Past this the rule based mode answers, so a
+ *  person in the middle of a call is never refused, and the model bill stays bounded. */
+export const FULL_TURNS_PER_HOUR = 120;
+
+/**
+ * The visitor address behind the Lambda Function URL, hashed: it is only a rate limit key and
+ * is never stored as is. Local runs have no proxy header and no limit.
+ */
+function visitorKey(c: Context): string | undefined {
+  const forwarded = c.req.header("x-forwarded-for")?.split(",")[0]?.trim();
+  if (!forwarded) return undefined;
+  return createHash("sha256").update(`visitor:${forwarded}`).digest("base64url").slice(0, 22);
+}
 
 const converseBody = z.object({
   deviceId: z.string().min(1).max(64),
@@ -58,6 +74,13 @@ export function apiRoutes(ctx: ApiContext) {
         olderAdultFirstName: device.olderAdultFirstName,
       });
     }
+    const visitor = visitorKey(c);
+    if (
+      visitor &&
+      (await ctx.deps.store.incrementRate(`start#${visitor}`, 3600)) > STARTS_PER_HOUR
+    ) {
+      return c.json({ error: "too_many_starts" }, 429);
+    }
     const household = await seedDemoHousehold(ctx.deps.store, ctx.deps.clock.now());
     const device: DeviceSession = {
       deviceId: crypto.randomUUID(),
@@ -82,8 +105,11 @@ export function apiRoutes(ctx: ApiContext) {
     const device = await ctx.sessions.get(parsed.data.deviceId);
     if (!device) return c.json({ error: "unknown_device" }, 404);
 
+    const turns = await ctx.deps.store.incrementRate(`turns#${device.householdId}`, 3600);
+    const agent =
+      turns > FULL_TURNS_PER_HOUR ? { mode: "simplified" as const, modelId: "none" } : ctx.agent;
     const { result, device: updated } = await runTurn(device, parsed.data.text, {
-      ...ctx.agent,
+      ...agent,
       logger: ctx.deps.logger,
       openSession: (d) =>
         openMcpSession(
