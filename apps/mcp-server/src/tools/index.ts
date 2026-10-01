@@ -7,6 +7,7 @@ import { registerFamilyPassword } from "./family-password";
 import { registerGetGuidance } from "./get-guidance";
 import { registerGetUpdates } from "./get-updates";
 import { registerOutreach } from "./outreach";
+import { registerPrepareReport } from "./prepare-report";
 
 /** Every tool of the contract (contracts/mcp-tools.md). */
 export function registerTools(server: McpServer, deps: Deps, caller: Caller): void {
@@ -16,5 +17,6 @@ export function registerTools(server: McpServer, deps: Deps, caller: Caller): vo
   registerGetUpdates(server, deps, caller);
   registerFamilyPassword(server, deps, caller);
   registerGetGuidance(server);
+  registerPrepareReport(server, deps, caller);
   registerCloseCheck(server, deps, caller);
 }

@@ -50,6 +50,9 @@ function allLines(): string[] {
     phrases.backToCheck(),
     `${phrases.cantHelpHere()} ${phrases.backToCheck()} ${phrases.offerVerify(michael)}`,
     phrases.closing(),
+    phrases.reportNeedsCall(),
+    `${phrases.thanksPaid()} Call the company that sold the gift card right away. ${phrases.offerHeadsUp(sarah)}`,
+    `${phrases.sent(undefined, ["Sarah"])} ${phrases.hotline()}`,
   ];
   for (const person of people) {
     lines.push(

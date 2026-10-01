@@ -56,6 +56,11 @@ export interface UpdatesResult {
 
 export type PasswordResult = "matches" | "does_not_match" | "not_set" | "locked";
 
+export interface GuidanceResult {
+  steps: string[];
+  helpResources: { name: string; phone?: string }[];
+}
+
 /** The tools the engine can call. Backed by an MCP session in the web app. */
 export interface EngineTools {
   assessCall(description: string, checkId?: string): Promise<AssessCallResult>;
@@ -67,9 +72,12 @@ export interface EngineTools {
   confirmOutreach(pendingId: string, userReply: string): Promise<ConfirmResult>;
   getUpdates(checkId?: string): Promise<UpdatesResult>;
   checkFamilyPassword(checkId: string, phraseHeard: string): Promise<PasswordResult>;
+  getGuidance(topic: "already_paid", paymentMethod?: PaymentMethod): Promise<GuidanceResult>;
+  prepareReport(checkId: string): Promise<{ reportId: string }>;
 }
 
-export type Stage = "idle" | "assessed" | "pick_member" | "awaiting_confirmation" | "waiting";
+export type Stage =
+  "idle" | "assessed" | "pick_member" | "awaiting_confirmation" | "waiting" | "report_offered";
 
 export interface EngineState {
   stage: Stage;
@@ -90,6 +98,8 @@ export interface EngineState {
   contacted?: Member[];
   /** One sentence to share while waiting, from the top warning sign. */
   waitingFact?: string;
+  /** Set after "I already paid": the hotline is offered once the heads up is settled. */
+  paid?: boolean;
 }
 
 export interface EngineReply {
@@ -112,6 +122,7 @@ export type Intent =
   | "password_heard"
   | "closing"
   | "file_for_me"
+  | "report"
   | "off_topic"
   | "bare_yes"
   | "bare_no"
@@ -127,6 +138,10 @@ const INTENTS: [Intent, RegExp][] = [
     /\b(what'?s new|any news|did \w+ (answer|reply|write back|text back|call back)|has \w+ (answered|replied))\b/i,
   ],
   ["file_for_me", /\b(send|file|submit) (it|the report|a report) for me\b/i],
+  [
+    "report",
+    /\b(report (it|this|the call|that)|help (me )?(to )?report|how (do|can) i report|file a report|make a report)\b/i,
+  ],
   [
     "say_password",
     /\b(what'?s|what is|tell me|say|read me|remind me(?: of| what)?)\s+(?:is\s+)?(our|the|my) (family )?(password|secret word|code word)\b/i,
@@ -240,6 +255,22 @@ async function describe(
   const lead = `${phrases.thanks()} ${phrases.signs(labels)}`;
   const helper = result.headsUpCandidate;
 
+  if (result.nextStep === "paid_guidance") {
+    const guidance = await tools.getGuidance("already_paid", result.alreadyPaid?.method);
+    const step = guidance.steps[0] ?? phrases.waitBeforePaying();
+    if (helper) {
+      const offered = await offer(
+        { ...base, paid: true },
+        tools,
+        `${phrases.thanksPaid()} ${step}`,
+        undefined,
+        helper,
+      );
+      return { ...offered, cardsFrom: ["assess_call"] };
+    }
+    return reply(phrases.thankForTelling(step), { paid: true });
+  }
+
   if (result.nextStep === "pick_member" && result.familyMatches.length > 1) {
     const first = result.familyMatches[0];
     const extra: Partial<EngineState> = { stage: "pick_member", candidates: result.familyMatches };
@@ -279,6 +310,7 @@ async function confirm(text: string, state: EngineState, tools: EngineTools): Pr
     if (result.reason === "unclear" && state.question) {
       return reply(phrases.unclearConfirm(state.question), { expectReply: true });
     }
+    if (state.paid) return done(phrases.hotline(), { state: { ...cleared, paid: false } });
     return done(phrases.nothingSent(), { state: cleared });
   }
   const delivered = result.sent.filter((s) => s.delivery === "sent");
@@ -296,6 +328,12 @@ async function confirm(text: string, state: EngineState, tools: EngineTools): Pr
   }
   const headsUpNames = delivered.filter((s) => s.kind === "heads_up").map((s) => s.name);
   const sentLine = phrases.sent(verified?.name, verified ? [] : headsUpNames);
+  if (state.paid && !verified) {
+    return done(`${sentLine} ${phrases.hotline()}`, {
+      cards: ["confirm_outreach"],
+      state: { stage: "assessed", contacted, paid: false },
+    });
+  }
   const fact = verified && state.waitingFact ? ` ${phrases.whileWaiting(state.waitingFact)}` : "";
   return done(`${sentLine}${fact}`, {
     cards: ["confirm_outreach"],
@@ -325,7 +363,7 @@ async function news(state: EngineState, tools: EngineTools): Promise<EngineReply
         return reply(phrases.replyDenied(person), {
           ...opts,
           expectReply: true,
-          state: { stage: "assessed" },
+          state: { stage: "report_offered" },
         });
       case "it_was_me":
         return reply(phrases.replyConfirmed(person), { ...opts, state: { stage: "assessed" } });
@@ -387,6 +425,13 @@ async function password(
   }
 }
 
+async function report(state: EngineState, tools: EngineTools): Promise<EngineReply> {
+  const reply = replier(state);
+  if (!state.checkId) return reply(phrases.reportNeedsCall());
+  await tools.prepareReport(state.checkId);
+  return reply(phrases.reportReady(), { cards: ["prepare_report"], state: { stage: "assessed" } });
+}
+
 export async function simplifiedTurn(
   text: string,
   state: EngineState,
@@ -419,8 +464,15 @@ export async function simplifiedTurn(
       return reply(phrases.passwordRefuse());
     case "password_heard":
       return password(text, state, tools);
-    case "file_for_me":
-      return reply(phrases.cannotFile());
+    case "file_for_me": {
+      const helper = state.headsUp;
+      if (!helper || !state.checkId) return reply(phrases.cannotFile());
+      const offered = await offer({ ...state, stage: "assessed" }, tools, "", undefined, helper);
+      const line = phrases.cannotFile(helper);
+      return { ...offered, say: line, state: { ...offered.state, lastSay: line } };
+    }
+    case "report":
+      return report(state, tools);
     case "off_topic": {
       const resume =
         state.stage === "awaiting_confirmation" && state.question ? ` ${state.question}` : "";
@@ -437,6 +489,10 @@ export async function simplifiedTurn(
   }
 
   if (state.stage === "awaiting_confirmation") return confirm(text, state, tools);
+  if (state.stage === "report_offered") {
+    if (intent === "bare_yes") return report(state, tools);
+    if (intent === "bare_no") return reply(phrases.closing(), { state: { stage: "assessed" } });
+  }
   if (state.stage === "pick_member" && state.candidates) {
     const chosen = named(text, state.candidates);
     if (chosen) return offer({ ...state, stage: "assessed" }, tools, "", chosen, state.headsUp);

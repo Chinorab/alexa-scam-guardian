@@ -259,14 +259,14 @@ on the family page with both links and no submission.
 
 ### Tests for User Story 5
 
-- [ ] T094 [P] [US5] Contract tests for prepare_report (facts redacted, submittedBySystem false, three links) and get_guidance already_paid per method in tests/contract/report.test.ts
+- [X] T094 [P] [US5] Contract tests for prepare_report (facts redacted, submittedBySystem false, three links) and get_guidance already_paid per method in tests/contract/report.test.ts
 
 ### Implementation for User Story 5
 
-- [ ] T095 [US5] Implement prepare_report tool in apps/mcp-server/src/tools/prepare-report.ts
-- [ ] T096 [P] [US5] Add already_paid guidance per payment method from FTC and FBI sources plus DOJ hotline in packages/scam-patterns/data/patterns.json and apps/mcp-server/src/tools/get-guidance.ts
-- [ ] T097 [P] [US5] Build MCP Apps view ui://guardian/report in apps/mcp-server/src/ui/report.html
-- [ ] T098 [US5] Add simplified mode states for already paid, offer report and "send it for me" refusal in packages/core/src/dialogue/engine.ts
+- [X] T095 [US5] Implement prepare_report tool in apps/mcp-server/src/tools/prepare-report.ts
+- [X] T096 [P] [US5] Add already_paid guidance per payment method from FTC and FBI sources plus DOJ hotline in packages/scam-patterns/data/patterns.json and apps/mcp-server/src/tools/get-guidance.ts
+- [X] T097 [P] [US5] Build MCP Apps view ui://guardian/report in apps/mcp-server/src/ui/report.html
+- [X] T098 [US5] Add simplified mode states for already paid, offer report and "send it for me" refusal in packages/core/src/dialogue/engine.ts
 
 **Checkpoint**: V6 passes; all quickstart scenarios pass.
 

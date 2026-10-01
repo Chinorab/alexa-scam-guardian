@@ -171,7 +171,7 @@ export interface ReportSummary {
     callerNumber?: string;
     warningSigns: string[];
   };
-  links: (SourceRef & { whenToUse: string })[];
+  links: (SourceRef & { name: string; whenToUse: string; phone?: string; hours?: string })[];
   submittedBySystem: false;
   createdAt: string;
 }

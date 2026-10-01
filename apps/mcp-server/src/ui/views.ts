@@ -4,6 +4,7 @@ import { GENERATED_VIEWS } from "./generated/views";
 export const VIEWS = {
   warningSigns: () => GENERATED_VIEWS.warningSigns,
   checkStatus: () => GENERATED_VIEWS.checkStatus,
+  report: () => GENERATED_VIEWS.report,
 };
 
 export type ViewKey = keyof typeof VIEWS;

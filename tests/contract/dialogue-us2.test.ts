@@ -229,3 +229,67 @@ describe("user story 3: let a trusted contact know", () => {
     expect((await d.phone()).map((m) => m.to)).toEqual(["Sarah"]);
   });
 });
+
+describe("user story 5: already paid and reporting", () => {
+  it("V6: gives the official first step, offers Sarah, then the DOJ hotline", async () => {
+    const d = demo();
+    await d.start();
+    const first = await d.say(
+      "My grandson called from jail. I already bought the gift cards and read him the numbers.",
+    );
+    expect(first.say).toBe(
+      "Thank you for telling me. Call the company that sold the gift card right away. Should I tell Sarah you got this call, so she can help?",
+    );
+    const second = await d.say("Yes");
+    expect(second.say).toBe(
+      "Done. I let Sarah know. You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+    );
+  });
+
+  it("still gives the hotline when the heads up is declined", async () => {
+    const d = demo();
+    await d.start();
+    await d.say(
+      "I already wired the money through Western Union to the lawyer for my grandson's bail",
+    );
+    const no = await d.say("No");
+    expect(no.say).toBe(
+      "You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+    );
+  });
+
+  it("prepares the report after a denial, with the report card", async () => {
+    const d = demo();
+    await d.start();
+    await d.say(OPENING);
+    await d.say("Yes");
+    const toMichael = (await d.phone()).find((m) => m.to === "Michael");
+    await d.tap(toMichael?.replyPath ?? "", "it_wasnt_me");
+    await d.say("What's new?");
+    const report = await d.say("Yes");
+    expect(report.say).toBe(
+      "I put a summary on the screen with where to report it. Nothing was sent to any agency.",
+    );
+    expect(report.cards.map((c) => c.uri)).toContain("ui://guardian/report");
+  });
+
+  it("will not file for them, and offers to share with Sarah instead", async () => {
+    const d = demo();
+    await d.start();
+    await d.say(OPENING);
+    await d.say("Just Michael");
+    const refuse = await d.say("Can you send it for me?");
+    expect(refuse.say).toBe(
+      "I can't file reports, but I can share the summary with Sarah so she can help. Should I?",
+    );
+    expect((await d.say("Yes")).say).toBe("Done. I let Sarah know.");
+  });
+
+  it("prepares a report when asked directly", async () => {
+    const d = demo();
+    await d.start();
+    await d.say("Someone from the IRS said I owe taxes and must pay with Bitcoin today");
+    const report = await d.say("How do I report this?");
+    expect(report.say).toMatch(/^I put a summary on the screen/);
+  });
+});

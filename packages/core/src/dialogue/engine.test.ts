@@ -54,6 +54,12 @@ function fakeTools(family: (typeof michael)[] = [], headsUp?: typeof sarah): Eng
     async checkFamilyPassword() {
       return "not_set";
     },
+    async getGuidance() {
+      return { steps: ["Call the company that sold the gift card right away."], helpResources: [] };
+    },
+    async prepareReport() {
+      return { reportId: "rep_1" };
+    },
     async assessCall(description, checkId) {
       const result = assess(description);
       const familyMatches = result.claimedRelationship

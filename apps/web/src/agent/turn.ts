@@ -12,6 +12,7 @@ import {
   type AssessCallResult,
   type ConfirmResult,
   type EngineTools,
+  type GuidanceResult,
   type PasswordResult,
   type PrepareResult,
   type UpdatesResult,
@@ -70,6 +71,9 @@ export function engineTools(session: McpSession): EngineTools {
     confirmOutreach: (pendingId, userReply) =>
       call<ConfirmResult>("confirm_outreach", { pendingId, userReply }),
     getUpdates: (checkId) => call<UpdatesResult>("get_updates", checkId ? { checkId } : {}),
+    getGuidance: (topic, paymentMethod) =>
+      call<GuidanceResult>("get_guidance", paymentMethod ? { topic, paymentMethod } : { topic }),
+    prepareReport: (checkId) => call<{ reportId: string }>("prepare_report", { checkId }),
     checkFamilyPassword: async (checkId, phraseHeard) =>
       (await call<{ result: PasswordResult }>("check_family_password", { checkId, phraseHeard }))
         .result,

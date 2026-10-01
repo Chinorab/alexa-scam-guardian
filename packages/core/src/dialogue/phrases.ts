@@ -147,6 +147,10 @@ export const phrases = {
   passwordRefuse: () =>
     "I can't say the family password out loud. Your family can change it on the family page.",
 
+  thanksPaid: () => "Thank you for telling me.",
+
+  reportNeedsCall: () => "Tell me about the call first, and I'll put a summary on the screen.",
+
   thankForTelling: (firstStep: string) =>
     `Thank you for telling me. Acting fast can help. ${firstStep}`,
 

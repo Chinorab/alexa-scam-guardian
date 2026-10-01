@@ -8,7 +8,8 @@
     "call_back": "won't call that number",
     "password": "can't say the family password",
     "caller_on_line": "hang up",
-    "destination": "^(?!Done)"
+    "destination": "^(?!Done)",
+    "file": "can't file"
   },
   "utterances": [
     {
@@ -234,6 +235,18 @@
     {
       "category": "danger",
       "text": "He said if I don't pay tonight he will hurt my grandson"
+    },
+    {
+      "category": "file",
+      "text": "Send it for me please"
+    },
+    {
+      "category": "file",
+      "text": "Can you file the report for me?"
+    },
+    {
+      "category": "file",
+      "text": "Just submit the report for me"
     }
   ]
 }
