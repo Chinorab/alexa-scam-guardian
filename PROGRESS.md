@@ -7,13 +7,14 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-spec.md v1 complete, markers resolved (Q1: B real email + demo phone for SMS; Q2: A emailed link sign in + public demo household). Running speckit-clarify.
+speckit-clarify done (3 Q: DOJ hotline exception, quiet notification, fixed phrase fallback). Constitution v1.1.0. Next: speckit-plan.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
 - [x] speckit init: .specify/ installed (spec-kit 0.16.5.dev0)
 - [x] Constitution v1.0.0 (8 principles) in .specify/memory/constitution.md; git init (branch main)
 - [x] spec.md v1 draft: 6 user stories, 35 FR, 9 SC, reference dialogues + hard cases
+- [x] speckit-clarify: 3 answers integrated (FR-009, FR-019, FR-021, FR-035, FR-036, SC-010)
 
 ## To do
 - [ ] speckit: specify, clarify, plan, tasks, analyze (no code before spec validated together)

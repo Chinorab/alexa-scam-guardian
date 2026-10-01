@@ -25,6 +25,14 @@ One term per concept, used the same way in speech, screens and docs.
 - **Check message**: the message sent to a relative to verify, asking if they really called.
 - **Heads up**: the message sent to a trusted contact saying a suspicious call happened.
 
+## Clarifications
+
+### Session 2026-10-01
+
+- Q: Can the DOJ National Elder Fraud Hotline be cited as an official resource, as an exception to the FTC and FBI only rule? → A: Yes, as the only exception, with its DOJ source cited; offered in the already paid case and in the report summary.
+- Q: When the relative answers after the conversation ended, should Alexa announce it on its own or wait to be asked? → A: Quiet notification (light ring, chime, card on screen); Alexa reads the reply only when the older adult asks ("What's new?", "Did Michael answer?"). If the conversation is still open, Alexa tells the reply right away.
+- Q: What should the guardian do if the service that understands and phrases answers fails or is too slow during a check? → A: Switch to a fixed phrase simplified mode (rule based warning signs, advice to wait, offer to message the saved relative, 911 if danger); it takes over after 3 seconds without an answer.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Describe a call and hear the warning signs (Priority: P1)
@@ -207,7 +215,10 @@ scam scenario by voice end to end, and watch the relative's reply arrive on scre
    same flow works.
 3. **Given** the demo household, **When** a check message is sent, **Then** a demo phone on
    screen shows the message as the relative would see it, with the one tap reply buttons.
-4. **Given** any moment, **When** the user says "repeat", **Then** Alexa repeats the last
+4. **Given** the conversation has ended, **When** the relative replies, **Then** the
+   simulated Echo shows the light ring, plays a chime and shows a card, and says nothing
+   until the user asks "What's new?".
+5. **Given** any moment, **When** the user says "repeat", **Then** Alexa repeats the last
    message more slowly and in simpler words.
 
 ---
@@ -235,7 +246,7 @@ Reference dialogues (wording to refine in testing, intent is binding):
 > **Older adult**: Yes.
 > **Alexa**: Done. I'll tell you when Michael answers. While we wait, no court or police
 > department asks for gift cards.
-> **Alexa** (reply arrives): Michael answered. He says he did not call you. You did the
+> **Alexa** (reply arrives while the conversation is open): Michael answered. He says he did not call you. You did the
 > right thing by checking. Would you like help reporting this call?
 
 **Scammer still on the line**
@@ -283,7 +294,8 @@ Reference dialogues (wording to refine in testing, intent is binding):
 
 - **Already paid**: Alexa gives the official next step for the payment method used (gift
   card company, wire or money transfer service, bank, cryptocurrency platform, cash sent by
-  mail or courier), offers a heads up to a trusted contact, and offers the report summary.
+  mail or courier), offers a heads up to a trusted contact, mentions the DOJ National Elder
+  Fraud Hotline, and offers the report summary.
   It never asks for the card, account or transaction numbers.
 - **Scammer still on the line**: Alexa advises hanging up first, then continues the check.
 - **Caller asked for secrecy** ("don't tell your parents"): treated as a warning sign;
@@ -307,6 +319,9 @@ Reference dialogues (wording to refine in testing, intent is binding):
 - **Immediate danger** (threat, someone at the door, medical emergency): Alexa leads with
   911 before anything else.
 - **Returning later** ("Did Michael answer?"): Alexa gives the latest status of the open check.
+- **Understanding service down or slow**: the simplified mode takes over after 3 seconds
+  without an answer; every safety rule still applies, and the check continues normally once
+  the service is back.
 - **Off topic request during a check**: Alexa answers briefly and returns to the open check.
 - **Caller pretends to be a government agency, bank, tech support or a romantic partner**:
   warning signs and official guidance apply; relative verification is offered only when the
@@ -342,7 +357,10 @@ Reference dialogues (wording to refine in testing, intent is binding):
 - **FR-008**: The check message MUST let the relative answer "It was me" or "It wasn't me" in
   one tap, and MUST invite them to call the older adult on a number they already know.
 - **FR-009**: System MUST report the verification outcome to the older adult (confirmed,
-  denied, no answer yet, delivery failed) in the open conversation or when asked later.
+  denied, no answer yet, delivery failed). If the conversation is still open, Alexa says it
+  right away. If it has ended, the device shows a quiet notification (light ring, chime and a
+  card on screen) and Alexa reads the outcome only when the older adult asks ("What's new?",
+  "Did Michael answer?"). Alexa never speaks unprompted after a conversation ended.
 - **FR-010**: System MUST treat "no answer" as unknown, never as confirmation, and offer the
   next saved contact after the household wait time (default 10 minutes).
 - **FR-011**: System MUST support an optional family password: check a phrase the older adult
@@ -375,10 +393,11 @@ Reference dialogues (wording to refine in testing, intent is binding):
 
 - **FR-019**: System MUST prepare a report summary on request and show it on screen and on
   the family page, with links to ReportFraud.ftc.gov and ic3.gov and one line on when each
-  applies.
+  applies, plus the DOJ National Elder Fraud Hotline with its official source link.
 - **FR-020**: System MUST NEVER submit a report to any agency, and MUST say so when asked.
 - **FR-021**: When the older adult already paid, System MUST give the official next step for
-  the payment method used, sourced from FTC or FBI guidance.
+  the payment method used, sourced from FTC or FBI guidance, and MUST offer the DOJ National
+  Elder Fraud Hotline as a place to get help.
 
 **Conversation**
 
@@ -387,6 +406,11 @@ Reference dialogues (wording to refine in testing, intent is binding):
 - **FR-023**: "Repeat" MUST replay the last message more slowly and in simpler words at any
   point.
 - **FR-024**: An open check MUST survive off topic interruptions and resume.
+- **FR-036**: If the understanding service fails or gives no answer within 3 seconds, System
+  MUST switch to a simplified mode using fixed, pre approved phrases: rule based warning
+  signs, advice not to pay and to wait, the offer to message a saved relative (with the same
+  explicit yes), and 911 when danger words are heard. The older adult hears no error message
+  and no technical term.
 
 **Family page**
 
@@ -413,7 +437,8 @@ Reference dialogues (wording to refine in testing, intent is binding):
 - **FR-034**: All copy MUST follow the constitution visual and copy rules (large text, high
   contrast, no emojis, no dashes, no mention of AI, concise and specific).
 - **FR-035**: Any statistic shown or spoken MUST come from an official FBI IC3 or FTC
-  publication and be shown with its link.
+  publication and be shown with its link. The DOJ exception covers the hotline as a resource
+  only, never statistics.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -459,6 +484,9 @@ Reference dialogues (wording to refine in testing, intent is binding):
   confirmed real) and the immediate danger case run end to end in the demo household.
 - **SC-009**: A first time visitor completes the full demo scenario without written
   instructions in under 3 minutes.
+- **SC-010**: With the understanding service switched off, the main grandparent scenario
+  still completes (warning signs, check message sent after a yes, relative reply heard) with
+  zero safety rule violations.
 
 ## Assumptions
 
