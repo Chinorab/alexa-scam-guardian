@@ -8,7 +8,6 @@ export interface StartResponse {
 export interface Card {
   tool: string;
   uri: string;
-  html: string;
   data: Record<string, unknown>;
 }
 

@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { epochSeconds } from "@asg/core/ports/index";
 import { initialState } from "@asg/core/dialogue/engine";
+import { phrases } from "@asg/core/dialogue/phrases";
+import { startsSensitiveNumber } from "@asg/core/redact/redact";
 import { newId } from "@asg/core/ids";
 import type { Deps } from "@asg/mcp-server";
 import type { DeviceSession, DeviceSessions } from "../device/sessions";
@@ -23,6 +25,11 @@ const DEMO_FIRST_NAME = "Ruth";
 const converseBody = z.object({
   deviceId: z.string().min(1).max(64),
   text: z.string().max(2000),
+});
+
+const interimBody = z.object({
+  deviceId: z.string().min(1).max(64),
+  partialText: z.string().max(2000),
 });
 
 export function apiRoutes(ctx: ApiContext) {
@@ -80,6 +87,17 @@ export function apiRoutes(ctx: ApiContext) {
     });
     await ctx.sessions.put(updated);
     return c.json(result);
+  });
+
+  /** Interim speech: interrupt as soon as a sensitive number starts (FR-017). Stores nothing. */
+  api.post("/interim", async (c) => {
+    const parsed = interimBody.safeParse(await c.req.json().catch(() => undefined));
+    if (!parsed.success) return c.json({ error: "bad_request" }, 400);
+    if (!(await ctx.sessions.get(parsed.data.deviceId)))
+      return c.json({ error: "unknown_device" }, 404);
+    return startsSensitiveNumber(parsed.data.partialText)
+      ? c.json({ interrupt: true, say: phrases.sensitiveStop() })
+      : c.json({ interrupt: false });
   });
 
   return api;

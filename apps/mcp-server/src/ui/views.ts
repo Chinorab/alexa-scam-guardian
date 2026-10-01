@@ -1,6 +1,8 @@
-/** Placeholder views until the bundled MCP Apps HTML lands (T045). */
+import { GENERATED_VIEWS } from "./generated/views";
+
+/** Bundled MCP Apps views (scripts/build-views.ts). */
 export const VIEWS = {
-  warningSigns: () => '<!doctype html><html lang="en"><body></body></html>',
+  warningSigns: () => GENERATED_VIEWS.warningSigns,
 };
 
 export type ViewKey = keyof typeof VIEWS;

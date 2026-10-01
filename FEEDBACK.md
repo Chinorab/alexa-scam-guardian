@@ -41,3 +41,13 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **What needs work:** The docs do not state the release status of v2 (see FRICTION_LOG.md #2). No guidance for serverless runtimes such as AWS Lambda, although the stateless design fits them well. The large generated type bundle is hard to browse; a short API page for `McpServer.registerTool` with zod v4 would help.
 - **Onboarding:** Good once past the version question; reading the `.d.mts` types was faster than finding the right docs page.
 - **Would I build with it again:** Yes.
+
+---
+
+## MCP Apps extension (`@modelcontextprotocol/ext-apps` 2.0.3)
+
+- **Used for:** Echo Show screen cards. The MCP server registers `ui://guardian/*` views (`text/html;profile=mcp-app`) linked from tools through `_meta.ui.resourceUri`; the simulated Echo is an MCP Apps host using `AppBridge` and `PostMessageTransport`, rendering each view in a sandboxed iframe with an opaque origin.
+- **What worked well:** `registerAppTool` and `registerAppResource` make the server side a two line change. `AppBridge` handles the host handshake. The protocol itself (JSON-RPC over postMessage) is small and clear, which let us write the view side by hand.
+- **What needs work:** Bundling the `App` class into a view pulls in the whole SDK and zod (our first view was 640 KB; a hand written view client is 4 KB plus the font). A tiny dependency free view runtime would help hosts on constrained devices like an Echo Show. A view that posts `ui/initialize` before the host listens loses it silently; the docs could recommend retrying or say who must be ready first.
+- **Onboarding:** Medium. The type definitions are thorough; examples for a non React view are scarce.
+- **Would I build with it again:** Yes. It is the right way to give a voice add-on a screen.

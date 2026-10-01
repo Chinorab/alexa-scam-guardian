@@ -123,3 +123,28 @@ describe("assess_call", () => {
     expect(outcome.isError).toBe(true);
   });
 });
+
+describe("close_check and idle checks", () => {
+  it("closes a check", async () => {
+    const first = await assess("My grandson called about bail money");
+    const outcome = await first.session.call("close_check", { checkId: first.s.checkId });
+    expect(outcome.structured).toMatchObject({ closed: true });
+    const check = await first.deps.store.getCheck("hh_01J9ZK3M8Q4R7T2V6X1Y5Z0A9B", first.s.checkId);
+    expect(check?.state).toBe("closed");
+  });
+
+  it("starts a new check after 30 minutes idle", async () => {
+    const { session, deps, advance } = await seededSession();
+    open = session;
+    const first = await session.call("assess_call", { description: "My grandson called" });
+    const firstId = (first.structured as Json).checkId;
+    advance(31 * 60_000);
+    const later = await session.call("assess_call", {
+      description: "Someone from Medicare called",
+      checkId: firstId,
+    });
+    expect((later.structured as Json).checkId).not.toBe(firstId);
+    const old = await deps.store.getCheck("hh_01J9ZK3M8Q4R7T2V6X1Y5Z0A9B", firstId);
+    expect(old?.state).toBe("closed");
+  });
+});

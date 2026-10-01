@@ -1,7 +1,8 @@
 import "./echo.css";
 import { render } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { converse, startDevice, type StartResponse } from "./api";
+import { converse, startDevice, type Card, type StartResponse } from "./api";
+import { McpAppFrame } from "./mcp-apps-host";
 
 interface Line {
   who: "you" | "alexa";
@@ -14,6 +15,7 @@ function Echo() {
   const [lines, setLines] = useState<Line[]>([]);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  const [cards, setCards] = useState<Card[]>([]);
   const [problem, setProblem] = useState<string>();
   const input = useRef<HTMLTextAreaElement>(null);
 
@@ -34,6 +36,7 @@ function Echo() {
     try {
       const reply = await converse(device.deviceId, text);
       setLines((current) => [...current, { who: "alexa", text: reply.say }]);
+      if (reply.cards.length > 0) setCards(reply.cards);
     } catch {
       setProblem("That did not go through. Please try again.");
     } finally {
@@ -49,6 +52,17 @@ function Echo() {
       <p class="echo-caption" aria-live="polite">
         {last ? last.text : "Tell me what happened on the call."}
       </p>
+      {device && cards.length > 0 && (
+        <div class="echo-cards">
+          {cards.map((card) => (
+            <McpAppFrame
+              key={`${card.uri}-${String(card.data.checkId)}`}
+              deviceId={device.deviceId}
+              card={card}
+            />
+          ))}
+        </div>
+      )}
       <form onSubmit={send} class="echo-form">
         <label for="echo-input">What happened?</label>
         <textarea

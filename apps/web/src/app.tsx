@@ -2,7 +2,9 @@ import { Hono, type MiddlewareHandler } from "hono";
 import { secureHeaders } from "hono/secure-headers";
 import { createMcpApp, type Deps } from "@asg/mcp-server";
 import type { DeviceSessions } from "./device/sessions";
+import { openMcpSession } from "./agent/mcp-client";
 import { apiRoutes, type ApiContext } from "./routes/api";
+import { frameRoutes } from "./routes/frame";
 import { EchoPage } from "./views/echo";
 import { HomePage } from "./views/home";
 import { PrivacyPage } from "./views/privacy";
@@ -46,6 +48,18 @@ export function createWebApp(options: WebAppOptions) {
     const mcp = createMcpApp(options.deps, { authorizationServer: options.deps.webUrl });
     app.route("/", mcp);
   }
+
+  // MCP Apps frames carry their own CSP, so they are routed before the site wide one.
+  app.route(
+    "/",
+    frameRoutes(options.sessions, (device) =>
+      openMcpSession(device, {
+        url: options.mcpUrl,
+        tokenSecret: options.deps.tokenSecret,
+        ...(options.mcpFetch ? { fetch: options.mcpFetch } : {}),
+      }),
+    ),
+  );
 
   app.use("*", csp);
   for (const handler of options.staticFiles ?? []) app.use("*", handler);

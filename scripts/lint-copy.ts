@@ -32,6 +32,7 @@ export const COPY_ROOTS = [
   "apps/web/src",
   "apps/web/echo/src",
   "apps/mcp-server/src",
+  "apps/mcp-server/ui-src",
   "packages/core/src/dialogue",
   "packages/scam-patterns/data",
 ];
@@ -167,7 +168,7 @@ function* walkFiles(dir: string): Generator<string> {
     return;
   }
   for (const entry of entries) {
-    if (entry === "node_modules" || entry === "dist") continue;
+    if (entry === "node_modules" || entry === "dist" || entry === "generated") continue;
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) yield* walkFiles(path);
     else if (SCANNED.has(extname(path)) && !/\.test\.tsx?$/.test(path)) yield path;

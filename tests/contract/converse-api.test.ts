@@ -105,3 +105,37 @@ describe("POST /api/converse", () => {
     expect(bad.status).toBe(400);
   });
 });
+
+describe("POST /api/interim", () => {
+  async function interim(
+    app: ReturnType<typeof createWebApp>,
+    deviceId: string,
+    partialText: string,
+  ) {
+    const response = await app.request("http://web.test/api/interim", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ deviceId, partialText }),
+    });
+    return (await response.json()) as { interrupt: boolean; say?: string };
+  }
+
+  it("interrupts once a card number starts, not before", async () => {
+    const app = makeWeb({ mode: "simplified" });
+    const deviceId = await start(app);
+    expect(await interim(app, deviceId, "my card number is four one two")).toEqual({
+      interrupt: false,
+    });
+    const stop = await interim(app, deviceId, "my card number is four one two two");
+    expect(stop.interrupt).toBe(true);
+    expect(stop.say).toMatch(/^Let me stop you there\./);
+  });
+
+  it("does not interrupt on amounts", async () => {
+    const app = makeWeb({ mode: "simplified" });
+    const deviceId = await start(app);
+    expect(await interim(app, deviceId, "he wants two thousand dollars")).toEqual({
+      interrupt: false,
+    });
+  });
+});

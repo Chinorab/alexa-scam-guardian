@@ -13,6 +13,7 @@ import { redact } from "@asg/core/redact/redact";
 import type { Caller, Deps } from "../deps";
 import { toolError, toolResult } from "../server";
 import { WARNING_SIGNS_URI } from "../ui/register";
+import { closed, isIdle } from "./close-check";
 import { headsUpCandidate, matchRelatives, publicMember } from "./members";
 
 const CHECK_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -78,6 +79,10 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       if (checkId) {
         check = await deps.store.getCheck(caller.householdId, checkId);
         if (!check) return toolError("I could not find that check. Let's start again.");
+        if (check.state === "closed" || isIdle(check, deps.clock)) {
+          if (check.state !== "closed") await deps.store.putCheck(closed(check, deps.clock));
+          check = undefined;
+        }
       }
       check ??= {
         checkId: newId("check"),

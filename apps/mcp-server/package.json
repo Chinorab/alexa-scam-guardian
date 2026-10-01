@@ -5,8 +5,9 @@
   "type": "module",
   "description": "Self-hosted MCP server (Streamable HTTP) for the voice scam guardian",
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "dev": "tsx watch src/local.ts"
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ui-src/tsconfig.json",
+    "dev": "tsx watch src/local.ts",
+    "build:views": "tsx scripts/build-views.ts"
   },
   "dependencies": {
     "@asg/core": "workspace:^",
@@ -24,6 +25,8 @@
   },
   "main": "./src/index.ts",
   "devDependencies": {
+    "@fontsource-variable/overpass": "5.3.0",
+    "esbuild": "0.28.2",
     "tsx": "4.23.15"
   }
 }

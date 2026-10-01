@@ -25,10 +25,10 @@ export interface TurnDeps {
   deadlineMs?: number;
 }
 
+/** A screen card: an MCP Apps view (loaded by the Echo through /frame) and its tool result. */
 export interface Card {
   tool: string;
   uri: string;
-  html: string;
   data: Record<string, unknown>;
 }
 
@@ -55,15 +55,12 @@ export function engineTools(session: McpSession): EngineTools {
   };
 }
 
-async function cardsFrom(session: McpSession, calls: { name: string; outcome: ToolCallOutcome }[]) {
-  const cards: Card[] = [];
-  for (const { name, outcome } of calls) {
-    if (!outcome.uiResourceUri || !outcome.structured) continue;
-    const resource = await session.readUiResource(outcome.uiResourceUri);
-    if (resource)
-      cards.push({ tool: name, uri: resource.uri, html: resource.html, data: outcome.structured });
-  }
-  return cards;
+function cardsFrom(calls: { name: string; outcome: ToolCallOutcome }[]): Card[] {
+  return calls.flatMap(({ name, outcome }) =>
+    outcome.uiResourceUri && outcome.structured
+      ? [{ tool: name, uri: outcome.uiResourceUri, data: outcome.structured }]
+      : [],
+  );
 }
 
 /** Records tool calls made by the engine so their cards can be shown. */
@@ -165,7 +162,7 @@ export async function runTurn(
       fallback: phrases.waitBeforePaying(),
       phrasesToNeverRepeat: next.engine.phrasesHeard,
     });
-    const cards = await cardsFrom(session, calls);
+    const cards = cardsFrom(calls);
     return finish(
       { say: guarded.line, rate: "normal", mode, cards, expectReply },
       fellBack,

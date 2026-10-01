@@ -115,13 +115,13 @@ spoken and shown with sources, no approval, at most one question.
 ### Implementation for User Story 1
 
 - [X] T044 [US1] Implement assess_call tool (create or extend check, redaction flags, nextStep) in apps/mcp-server/src/tools/assess-call.ts
-- [ ] T045 [P] [US1] Build MCP Apps view ui://guardian/warning-signs (icons with labels, sources, 32 px text) in apps/mcp-server/src/ui/warning-signs.html
+- [X] T045 [P] [US1] Build MCP Apps view ui://guardian/warning-signs (icons with labels, sources, 32 px text) in apps/mcp-server/src/ui/warning-signs.html
 - [X] T046 [US1] Register the warning signs resource and link it via _meta.ui.resourceUri in apps/mcp-server/src/ui/register.ts
-- [ ] T047 [US1] Implement close_check tool and closing after 30 minutes idle in apps/mcp-server/src/tools/close-check.ts
+- [X] T047 [US1] Implement close_check tool and closing after 30 minutes idle in apps/mcp-server/src/tools/close-check.ts
 - [X] T048 [US1] Add simplified mode states for assessment, no signs found, danger first, payment question and sensitive interrupt in packages/core/src/dialogue/engine.ts
-- [ ] T049 [US1] Implement POST /api/interim (interrupt on sensitive number start) in apps/web/src/routes/api.ts
-- [ ] T050 [US1] Tune the agent system prompt and tool descriptions for US1 phrasing (thanks first, signs, wait) in apps/web/src/agent/prompt.ts
-- [ ] T051 [US1] Render uiResources returned by /api/converse in a sandboxed iframe (MCP Apps host bridge) in apps/web/echo/src/mcp-apps-host.tsx
+- [X] T049 [US1] Implement POST /api/interim (interrupt on sensitive number start) in apps/web/src/routes/api.ts
+- [X] T050 [US1] Tune the agent system prompt and tool descriptions for US1 phrasing (thanks first, signs, wait) in apps/web/src/agent/prompt.ts
+- [X] T051 [US1] Render uiResources returned by /api/converse in a sandboxed iframe (MCP Apps host bridge) in apps/web/echo/src/mcp-apps-host.tsx
 
 **Checkpoint**: V1, V8, V9 from quickstart pass by text.
 
