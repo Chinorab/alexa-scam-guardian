@@ -1,0 +1,25 @@
+{
+  "name": "us-scam-patterns",
+  "version": "1.0.0",
+  "description": "US scam patterns and warning signs written only from FTC and FBI sources",
+  "license": "MIT",
+  "type": "module",
+  "main": "data/patterns.json",
+  "scripts": {
+    "check": "tsx scripts/check-sources.ts",
+    "check:online": "tsx scripts/check-sources.ts --online",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

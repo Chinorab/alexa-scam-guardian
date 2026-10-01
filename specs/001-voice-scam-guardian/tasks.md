@@ -279,8 +279,8 @@ on the family page with both links and no submission.
 - [X] T101 Design pass on every screen with the design skills, then copy review against Principle VIII in apps/web/src/views and apps/web/echo/src
 - [ ] T102 Playwright full run V1 to V14 on the deployed URL; record results in docs/measurements.md
 - [ ] T103 Timed runs before the freeze: SC-002 (turns and seconds to send a check message), SC-005 (family setup on a phone), SC-009 (two first time visitors without instructions); record in docs/measurements.md
-- [ ] T104 [P] Write README: architecture diagram, local run, deploy, AWS integration section (Lambda, DynamoDB, Bedrock, SES, Polly, CDK), safety design, Alexa+ readiness in README.md
-- [ ] T105 [P] Split packages/scam-patterns into a separate public MIT repository with README, schema and source check; link it from README.md
+- [X] T104 [P] Write README: architecture diagram, local run, deploy, AWS integration section (Lambda, DynamoDB, Bedrock, SES, Polly, CDK), safety design, Alexa+ readiness in README.md
+- [X] T105 [P] Split packages/scam-patterns into a separate public MIT repository with README, schema and source check; link it from README.md
 - [ ] T106 [P] Write the demo video script (under 3 minutes, strongest moment in the first 30 s, English) in docs/demo-script.md
 - [ ] T107 Review FEEDBACK.md and FRICTION_LOG.md for completeness (every tool used has a section), without rewriting past friction entries
 - [ ] T108 Audit every number in README.md, docs/demo-script.md and the Devpost draft: each statistic links to an FTC, FBI or IC3 publication, otherwise remove it (FR-035, SC-006)

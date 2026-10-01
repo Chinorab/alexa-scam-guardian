@@ -23,7 +23,8 @@
     "deploy": "pnpm --filter @asg/infra deploy",
     "check": "pnpm lint && pnpm format:check && pnpm lint:copy && pnpm typecheck && pnpm test",
     "measure": "tsx scripts/measure.ts",
-    "synth": "pnpm --filter @asg/infra synth"
+    "synth": "pnpm --filter @asg/infra synth",
+    "export:dataset": "tsx scripts/export-dataset.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
