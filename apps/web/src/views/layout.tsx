@@ -16,6 +16,8 @@ export function Layout(props: {
   current?: NavKey;
   /** Echo page: always the asphalt theme and a wider column. */
   device?: boolean;
+  /** Home page: main spans the window; sections set their own column. */
+  bare?: boolean;
   children: Child;
 }) {
   return (
@@ -57,7 +59,11 @@ export function Layout(props: {
             </nav>
           </div>
         </header>
-        <main id="main" class={props.device ? "page page-wide" : "page"} tabindex={-1}>
+        <main
+          id="main"
+          class={props.bare ? "main-bare" : props.device ? "page page-wide" : "page"}
+          tabindex={-1}
+        >
           {props.children}
         </main>
         <footer class="site-footer">

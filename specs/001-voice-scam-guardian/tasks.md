@@ -276,7 +276,7 @@ on the family page with both links and no submission.
 
 - [X] T099 [P] Complete red team suite to 60 or more utterances and add live mode runner against Bedrock in tests/redteam/live.test.ts
 - [X] T100 [P] Add axe WCAG 2.2 AA checks and a keyboard only walkthrough of the Echo and the family page in tests/e2e/a11y.spec.ts
-- [ ] T101 Design pass on every screen with the design skills, then copy review against Principle VIII in apps/web/src/views and apps/web/echo/src
+- [X] T101 Design pass on every screen with the design skills, then copy review against Principle VIII in apps/web/src/views and apps/web/echo/src
 - [ ] T102 Playwright full run V1 to V14 on the deployed URL; record results in docs/measurements.md
 - [ ] T103 Timed runs before the freeze: SC-002 (turns and seconds to send a check message), SC-005 (family setup on a phone), SC-009 (two first time visitors without instructions); record in docs/measurements.md
 - [ ] T104 [P] Write README: architecture diagram, local run, deploy, AWS integration section (Lambda, DynamoDB, Bedrock, SES, Polly, CDK), safety design, Alexa+ readiness in README.md
