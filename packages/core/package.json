@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@asg/scam-patterns": "workspace:^",
+    "jose": "6.2.12",
     "ulid": "3.0.2",
     "zod": "4.6.5"
   },

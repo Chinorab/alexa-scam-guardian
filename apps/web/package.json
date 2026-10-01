@@ -5,6 +5,15 @@
   "type": "module",
   "description": "Simulated Echo Show, family page and reply page",
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "token:demo": "tsx --env-file-if-exists=../../.env scripts/token-demo.ts"
+  },
+  "dependencies": {
+    "@asg/core": "workspace:^",
+    "@asg/mcp-server": "workspace:^",
+    "@asg/scam-patterns": "workspace:^"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
   }
 }

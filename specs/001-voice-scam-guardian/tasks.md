@@ -74,11 +74,11 @@ before this phase is done.
 
 ### MCP server shell
 
-- [ ] T025 Create MCP server factory with createMcpHandler (stateless, eras 2026-07-28 and 2025-11-25) and the shared assistantRules block in apps/mcp-server/src/server.ts
-- [ ] T026 [P] Implement household bearer token verification (iss, aud, sub, exp) and 401 with WWW-Authenticate in apps/mcp-server/src/auth/token.ts
-- [ ] T027 [P] Serve protected resource metadata at /.well-known/oauth-protected-resource in apps/mcp-server/src/auth/metadata.ts
-- [ ] T028 Add local Node entry on port 8788 using the Hono adapter in apps/mcp-server/src/local.ts
-- [ ] T029 Add token minting helper and `pnpm token:demo` script in apps/web/src/auth/household-token.ts
+- [X] T025 Create MCP server factory with createMcpHandler (stateless, eras 2026-07-28 and 2025-11-25) and the shared assistantRules block in apps/mcp-server/src/server.ts
+- [X] T026 [P] Implement household bearer token verification (iss, aud, sub, exp) and 401 with WWW-Authenticate in apps/mcp-server/src/auth/token.ts
+- [X] T027 [P] Serve protected resource metadata at /.well-known/oauth-protected-resource in apps/mcp-server/src/auth/metadata.ts
+- [X] T028 Add local Node entry on port 8788 using the Hono adapter in apps/mcp-server/src/local.ts
+- [X] T029 Add token minting helper and `pnpm token:demo` script in apps/web/src/auth/household-token.ts
 
 ### Web and agent shell
 

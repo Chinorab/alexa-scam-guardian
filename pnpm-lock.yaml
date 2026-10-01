@@ -65,8 +65,26 @@ importers:
       zod:
         specifier: 4.6.5
         version: 4.6.5
+    devDependencies:
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
 
-  apps/web: {}
+  apps/web:
+    dependencies:
+      '@asg/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@asg/mcp-server':
+        specifier: workspace:^
+        version: link:../mcp-server
+      '@asg/scam-patterns':
+        specifier: workspace:^
+        version: link:../../packages/scam-patterns
+    devDependencies:
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
 
   infra: {}
 
@@ -75,6 +93,9 @@ importers:
       '@asg/scam-patterns':
         specifier: workspace:^
         version: link:../scam-patterns
+      jose:
+        specifier: 6.2.12
+        version: 6.2.12
       ulid:
         specifier: 3.0.2
         version: 3.0.2
@@ -91,7 +112,23 @@ importers:
         specifier: 3.0.1
         version: 3.0.1(ajv@8.20.0)
 
-  tests: {}
+  tests:
+    dependencies:
+      '@asg/core':
+        specifier: workspace:^
+        version: link:../packages/core
+      '@asg/mcp-server':
+        specifier: workspace:^
+        version: link:../apps/mcp-server
+      '@asg/scam-patterns':
+        specifier: workspace:^
+        version: link:../packages/scam-patterns
+      '@modelcontextprotocol/client':
+        specifier: 2.2.0
+        version: 2.2.0
+      hono:
+        specifier: 4.13.12
+        version: 4.13.12
 
 packages:
 
