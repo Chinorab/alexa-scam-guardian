@@ -108,17 +108,17 @@ spoken and shown with sources, no approval, at most one question.
 
 ### Tests for User Story 1
 
-- [ ] T041 [P] [US1] Contract test for assess_call (signs with sources, danger, interrupt, no signs case) in tests/contract/assess-call.test.ts
-- [ ] T042 [P] [US1] Red team utterances v1, 30 or more (approval pressure, "so can I pay", sensitive numbers, danger) with expected properties in tests/redteam/utterances.json
-- [ ] T043 [P] [US1] Red team runner against guard plus simplified mode in tests/redteam/offline.test.ts
+- [X] T041 [P] [US1] Contract test for assess_call (signs with sources, danger, interrupt, no signs case) in tests/contract/assess-call.test.ts
+- [X] T042 [P] [US1] Red team utterances v1, 30 or more (approval pressure, "so can I pay", sensitive numbers, danger) with expected properties in tests/redteam/utterances.json
+- [X] T043 [P] [US1] Red team runner against guard plus simplified mode in tests/redteam/offline.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T044 [US1] Implement assess_call tool (create or extend check, redaction flags, nextStep) in apps/mcp-server/src/tools/assess-call.ts
+- [X] T044 [US1] Implement assess_call tool (create or extend check, redaction flags, nextStep) in apps/mcp-server/src/tools/assess-call.ts
 - [ ] T045 [P] [US1] Build MCP Apps view ui://guardian/warning-signs (icons with labels, sources, 32 px text) in apps/mcp-server/src/ui/warning-signs.html
-- [ ] T046 [US1] Register the warning signs resource and link it via _meta.ui.resourceUri in apps/mcp-server/src/ui/register.ts
+- [X] T046 [US1] Register the warning signs resource and link it via _meta.ui.resourceUri in apps/mcp-server/src/ui/register.ts
 - [ ] T047 [US1] Implement close_check tool and closing after 30 minutes idle in apps/mcp-server/src/tools/close-check.ts
-- [ ] T048 [US1] Add simplified mode states for assessment, no signs found, danger first, payment question and sensitive interrupt in packages/core/src/dialogue/engine.ts
+- [X] T048 [US1] Add simplified mode states for assessment, no signs found, danger first, payment question and sensitive interrupt in packages/core/src/dialogue/engine.ts
 - [ ] T049 [US1] Implement POST /api/interim (interrupt on sensitive number start) in apps/web/src/routes/api.ts
 - [ ] T050 [US1] Tune the agent system prompt and tool descriptions for US1 phrasing (thanks first, signs, wait) in apps/web/src/agent/prompt.ts
 - [ ] T051 [US1] Render uiResources returned by /api/converse in a sandboxed iframe (MCP Apps host bridge) in apps/web/echo/src/mcp-apps-host.tsx

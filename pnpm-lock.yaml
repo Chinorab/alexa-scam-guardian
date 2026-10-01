@@ -168,6 +168,10 @@ importers:
       hono:
         specifier: 4.13.12
         version: 4.13.12
+    devDependencies:
+      '@aws-sdk/client-bedrock-runtime':
+        specifier: 3.1144.0
+        version: 3.1144.0
 
 packages:
 

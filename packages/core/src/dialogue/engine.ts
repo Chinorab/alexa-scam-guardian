@@ -18,7 +18,8 @@ export interface AssessCallResult {
     | "offer_verify"
     | "offer_heads_up"
     | "paid_guidance"
-    | "no_signs_found";
+    | "no_signs_found"
+    | "advise_wait";
   familyMatches: (Person & { memberId: string })[];
   headsUpCandidate?: Person & { memberId: string };
   alreadyPaid?: { method: PaymentMethod };

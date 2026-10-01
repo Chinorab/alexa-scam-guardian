@@ -19,10 +19,9 @@ function makeWeb(agent: {
   deadlineMs?: number;
 }) {
   const { deps } = makeDeps();
-  let app: ReturnType<typeof createWebApp>;
-  const mcpFetch = (async (input: RequestInfo | URL, init?: RequestInit) =>
+  const mcpFetch = (async (input: string | URL | Request, init?: RequestInit) =>
     app.request(input instanceof URL ? input.href : String(input), init)) as typeof fetch;
-  app = createWebApp({
+  const app: ReturnType<typeof createWebApp> = createWebApp({
     deps,
     sessions: new MemoryDeviceSessions(),
     agent: { modelId: "test-model", ...agent },
