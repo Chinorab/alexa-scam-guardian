@@ -31,3 +31,13 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **What needs work:** typescript-eslint does not support TypeScript 7 yet, so `latest` cannot be used (FRICTION_LOG.md #3).
 - **Onboarding:** Smooth once the version was pinned.
 - **Would I build with it again:** Yes.
+
+---
+
+## MCP TypeScript SDK v2 (`@modelcontextprotocol/server` and `client` 2.2.0)
+
+- **Used for:** The self-hosted MCP server (stateless Streamable HTTP, protocol 2026-07-28 and 2025-11-25 from one endpoint) and the MCP client in the simulated Echo and the contract tests.
+- **What worked well:** `createMcpHandler` exposes a web standard `fetch(Request) => Response` face, so it drops into Hono, Lambda or tests with no adapter. `authInfo` passes straight through to the per request server factory, which makes multi tenant servers simple. The official client connected to our server on the first try in an in process test.
+- **What needs work:** The docs do not state the release status of v2 (see FRICTION_LOG.md #2). No guidance for serverless runtimes such as AWS Lambda, although the stateless design fits them well. The large generated type bundle is hard to browse; a short API page for `McpServer.registerTool` with zod v4 would help.
+- **Onboarding:** Good once past the version question; reading the `.d.mts` types was faster than finding the right docs page.
+- **Would I build with it again:** Yes.
