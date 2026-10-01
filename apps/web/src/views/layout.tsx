@@ -14,6 +14,8 @@ export function Layout(props: {
   title: string;
   description: string;
   current?: NavKey;
+  /** Echo page: always the asphalt theme and a wider column. */
+  device?: boolean;
   children: Child;
 }) {
   return (
@@ -29,12 +31,12 @@ export function Layout(props: {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="stylesheet" href="/assets/site.css" />
       </head>
-      <body>
+      <body class={props.device ? "theme-asphalt" : undefined}>
         <a class="skip-link" href="#main">
           Skip to content
         </a>
         <header class="site-header">
-          <div class="page">
+          <div class={props.device ? "page page-wide" : "page"}>
             <a class="brand" href="/" aria-current={props.current === "home" ? "page" : undefined}>
               <img src="/favicon.svg" alt="" width="40" height="40" />
               {PRODUCT_NAME}
@@ -55,11 +57,11 @@ export function Layout(props: {
             </nav>
           </div>
         </header>
-        <main id="main" class="page" tabindex={-1}>
+        <main id="main" class={props.device ? "page page-wide" : "page"} tabindex={-1}>
           {props.children}
         </main>
         <footer class="site-footer">
-          <div class="page">
+          <div class={props.device ? "page page-wide" : "page"}>
             <ul>
               <li>
                 <a href="/privacy">Privacy</a>

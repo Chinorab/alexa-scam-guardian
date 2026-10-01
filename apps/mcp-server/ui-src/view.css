@@ -170,3 +170,23 @@ body {
   color: var(--ink);
   box-shadow: inset 0 0 0 2px #3c4349;
 }
+
+@media (max-width: 30rem) {
+  #view {
+    padding: 14px 12px;
+  }
+  .sign {
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+  }
+  .diamond {
+    width: 52px;
+    height: 52px;
+  }
+  .sign h2 {
+    font-size: 26px;
+  }
+  .status-row h2 {
+    font-size: 24px;
+  }
+}

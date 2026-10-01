@@ -51,3 +51,13 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **What needs work:** Bundling the `App` class into a view pulls in the whole SDK and zod (our first view was 640 KB; a hand written view client is 4 KB plus the font). A tiny dependency free view runtime would help hosts on constrained devices like an Echo Show. A view that posts `ui/initialize` before the host listens loses it silently; the docs could recommend retrying or say who must be ready first.
 - **Onboarding:** Medium. The type definitions are thorough; examples for a non React view are scarce.
 - **Would I build with it again:** Yes. It is the right way to give a voice add-on a screen.
+
+---
+
+## Playwright 1.63
+
+- **Used for:** End to end runs of the simulated Echo in a real Chromium (typed input, mocked speech output), including the MCP Apps cards inside sandboxed iframes, and screenshots for design review.
+- **What worked well:** `frameLocator` reaches into the sandboxed MCP Apps iframes, which the app's own preview browser blocks. `webServer` builds and starts the app for each run.
+- **What needs work:** Clicking an element scrolls its container, which made a full page capture look like a layout bug until measured.
+- **Onboarding:** Smooth; browsers install to any folder with `PLAYWRIGHT_BROWSERS_PATH`.
+- **Would I build with it again:** Yes.

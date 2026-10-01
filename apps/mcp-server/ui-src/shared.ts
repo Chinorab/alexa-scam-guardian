@@ -37,6 +37,10 @@ export function runView(name: string, render: (data: Structured) => string): voi
       params: { width: document.body.scrollWidth, height: document.body.scrollHeight },
     });
 
+  // Fonts and narrow screens change the height after the first render: report every change.
+  new ResizeObserver(() => reportSize()).observe(document.body);
+  void document.fonts?.ready.then(() => reportSize());
+
   window.addEventListener("message", (event: MessageEvent<JsonRpc>) => {
     if (event.source !== window.parent) return;
     const message = event.data;

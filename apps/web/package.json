@@ -16,6 +16,7 @@
     "@asg/mcp-server": "workspace:^",
     "@asg/scam-patterns": "workspace:^",
     "@aws-sdk/client-bedrock-runtime": "3.1144.0",
+    "@aws-sdk/client-polly": "3.1144.0",
     "@fontsource-variable/overpass": "5.3.0",
     "@fontsource/atkinson-hyperlegible-next": "5.3.0",
     "@hono/node-server": "2.1.3",

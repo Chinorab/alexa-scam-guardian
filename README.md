@@ -45,6 +45,8 @@ pnpm lint          # ESLint
 pnpm lint:copy     # user facing copy rules (no emojis, no dashes, no "AI")
 pnpm typecheck
 pnpm test          # unit, contract and red team suites
+pnpm check         # all of the above, the gate before every commit
+pnpm test:e2e      # Playwright scenarios in a real Chromium (simulated Echo)
 ```
 
 ## Project documents

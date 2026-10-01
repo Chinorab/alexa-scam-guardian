@@ -257,3 +257,21 @@ main {
   min-height: 4.5rem;
   font-size: var(--text-lg);
 }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.page-wide {
+  width: min(100% - 2rem, 92rem);
+}
+
+.theme-asphalt {
+  background: var(--ground);
+  color: var(--ink);
+}

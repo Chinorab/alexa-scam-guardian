@@ -7,6 +7,7 @@
  */
 import type { Message } from "@aws-sdk/client-bedrock-runtime";
 import {
+  classify,
   simplifiedTurn,
   type AssessCallResult,
   type ConfirmResult,
@@ -116,6 +117,21 @@ export async function runTurn(
     });
     return { result, device: next };
   };
+
+  // "Repeat" replays the last line more slowly (FR-023), whatever the mode.
+  if (classify(rawText) === "repeat" && device.engine.lastSay) {
+    return finish(
+      {
+        say: device.engine.lastSay,
+        rate: "slow",
+        mode: "simplified",
+        cards: [],
+        expectReply: false,
+      },
+      false,
+      [],
+    );
+  }
 
   const redacted = redact(rawText);
   if (redacted.removed || startsSensitiveNumber(rawText)) {

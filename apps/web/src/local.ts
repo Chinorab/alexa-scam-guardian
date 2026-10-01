@@ -10,6 +10,7 @@ import { systemClock } from "@asg/core/ports/index";
 import { bedrockConverse } from "./agent/bedrock-agent";
 import { createWebApp } from "./app";
 import { MemoryDeviceSessions } from "./device/sessions";
+import { pollySpeech } from "./routes/tts";
 
 const port = Number(process.env.WEB_PORT ?? 8787);
 const outbox = new Outbox();
@@ -37,6 +38,8 @@ const app = createWebApp({
   },
   mcpUrl: process.env.MCP_URL ?? `${webUrl}/mcp`,
   mountMcp: true,
+  ...(process.env.POLLY_VOICE ? { speech: pollySpeech(region, process.env.POLLY_VOICE) } : {}),
+  pollMs: Number(process.env.DEMO_POLL_MS ?? 3000),
   staticFiles: [serveStatic({ root: "./dist" }), serveStatic({ root: "./public" })],
 });
 

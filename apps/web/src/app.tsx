@@ -6,6 +6,7 @@ import { openMcpSession } from "./agent/mcp-client";
 import { apiRoutes, type ApiContext } from "./routes/api";
 import { frameRoutes } from "./routes/frame";
 import { replyRoutes } from "./routes/reply";
+import { ttsRoutes, type SpeechSynth } from "./routes/tts";
 import { EchoPage } from "./views/echo";
 import { HomePage } from "./views/home";
 import { PrivacyPage } from "./views/privacy";
@@ -16,6 +17,10 @@ export interface WebAppOptions {
   agent: ApiContext["agent"];
   mcpUrl: string;
   mcpFetch?: typeof fetch;
+  /** Amazon Polly when configured; otherwise the Echo uses the browser's voice. */
+  speech?: SpeechSynth;
+  /** How often the Echo polls for news, in milliseconds. */
+  pollMs?: number;
   /** Serves /assets, /favicon.* from disk (local) or the bundle (Lambda). */
   staticFiles?: MiddlewareHandler[];
   /** Local runs mount the MCP server on the same origin at /mcp. */
@@ -73,12 +78,13 @@ export function createWebApp(options: WebAppOptions) {
   };
   if (options.mcpFetch) api.mcpFetch = options.mcpFetch;
   app.route("/api", apiRoutes(api));
+  app.route("/api", ttsRoutes(options.sessions, options.speech));
 
   app.route("/", replyRoutes(options.deps));
 
   app.get("/", (c) => c.html(<HomePage />));
   app.get("/privacy", (c) => c.html(<PrivacyPage />));
-  app.get("/echo", (c) => c.html(<EchoPage />));
+  app.get("/echo", (c) => c.html(<EchoPage pollMs={options.pollMs ?? 3000} />));
 
   return app;
 }

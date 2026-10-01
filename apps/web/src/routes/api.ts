@@ -77,6 +77,28 @@ export function apiRoutes(ctx: ApiContext) {
     return c.json(result);
   });
 
+  /** Start over: a fresh demo family for this device (FR-032). Demo households only. */
+  api.post("/demo/reset", async (c) => {
+    const parsed = z
+      .object({ deviceId: z.string().min(1).max(64) })
+      .safeParse(await c.req.json().catch(() => undefined));
+    if (!parsed.success) return c.json({ error: "bad_request" }, 400);
+    const device = await ctx.sessions.get(parsed.data.deviceId);
+    if (!device) return c.json({ error: "unknown_device" }, 404);
+    if (device.kind !== "demo") return c.json({ error: "not_a_demo" }, 403);
+    await ctx.deps.demoOutbox.clear(device.householdId);
+    await ctx.deps.store.deleteHousehold(device.householdId);
+    const household = await seedDemoHousehold(ctx.deps.store, ctx.deps.clock.now());
+    await ctx.sessions.put({
+      ...device,
+      householdId: household.householdId,
+      olderAdultFirstName: household.olderAdultFirstName,
+      history: [],
+      engine: initialState(),
+    });
+    return c.json({ ok: true, olderAdultFirstName: household.olderAdultFirstName });
+  });
+
   /** Polled every 3 s: quiet notification state (FR-009). Content is spoken only when asked. */
   api.get("/device/:deviceId/events", async (c) => {
     const device = await ctx.sessions.get(c.req.param("deviceId"));

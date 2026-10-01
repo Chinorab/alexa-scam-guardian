@@ -170,18 +170,18 @@ watch the relative's reply arrive.
 
 ### Tests for User Story 6
 
-- [ ] T067 [P] [US6] Playwright scenarios V1 to V4 using typed input and a mocked speech layer in tests/e2e/echo.spec.ts
+- [X] T067 [P] [US6] Playwright scenarios V1 to V4 using typed input and a mocked speech layer in tests/e2e/echo.spec.ts
 
 ### Implementation for User Story 6
 
-- [ ] T068 [US6] Build the Echo Show frame layout (screen, captions, cards area, talk control, typed fallback) in apps/web/echo/src/EchoShow.tsx
-- [ ] T069 [P] [US6] Implement speech recognition with interim results feeding /api/interim in apps/web/echo/src/speech-in.ts
-- [ ] T070 [P] [US6] Implement POST /api/tts with Polly (normal and slow rate) in apps/web/src/routes/tts.ts and client playback with browser speech fallback in apps/web/echo/src/speech-out.ts
-- [ ] T071 [P] [US6] Implement light ring states and chime in apps/web/echo/src/LightRing.tsx
-- [ ] T072 [US6] Implement event polling, quiet notification and "What's new?" handling in apps/web/echo/src/notifications.ts
-- [ ] T073 [P] [US6] Build the on screen demo phone (messages, It was me and It wasn't me buttons) in apps/web/echo/src/DemoPhone.tsx
-- [ ] T074 [US6] Implement "repeat" (slow rate, simpler wording through the guard) in apps/web/src/agent/turn.ts
-- [ ] T075 [US6] Implement POST /api/demo/reset and a reset control in apps/web/src/routes/api.ts and apps/web/echo/src/EchoShow.tsx
+- [X] T068 [US6] Build the Echo Show frame layout (screen, captions, cards area, talk control, typed fallback) in apps/web/echo/src/EchoShow.tsx
+- [X] T069 [P] [US6] Implement speech recognition with interim results feeding /api/interim in apps/web/echo/src/speech-in.ts
+- [X] T070 [P] [US6] Implement POST /api/tts with Polly (normal and slow rate) in apps/web/src/routes/tts.ts and client playback with browser speech fallback in apps/web/echo/src/speech-out.ts
+- [X] T071 [P] [US6] Implement light ring states and chime in apps/web/echo/src/LightRing.tsx
+- [X] T072 [US6] Implement event polling, quiet notification and "What's new?" handling in apps/web/echo/src/notifications.ts
+- [X] T073 [P] [US6] Build the on screen demo phone (messages, It was me and It wasn't me buttons) in apps/web/echo/src/DemoPhone.tsx
+- [X] T074 [US6] Implement "repeat" (slow rate, simpler wording through the guard) in apps/web/src/agent/turn.ts
+- [X] T075 [US6] Implement POST /api/demo/reset and a reset control in apps/web/src/routes/api.ts and apps/web/echo/src/EchoShow.tsx
 
 **Checkpoint**: V1 to V4 pass by voice in Chrome; typed input works in any browser.
 
