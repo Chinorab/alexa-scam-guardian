@@ -1,4 +1,4 @@
-# Alexa+ Scam Guardian (working name) — progress
+# Scam Guardian for Alexa+ — progress
 
 Last update: 2026-10-01
 
@@ -8,7 +8,7 @@ Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-
 
 ## Current step
 All code tasks done except the ones that need the owner (2026-10-02). Phase 6 code done (DynamoDB store and outbox on one table, SES mailer, Lambda handlers, CDK stack validated by synth and assertions, docs/deploy.md); deploy blocked: no AWS CLI, account or Bedrock access on this machine yet. Phase 10 done: home page (road sign assembly), README with architecture and AWS, dataset published as github.com/Chinorab/us-scam-patterns (MIT, CI green), demo script, Devpost draft, number audit (IC3 2025 figures read in the PDF), FEEDBACK review, clean clone quickstart (found and fixed pnpm dev hanging on Windows), AgentCore container. 530 tests, 72 red team utterances, 24 Playwright runs.
-NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, install AWS CLI to D:, then `pnpm deploy` (T080); 2) SES sender/domain (production access request early); 3) confirm product name "Scam Guardian". Then T102 (Playwright on the deployed URL), T103 timed runs with people, `pnpm test:redteam:live`, update docs/measurements.md, record video Oct 21, Devpost Oct 22 from docs/devpost.md.
+NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, install AWS CLI to D:, then `pnpm deploy` (T080); 2) SES sender/domain (production access request early); Then T102 (Playwright on the deployed URL), T103 timed runs with people, `pnpm test:redteam:live`, update docs/measurements.md, record video Oct 21, Devpost Oct 22 from docs/devpost.md.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
@@ -26,6 +26,7 @@ NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, ins
 
 ## Decisions
 - User validated the path (2026-10-01) and kept the working name alexa-scam-guardian.
+- Product name confirmed by the owner (2026-10-02): "Scam Guardian" (Devpost: "Scam Guardian for Alexa+").
 - Path: real self-hosted MCP server (spec 2025-11-25, Streamable HTTP) + web app simulating Alexa+ (voice in/out, Echo Show style) driving it through an MCP client. Keep server "Alexa+ ready" (alexa-ai addon.json shape, <500 ms tools, MCP Apps UI) for when access opens.
 - Everything in English, US context only.
 - Messages: real email, SMS on on-screen demo phone (SMS adapter switchable later). Family page: magic link sign in + public resettable demo household. (user accepted recommended options 2026-10-01)
