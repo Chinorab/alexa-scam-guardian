@@ -1,7 +1,9 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 -> 1.1.0 (MINOR: Principle V expanded with one DOJ resource exception,
+Version change: 1.1.0 -> 1.1.1 (PATCH: Principle III clarifies that the speech to text layer
+is the platform's recognizer, decided after speckit-analyze finding C1, 2026-10-01)
+Earlier: 1.0.0 -> 1.1.0 (MINOR: Principle V expanded with one DOJ resource exception,
 decided in speckit-clarify session 2026-10-01)
 Previous: (template, unversioned) -> 1.0.0
 Modified principles: none (initial ratification)
@@ -58,6 +60,11 @@ Deferred items: none
 - If the user starts dictating one, the system MUST interrupt politely and steer back. Input
   that matches such patterns MUST be redacted before any logging, storage or model call.
 - No call audio is recorded or processed. The system only works on what the user describes.
+- Scope of "transmit": the speech to text layer stands in for the voice platform's own speech
+  recognition (Alexa's on a real Echo; the browser's or Amazon Transcribe's in the simulation).
+  Product code never sends unredacted text beyond that layer. The interruption rule limits
+  what the older adult says, the privacy page names the speech layer, and typed input is
+  always available.
 - Family setup data is limited to what verification and alerts need (names, relationship,
   phone or email, optional family password). It is never sold, shared or used for anything
   else, and the privacy page states this plainly.
@@ -158,4 +165,4 @@ Applies to the family setup page and the simulated Alexa+ web app.
 - Any conflict between a feature request and Principles I to V is resolved in favor of the
   principles; the feature is changed or dropped.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-01 | **Last Amended**: 2026-10-01
+**Version**: 1.1.1 | **Ratified**: 2026-10-01 | **Last Amended**: 2026-10-01

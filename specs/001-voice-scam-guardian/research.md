@@ -95,7 +95,8 @@ Checked 2026-10-01.
 - **Rationale**: Fastest path to a working voice loop; Polly gives a natural voice and counts
   as a documented AWS integration. Amazon Transcribe streaming is a stretch goal.
 - **Privacy note**: browser speech recognition may be processed by the browser vendor; the
-  privacy page says so and typed input is always available.
+  privacy page says so and typed input is always available. Constitution v1.1.1 treats this
+  layer as the platform recognizer; product code redacts its output before any other use.
 - **Alternatives**: Amazon Transcribe streaming from the browser (more setup: temporary
   credentials and audio streaming).
 

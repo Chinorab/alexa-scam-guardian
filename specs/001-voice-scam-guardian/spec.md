@@ -24,6 +24,10 @@ One term per concept, used the same way in speech, screens and docs.
 - **Warning sign**: a feature of the call that matches an official FTC or FBI scam alert.
 - **Check message**: the message sent to a relative to verify, asking if they really called.
 - **Heads up**: the message sent to a trusted contact saying a suspicious call happened.
+- **Understanding service**: the part that understands what the older adult says and
+  phrases answers (called "full mode" in the plan).
+- **Simplified mode**: the fixed phrase, rule based mode used when the understanding service
+  fails or is slow (FR-036).
 
 ## Clarifications
 
@@ -503,6 +507,9 @@ Reference dialogues (wording to refine in testing, intent is binding):
   deadline, so text delivery is shown on a demo phone; email delivery is real.
 - Default wait time before "no answer" is 10 minutes, editable on the family page.
 - Check history is kept 30 days, then deleted.
+- Speech is turned into text by the voice platform's speech recognition (the browser's in the
+  simulation, Alexa's on a real Echo). Product code redacts that text before anything else
+  and never sends unredacted text further (constitution Principle III, v1.1.1).
 - The household's older adult is identified by being on that household's device. No voice
   identification.
 - Out of scope for this version: Spanish and other languages, analysis of real call audio,
