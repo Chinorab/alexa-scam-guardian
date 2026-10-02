@@ -45,7 +45,9 @@ page, with the checks just made.
 
 ## Try it
 
-- **Hosted demo**: link added after the first deploy (see [docs/deploy.md](docs/deploy.md)).
+- **Hosted demo**, no sign in, on AWS:
+  [the simulated Echo Show](https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo).
+  Type or talk as Ruth, and answer as Michael on the demo phone beside it.
 - **Locally** in two minutes, no AWS account needed:
 
 ```bash

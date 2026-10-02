@@ -1,6 +1,6 @@
 # Devpost submission draft
 
-Paste section by section into the Devpost form. Fill the two links after the first deploy.
+Paste section by section into the Devpost form. The live demo link is filled in; add the video link after recording.
 Numbers: only the ones listed in docs/number-audit.md.
 
 ## Images

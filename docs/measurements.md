@@ -1,7 +1,7 @@
 # Measurements
 
 Every number here was measured by a script or a test in this repository, with the date and
-the target. Cloud figures are added after the first deploy (docs/deploy.md).
+the target. Cloud figures come from the deployed stack (docs/deploy.md).
 
 ## 2026-10-02, local run (simplified mode, in memory store)
 

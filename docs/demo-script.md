@@ -3,7 +3,9 @@
 Goal: the judge understands the product, sees it work, and trusts its safety in the first
 30 seconds; the rest proves depth. Every Alexa line below is what the product says today in
 the demo household (checked with `pnpm measure` and the Playwright scenarios). Record with the
-hosted URL once deployed, Polly voice on; until then the local run.
+hosted URL, Polly voice on: https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo
+(rehearsed there with `pnpm demo:play` on 2026-10-02: the whole script plays in 2 min 36 s of
+raw footage, before cuts).
 
 Hands free take: `pnpm demo:play` (or `E2E_BASE_URL=https://... pnpm demo:play` on the hosted
 site) opens a visible Chromium and plays every Echo beat below at a human pace, typing,

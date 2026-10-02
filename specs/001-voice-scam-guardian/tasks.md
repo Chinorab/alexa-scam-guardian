@@ -195,7 +195,7 @@ watch the relative's reply arrive.
 - [X] T077 [P] Implement SES v2 Mailer adapter in apps/mcp-server/src/adapters/ses-mailer.ts
 - [X] T078 Add Lambda handlers in apps/mcp-server/src/lambda.ts and apps/web/src/lambda.ts
 - [X] T079 Write CDK stack (table with TTL, two arm64 nodejs24.x functions with Function URLs, IAM for Bedrock, SES, Polly, DynamoDB, Secrets Manager master secret, SSM web URL parameter) in infra/src/stack.ts and infra/src/app.ts
-- [X] T080 Deploy, record MCP and web URLs, measure tool p95 latency and first answer time in docs/measurements.md (local figures recorded 2026-10-02; deploy waits for the AWS account, see docs/deploy.md)
+- [X] T080 Deploy, record MCP and web URLs, measure tool p95 latency and first answer time in docs/measurements.md (deployed 2026-10-02; figures in docs/measurements.md)
 
 **Checkpoint**: public MCP URL answers the inspector; V1 and V2 pass on the web URL.
 
