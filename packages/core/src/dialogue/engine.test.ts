@@ -243,3 +243,21 @@ describe("asking for news from family", () => {
     expect(classify("My grandson called and said he needs bail")).toBe("describe");
   });
 });
+
+describe("asking how to report", () => {
+  it.each([
+    "Who should I tell about this?",
+    "Should I call the police?",
+    "Help me file a complaint",
+    "Where can I report a scam?",
+  ])("'%s' asks for the report summary", (text) => {
+    expect(classify(text)).toBe("report");
+  });
+});
+
+describe("repeat before anything was said", () => {
+  it("repeats the opening invitation", async () => {
+    const reply = await simplifiedTurn("What?", initialState(), {} as never);
+    expect(reply.say).toBe("Tell me what happened on the call.");
+  });
+});

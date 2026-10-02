@@ -157,7 +157,8 @@ const INTENTS: [Intent, RegExp][] = [
   ["file_for_me", /\b(send|file|submit) (it|the report|a report) for me\b/i],
   [
     "report",
-    /\b(report (it|this|the call|that)|help (me )?(to )?report|how (do|can) i report|file a report|make a report)\b/i,
+    // Danger is checked first elsewhere, so "call the police" here means reporting the scam.
+    /\b(report (it|this|the call|that|a scam|the scam)|help (me )?(to )?report|how (do|can) i report|file a (report|complaint)|make a (report|complaint)|who (should|do) i tell|(should|can) i (call|tell) the police)\b/i,
   ],
   [
     "say_password",
@@ -484,7 +485,8 @@ export async function simplifiedTurn(
 
   switch (intent) {
     case "repeat":
-      return reply(state.lastSay ?? phrases.closing());
+      // Nothing said yet: repeat the invitation the Echo shows on screen.
+      return reply(state.lastSay ?? phrases.askWhatHappened());
     case "whats_new":
       return news(state, tools);
     case "pay_question":
