@@ -73,3 +73,20 @@ test("start over gives a fresh demo family", async ({ page }) => {
   await expect(phone.getByRole("article")).toHaveCount(0);
   await expect(caption(page)).toContainText("Tell me what happened");
 });
+
+test("FR-026: opens the Echo's demo family page and keeps the family after coming back", async ({
+  page,
+}) => {
+  await openEcho(page);
+  await say(page, OPENING);
+  await expect(caption(page)).toContainText("Should I text Michael");
+  await page.getByRole("button", { name: "Open Ruth's family page" }).click();
+  await expect(page.getByRole("heading", { name: "Ruth's family" })).toBeVisible();
+  await expect(page.getByText("Demo family.")).toBeVisible();
+  await page.getByRole("link", { name: "See recent checks and report summaries" }).click();
+  await expect(page.locator("main")).toContainText("gift cards");
+  await page.getByRole("link", { name: "Back to Ruth's family" }).click();
+  await page.getByRole("link", { name: "Open Ruth's simulated Echo" }).click();
+  await say(page, "Yes");
+  await expect(caption(page)).toContainText("I'll tell you when Michael answers");
+});

@@ -269,6 +269,14 @@ export function EchoShow(props: { pollMs: number }) {
             Start over
           </button>
         </div>
+        {device?.householdKind === "demo" && (
+          <form method="post" action="/family/demo" class="echo-family">
+            <input type="hidden" name="deviceId" value={device.deviceId} />
+            <button type="submit" class="button button-secondary">
+              Open {device.olderAdultFirstName}'s family page
+            </button>
+          </form>
+        )}
         {!voiceInputSupported && (
           <p class="echo-hint">Voice input works in Chrome and Edge. You can type instead.</p>
         )}

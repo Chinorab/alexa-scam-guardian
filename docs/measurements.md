@@ -35,6 +35,9 @@ PutItem, Query and UpdateItem on the table. It found two real problems, both fix
 per hour demo start limit would have blocked a judging team behind one address, and the
 Echo's text field stayed disabled until the device started, so early typing was lost.
 
+Later the same day, with the public demo family (FR-026): 22 passed, 7 skipped, 0 failed
+against the Lambda bundles; the family page accessibility checks now run there too.
+
 ## Still to measure
 
 - Cloud: answer time per turn in full mode (Bedrock), tool p95 from the MCP server logs.

@@ -38,7 +38,7 @@ export const SITE_TURNS_PER_HOUR = 3000;
  * The visitor address behind the Lambda Function URL, hashed: it is only a rate limit key and
  * is never stored as is. Local runs have no proxy header and no limit.
  */
-function visitorKey(c: Context): string | undefined {
+export function visitorKey(c: Context): string | undefined {
   const forwarded = c.req.header("x-forwarded-for")?.split(",")[0]?.trim();
   if (!forwarded) return undefined;
   return createHash("sha256").update(`visitor:${forwarded}`).digest("base64url").slice(0, 22);
@@ -59,25 +59,41 @@ export function apiRoutes(ctx: ApiContext) {
 
   /** A private demo household per visitor, so judges never see each other's data. */
   api.post("/device/start", async (c) => {
-    // A signed in organizer gets their own household's Echo; everyone else a demo family.
-    const ownId = await ctx.householdFromRequest?.(c);
-    const own = ownId ? await ctx.deps.store.getHousehold(ownId) : undefined;
-    if (own && own.olderAdultFirstName) {
-      const device: DeviceSession = {
-        deviceId: crypto.randomUUID(),
-        householdId: own.householdId,
-        kind: "real",
-        olderAdultFirstName: own.olderAdultFirstName,
-        history: [],
-        engine: initialState(),
-        expiresAt: epochSeconds(ctx.deps.clock.now()) + DAY_SECONDS,
-      };
-      await ctx.sessions.put(device);
-      return c.json({
+    const answer = (device: DeviceSession) =>
+      c.json({
         deviceId: device.deviceId,
         householdKind: device.kind,
         olderAdultFirstName: device.olderAdultFirstName,
       });
+    const ownId = await ctx.householdFromRequest?.(c);
+    const own = ownId ? await ctx.deps.store.getHousehold(ownId) : undefined;
+
+    // A reloaded Echo keeps its family, so its conversation and checks carry on. A device of
+    // a real household resumes only for someone signed in to that household.
+    const resume = z
+      .object({ deviceId: z.string().min(1).max(64) })
+      .safeParse(await c.req.json().catch(() => undefined));
+    const previous = resume.success ? await ctx.sessions.get(resume.data.deviceId) : undefined;
+    const alive = previous && (await ctx.deps.store.getHousehold(previous.householdId));
+    if (previous && alive) {
+      const mine = own?.householdId === previous.householdId;
+      if (mine || (previous.kind === "demo" && !own)) return answer(previous);
+    }
+
+    // A signed in organizer gets their own household's Echo (the public demo family included);
+    // everyone else a new demo family.
+    if (own && own.olderAdultFirstName) {
+      const device: DeviceSession = {
+        deviceId: crypto.randomUUID(),
+        householdId: own.householdId,
+        kind: own.kind,
+        olderAdultFirstName: own.olderAdultFirstName,
+        history: [],
+        engine: initialState(),
+        expiresAt: own.expiresAt ?? epochSeconds(ctx.deps.clock.now()) + DAY_SECONDS,
+      };
+      await ctx.sessions.put(device);
+      return answer(device);
     }
     const visitor = visitorKey(c);
     if (

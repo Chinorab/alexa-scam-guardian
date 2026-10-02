@@ -476,3 +476,15 @@ main {
   margin: 0 0 var(--space-2);
   font-size: var(--text-lg);
 }
+
+.demo-notice {
+  margin-block: var(--space-4);
+}
+
+.demo-notice p {
+  margin: 0;
+}
+
+.demo-notice .sign-diamond {
+  vertical-align: -0.35em;
+}
