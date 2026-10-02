@@ -26,6 +26,8 @@ export interface Assessment {
   claimedRelationship?: Relationship;
   claimedIdentity?: string;
   alreadyPaid?: { method: PaymentMethod };
+  /** The contact asked for money, even with no warning sign ("he asked for money"). */
+  asksForMoney: boolean;
 }
 
 /** Speaking order. A familiar voice is context, so it comes last. */
@@ -56,10 +58,13 @@ const DANGER =
 const ON_LINE =
   /\b((still|is|he'?s|she'?s|they'?re|caller'?s) (still )?on the (line|phone|other phone|other line)|on hold|(holding|waiting|staying) on the (phone|line)|still holding|hasn'?t hung up)\b/i;
 
+const MONEY =
+  /\b(money|cash|dollars|bucks|pay|paid|bail|loan|lend|borrow|wire|gift ?cards?|a check|bills?|rent|fees?|fine)\b|\$\s?\d/i;
+
 const NOT_PAID =
   /\b(haven'?t|have not|didn'?t|did not|not yet|never) (bought|paid|sent|wired|given|gave|mailed|transferred)\b/i;
 const PAID =
-  /\b((i|we) (already |just )?(bought|paid|sent|wired|gave|mailed|transferred|handed|read (him|her|them) the)|already (bought|paid|sent|wired|gave|mailed|transferred)|(i|we) (already |just )?(put|deposited|loaded|fed) (the |my |some |all the )?(cash|money|bills|savings))\b/i;
+  /\b((i|we) (already |just )?(bought|paid|sent|wired|gave|mailed|transferred|moved|handed|read (him|her|them) the)|already (bought|paid|sent|wired|gave|mailed|transferred|moved)|(i|we) (already |just )?(put|deposited|loaded|fed) (the |my |some |all the )?(cash|money|bills|savings))\b/i;
 
 const PAYMENT_CUES: [PaymentMethod, RegExp][] = [
   ["money_order", /\bmoney orders?\b/i],
@@ -78,7 +83,7 @@ const PAYMENT_CUES: [PaymentMethod, RegExp][] = [
     "cash_courier",
     /\b(courier|picked (it|the money|the cash) up|gave (the )?(cash|money|gold) to (a|the|some)|driver came)\b/i,
   ],
-  ["bank_transfer", /\b(bank transfer|transferred|moved (my|the) money)\b/i],
+  ["bank_transfer", /\b(bank transfer|transferred|moved)\b/i],
 ];
 
 const RELATIONSHIPS: [Relationship, RegExp][] = [
@@ -146,6 +151,7 @@ export function createMatcher(data: Dataset = defaultDataset) {
       signs,
       danger: DANGER.test(description),
       callerOnLine: ON_LINE.test(description),
+      asksForMoney: MONEY.test(description),
       contactKind: CONTACT_KINDS.find(([, cue]) => cue.test(description))?.[0] ?? "call",
     };
     if (pattern) assessment.pattern = pattern;

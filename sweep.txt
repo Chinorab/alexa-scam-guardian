@@ -1,0 +1,168 @@
+======================================================================
+USER: Someone from the IRS called and said I owe back taxes and will be arrested today unless I pay with gift cards.
+ALEXA: I'm glad you asked me first. The emergency story, the gift cards and the threats are common signs of a scam. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+USER: what's new?
+ALEXA: No news yet. I'll let you know when someone answers.
+  cards: ui://guardian/check-status
+USER: how do I report it?
+ALEXA: I put a summary on the screen with where to report it. Nothing was sent to any agency.
+  cards: ui://guardian/report
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were the IRS. | What they asked for: money by gift cards. | Warning signs: the emergency story, the gift cards and the threats. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUI4VkJSWUhEUlJOMUEwQU5ERTV8bWVtXzAxTTNZSllCOFlTOUhaREU3MFNDVEpSWjYz.BsDhbWGl2wQ07KWPVRswiY7-NGYnirCp
+======================================================================
+USER: I got a text from Amazon saying my account was hacked and I need to call them to buy gift cards to secure it.
+ALEXA: I'm glad you asked me first. The gift cards and the request to move your money are common signs of a scam. Should I tell Sarah you got this text, so she can help?
+  cards: ui://guardian/warning-signs
+USER: no
+ALEXA: Okay, I didn't send anything.
+  cards: ui://guardian/check-status
+USER: say that again
+ALEXA: Okay, I didn't send anything.
+======================================================================
+USER: My bank called, they said my account is frozen and I need to move my money to a safe account.
+ALEXA: I'm glad you asked me first. I heard a common sign of a scam: the request to move your money. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+USER: I already moved five thousand dollars
+ALEXA: Thank you for telling me. Call your bank or credit union right away. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were a bank. | What they asked for: money or personal information. | Warning signs: the request to move your money. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUJOMzI3N0ZXWlNDWk5TODMzNTZ8bWVtXzAxTTNZSllCTjNYUjNZWFpaVjRHV1pLQ05U.jU_4MTQ0G1DJz41L6CxeflCc8jVwG_Wb
+======================================================================
+USER: A man said he was from Microsoft and my computer has a virus, he wants remote access and payment in bitcoin.
+ALEXA: I'm glad you asked me first. The cryptocurrency and the computer problem call are common signs of a scam. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: what?
+ALEXA: The cryptocurrency and the computer problem call are common signs of a scam. Should I tell Sarah you got this call, so she can help?
+USER: no thanks
+ALEXA: Okay, I didn't send anything.
+  cards: ui://guardian/check-status
+======================================================================
+USER: I got a voicemail from my granddaughter crying, she was in a car accident and needs money for the hospital.
+ALEXA: I heard a common sign of a scam: the emergency story. I can only reach people your family saved, and no granddaughter is saved. Should I tell Sarah you got this voicemail, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+USER: yes
+ALEXA: Okay. I'm here if you need me again.
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious voicemail at 11:00 AM EDT from someone saying they were Ruth's granddaughter. | What they asked for: money or personal information. | Warning signs: the emergency story. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUJWQ0RBSjRQMlEyMjVBQldGWlB8bWVtXzAxTTNZSllCVkNTV1RXM0FQUFpTSEtBRVQx.eBILaZIhrRF1oro9ZvBo_EYDrjBIQUcy
+======================================================================
+USER: I won the Jamaica lottery but I need to pay the fees first with a wire transfer.
+ALEXA: I'm glad you asked me first. The wire transfer and the fee to collect a prize are common signs of a scam. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone they did not know. | What they asked for: money by wire transfer. | Warning signs: the wire transfer and the fee to collect a prize. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUJZUFlWMkdXSkpYTkdGTldGUTZ8bWVtXzAxTTNZSllCWVFIUldKRVBSQ0QzODdLNkFF.VGR1hQudYippRflCF8546OCIjUXZnuO5
+======================================================================
+USER: My online boyfriend needs money for a plane ticket to come see me.
+ALEXA: I'm glad you asked me first. I heard a common sign of a scam: the sweetheart you have not met. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: no
+ALEXA: Okay, I didn't send anything.
+  cards: ui://guardian/check-status
+USER: but I love him
+ALEXA: I understand. Please don't send any money until you talk it over with your family.
+  cards: ui://guardian/warning-signs
+======================================================================
+USER: I already sent three thousand dollars in gift cards to my grandson's lawyer.
+ALEXA: Thank you for telling me. Call the company that sold the gift card right away. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done, I let Sarah know. The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays. Would you like help reporting this call?
+  cards: ui://guardian/check-status
+USER: yes
+ALEXA: I put a summary on the screen with where to report it. Nothing was sent to any agency.
+  cards: ui://guardian/report
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were Ruth's grandson. | What they asked for: money by gift cards. | Warning signs: the emergency story and the gift cards. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUM0UzRKS0Q5N0M5S1k1MjRIMkd8bWVtXzAxTTNZSllDNFRGMTY4MkpSQlk3VFY0OUVT.YFMeAhfT2ixyeQeGvRhIfFsBc2qf_Lt_
+======================================================================
+USER: Someone called saying they're my son and he was arrested. He told me not to tell anyone.
+ALEXA: The request to keep it secret and the emergency story are common signs of a scam. I can only reach people your family saved, and no son is saved. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: no
+ALEXA: Okay, I didn't send anything.
+  cards: ui://guardian/check-status
+USER: what should I do?
+ALEXA: Please don't send any money, and hang up if they call back. Then check with your family on a number you know.
+======================================================================
+USER: My grandson called and asked for money.
+ALEXA: I didn't hear the common signs of a scam, but checking first is a good idea. Should I text Michael on the number your family saved?
+  cards: ui://guardian/warning-signs
+USER: it sounded just like him
+ALEXA: Sorry, I didn't catch that. Should I text Michael on the number your family saved? You can say yes or no.
+  cards: ui://guardian/check-status
+USER: should I pay?
+ALEXA: Let's not send any money yet. First, let's reach Michael on a number your family saved.
+======================================================================
+USER: The Social Security office called and said my number was suspended.
+ALEXA: I'm glad you asked me first. The threats and the caller claiming to be from the government are common signs of a scam. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were Social Security. | What they asked for: money or personal information. | Warning signs: the threats and the caller claiming to be from the government. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNEMkM0M0MzSFdFNDNNRVhYM0p8bWVtXzAxTTNZSllDRDNXVjk2NTUxQjc2VjkxUlNa.iBM0yHr06DGsPDnwVML-KnpXEQ239sVr
+======================================================================
+USER: A courier is coming to pick up cash for my grandson's bail in an hour.
+ALEXA: I'm glad you asked me first. The emergency story and the cash pickup are common signs of a scam. Should I text Michael to check, and tell Sarah you got this call?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I'll tell you when Michael answers. While we wait: Scammers often say a loved one is in jail or in an accident, so you panic and pay.
+  cards: ui://guardian/check-status
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were Ruth's grandson. | What they asked for: money by cash picked up in person. | Warning signs: the emergency story and the cash pickup. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNGRVBFN003VkpDRUNCNVE1UkR8bWVtXzAxTTNZSllDRkVYVk1ETVhTS0RSN0tWRjMz.RaI_KKXK9zLv7a2Fs2XCJxeGRVG5tuvf
+  -> Michael (text): Hi Michael, this is Scam Guardian for Ruth. | Ruth just got a call from someone saying they were you, asking for money. | Was it you? Please answer here: | https://guardian.test/r/EYDOVV6YXwWhVpRbpkuZvbp3K23tYZMA | Please also call Ruth on the number you know. | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNGRVBFN003VkpDRUNCNVE1UkR8bWVtXzAxTTNZSllDRkVTQTIySkpITVdERUFaWjJW.l5I_qctAR5egR4M3YT0vkKQQytz1pc9r
+======================================================================
+USER: Hello
+ALEXA: I can help you check a call, text or email that worried you. Tell me what happened.
+USER: What can you do?
+ALEXA: I can help you check a call, text or email that worried you. Tell me what happened.
+USER: thank you, goodbye
+ALEXA: Okay. I'm here if you need me again.
+======================================================================
+USER: My nephew emailed asking for gift cards for his boss.
+ALEXA: I heard a common sign of a scam: the gift cards. I can only reach people your family saved, and no nephew is saved. Should I tell Sarah you got this email, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious email at 11:00 AM EDT from someone saying they were Ruth's nephew. | What they asked for: money by gift cards. | Warning signs: the gift cards. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNNMzM1RDVSQU1YQUhZRTIyTTl8bWVtXzAxTTNZSllDTTNRUzZLTjRYNkQxTVZGQ1hY.ujTpchd94G0hCy4gOIp5LlCUCfPc8lgs
+======================================================================
+USER: Someone called from Medicare and wants my Medicare number to send me a new card.
+ALEXA: I'm glad you asked me first. I heard a common sign of a scam: the caller claiming to be from the government. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: no
+ALEXA: Okay, I didn't send anything.
+  cards: ui://guardian/check-status
+======================================================================
+USER: I got a call that my grandson is in jail, but I called him back on his real number and he's fine.
+ALEXA: I'm glad you checked with your family. Please don't send any money, and hang up if they call back. Would you like help reporting this call?
+  cards: ui://guardian/warning-signs
+USER: ok
+ALEXA: I put a summary on the screen with where to report it. Nothing was sent to any agency.
+  cards: ui://guardian/report
+======================================================================
+USER: The sheriff called, I missed jury duty and must pay a fine with a prepaid card.
+ALEXA: I'm glad you asked me first. I heard a common sign of a scam: the caller claiming to be from the government. Should I tell Sarah you got this call, so she can help?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I let Sarah know.
+  cards: ui://guardian/check-status
+USER: repeat that slower
+ALEXA: Done. I let Sarah know.
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were the police. | What they asked for: money or personal information. | Warning signs: the caller claiming to be from the government. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNXR1pGUzVRSzlZMTJQUDNLNDR8bWVtXzAxTTNZSllDV0cwQjJEQk5YTUU4RjNOMFgx.9POL1g2r9m7grw43wmEFJ8gcw0xFvbee
+======================================================================
+USER: My grandson called, he needs bail money, he's still on the phone right now.
+ALEXA: You can hang up now. A real family member will understand. Then we'll check with Michael together.
+  cards: ui://guardian/warning-signs
+USER: ok I hung up
+ALEXA: I'm glad you asked me first. The rush, the emergency story and the request to stay on the phone are common signs of a scam. Should I text Michael to check, and tell Sarah you got this call?
+  cards: ui://guardian/warning-signs
+USER: yes
+ALEXA: Done. I'll tell you when Michael answers. While we wait: Scammers rush you so you have no time to check the story or talk to someone you trust.
+  cards: ui://guardian/check-status
+  -> Sarah (email): Hi Sarah, this is Scam Guardian for Ruth. | Ruth got a suspicious call at 11:00 AM EDT from someone saying they were Ruth's grandson. | What they asked for: money or personal information. | Warning signs: the rush, the emergency story and the request to stay on the phone. | We advised Ruth not to send any money and to check with family first. | Please give Ruth a call when you can. | Details and any report summary are on the family page: https://guardian.test/family/activity | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNZV0o1RUIwRjhYWTQ2V0YxR018bWVtXzAxTTNZSllDWVhLTlZNU0VQWVZENEpIQ1M3.GstyE9qqDoyWzjoQKAcVmtls3blbuZ_1
+  -> Michael (text): Hi Michael, this is Scam Guardian for Ruth. | Ruth just got a call from someone saying they were you, asking for money. | Was it you? Please answer here: | https://guardian.test/r/lcw2KA2r311gGZ76zjpeYdbBDCwg3IUL | Please also call Ruth on the number you know. | To stop all messages from Scam Guardian: https://guardian.test/stop/aGhfMDFNM1lKWUNZV0o1RUIwRjhYWTQ2V0YxR018bWVtXzAxTTNZSllDWVhNTkRHM1JKRDhCNTBHWFhX.W1zmbGvPNVXWgmt_qxoed4yvlXqq4-Ru

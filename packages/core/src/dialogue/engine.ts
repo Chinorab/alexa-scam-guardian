@@ -116,6 +116,10 @@ export interface EngineState {
   waitingFact?: string;
   /** Set after "I already paid": the hotline is offered once the heads up is settled. */
   paid?: boolean;
+  /** Signs already spoken in this check: details with nothing new don't repeat the offer. */
+  heardSigns?: string[];
+  /** Alexa asked them to hang up first; the next turn continues the check. */
+  afterHangUp?: boolean;
 }
 
 export interface EngineReply {
@@ -131,6 +135,8 @@ export const initialState = (): EngineState => ({ stage: "idle", phrasesHeard: [
 
 export type Intent =
   | "repeat"
+  | "greeting"
+  | "what_to_do"
   | "whats_new"
   | "pay_question"
   | "call_back"
@@ -149,6 +155,10 @@ const INTENTS: [Intent, RegExp][] = [
     "repeat",
     // Short forms only as the whole reply ("What?"), so "What should I do?" is not a repeat.
     /^(?:(?:what|huh|pardon(?: me)?|sorry|sorry what|come again|again|one more time|slower|louder|say it slower)(?: please)?[?.!]*$|(?:please |sorry,? |excuse me,? )?(?:repeat|say (?:that|it) (?:again|slower)|what did you say|what was that|(?:can|could|would) you (?:please )?(?:repeat|say (?:that|it) again|speak (?:up|slower|louder|more slowly))|i (?:didn'?t|did not|can'?t|couldn'?t) (?:hear|catch|understand)(?: (?:you|that|it|what you said))?[?.!]*$))/i,
+  ],
+  [
+    "greeting",
+    /^(?:(?:hi|hello|hey|good (?:morning|afternoon|evening))(?: alexa| there)?[.!?]*$|(?:what can you do|what do you do|how does this work|who are you|how can you help(?: me)?)\b)/i,
   ],
   [
     "whats_new",
@@ -173,6 +183,10 @@ const INTENTS: [Intent, RegExp][] = [
     "pay_question",
     /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy))\b/i,
   ],
+  [
+    "what_to_do",
+    /\b(what (should|do|can|must) i do|what now|what do you (think|suggest|recommend)|what'?s (my|the) next step)\b/i,
+  ],
   // Any other mention of the password asks for it ("he wants the family password"); after
   // payment questions, so "he knew the password so I can send it" stays a payment question.
   ["say_password", /\b(password|secret word|code word)\b/i],
@@ -192,6 +206,10 @@ export function classify(text: string): Intent {
   const trimmed = text.trim();
   return INTENTS.find(([, pattern]) => pattern.test(trimmed))?.[0] ?? "describe";
 }
+
+/** They already reached the real relative: "I called him on his real number and he's fine". */
+const CHECKED_FINE =
+  /\b(i|we) (just |already )?(called|talked to|spoke (to|with)|reached|texted|heard from|checked with|got hold of)\b.*\b((he'?s|she'?s|they'?re|he is|she is|they are) (just )?(fine|okay|ok|safe|alright|all right|at home|at work|at school)|(it )?(wasn'?t|was not) (really )?(him|her|them)|(he|she|they) (didn'?t|did not|never) call)\b/i;
 
 const DOOR = /\b(door|outside|here at|at my house|on my porch)\b/i;
 
@@ -258,19 +276,24 @@ async function describe(
 ): Promise<EngineReply> {
   const result = await tools.assessCall(text, state.checkId);
   const base: EngineState = { ...state, stage: "assessed", checkId: result.checkId };
+  delete base.afterHangUp;
   const reply = (say: string, extra: Partial<EngineState> = {}, expectReply = false) =>
     replier(base)(say, { cards: ["assess_call"], state: extra, expectReply });
 
   if (result.interrupt) return reply(phrases.sensitiveStop());
   if (result.danger) return reply(DOOR.test(text) ? phrases.dangerAtDoor() : phrases.danger());
-  if (result.nextStep === "hang_up_first") return reply(phrases.hangUpFirst());
+  if (result.nextStep === "hang_up_first") {
+    const person = result.familyMatches.length === 1 ? result.familyMatches[0] : undefined;
+    return reply(phrases.hangUpFirst(person), { afterHangUp: true });
+  }
 
   const helper = result.headsUpCandidate;
   // Money already gone comes first, signs or not: one official first step, no blame.
   if (result.nextStep === "paid_guidance") {
     const guidance = await tools.getGuidance("already_paid", result.alreadyPaid?.method);
     const step = guidance.steps[0] ?? phrases.waitBeforePaying();
-    if (helper) {
+    const alreadyTold = state.contacted?.some((m) => m.memberId === helper?.memberId);
+    if (helper && !alreadyTold) {
       const offered = await offer(
         { ...base, paid: true },
         tools,
@@ -280,16 +303,61 @@ async function describe(
       );
       return { ...offered, cardsFrom: ["assess_call"] };
     }
-    return reply(phrases.thankForTelling(step), { paid: true });
+    // Nobody to tell, or they were told already: the hotline and the report come now.
+    return reply(
+      `${step} ${phrases.hotline()} ${phrases.offerReport()}`,
+      { stage: "report_offered" },
+      true,
+    );
+  }
+
+  if (CHECKED_FINE.test(text)) {
+    return reply(
+      `${phrases.checkedWithFamily()} ${phrases.offerReport()}`,
+      { stage: "report_offered" },
+      true,
+    );
   }
 
   // A familiar voice is context: shown on screen, but not read aloud as a sign.
   const spoken = result.matchedSigns.filter((sign) => sign.id !== "family-voice");
   const labels = spoken.map((sign) => sign.label);
+  const heard = state.heardSigns ?? [];
+  base.heardSigns = [...new Set([...heard, ...spoken.map((sign) => sign.id)])];
+  const target = result.familyMatches.length === 1 ? result.familyMatches[0] : undefined;
+  // During an open check, details without new signs keep the current question going.
+  if (state.stage === "waiting" && state.offered && spoken.every((s) => heard.includes(s.id))) {
+    return reply(phrases.stillWaiting(state.offered));
+  }
+  if (
+    state.stage === "assessed" &&
+    heard.length > 0 &&
+    spoken.every((sign) => heard.includes(sign.id))
+  ) {
+    // After a no, more details don't bring the same offer back, unless they name the person.
+    const again = [state.offered, state.headsUp].find((m) => m && named(text, [m]));
+    if (again) {
+      const offered = await offer(base, tools, "", state.offered, state.headsUp);
+      return { ...offered, cardsFrom: ["assess_call"] };
+    }
+    return reply(phrases.noNewSigns());
+  }
   if (labels.length === 0) {
-    // During an open check, details without new signs keep the current question going.
-    if (state.stage === "waiting" && state.offered)
-      return reply(phrases.stillWaiting(state.offered));
+    if (target && result.nextStep === "offer_verify") {
+      const offered = await offer(base, tools, phrases.noSignsCheck(), target);
+      return { ...offered, cardsFrom: ["assess_call"] };
+    }
+    if (result.nextStep === "pick_member" && result.familyMatches.length > 1) {
+      const first = result.familyMatches[0];
+      return reply(
+        `${phrases.noSignsCheck()} ${phrases.pickMember(
+          relationshipWord(first?.relationship ?? "other"),
+          result.familyMatches.map((m) => m.name),
+        )}`,
+        { stage: "pick_member", candidates: result.familyMatches },
+        true,
+      );
+    }
     return reply(phrases.noSigns());
   }
   const waitingFact = spoken.find((sign) => !sign.explanation.includes(". "))?.explanation;
@@ -313,7 +381,6 @@ async function describe(
       true,
     );
   }
-  const target = result.familyMatches.length === 1 ? result.familyMatches[0] : undefined;
   if (target && result.nextStep === "offer_verify") {
     const offered = await offer(base, tools, lead, target, helper);
     return { ...offered, cardsFrom: ["assess_call"] };
@@ -483,10 +550,29 @@ export async function simplifiedTurn(
   const intent = classify(text);
   const reply = replier(state);
 
+  // Danger and a caller still on the line outrank everything else, including any open
+  // question: "Someone is at my door" is never read as the answer to "Should I text Michael?".
+  if (isDanger(text) || isCallerOnLine(text)) {
+    return describe(text, { ...state, stage: state.stage === "idle" ? "idle" : "assessed" }, tools);
+  }
+  // They were asked to hang up first: whatever they say next, the check goes on.
+  if (state.afterHangUp && ["bare_yes", "bare_no", "describe", "closing"].includes(intent)) {
+    return describe(text, { ...state, stage: "assessed" }, tools);
+  }
+
   switch (intent) {
     case "repeat":
       // Nothing said yet: repeat the invitation the Echo shows on screen.
       return reply(state.lastSay ?? phrases.askWhatHappened());
+    case "greeting":
+      return reply(phrases.intro(), { expectReply: true });
+    case "what_to_do": {
+      if (!state.checkId) return reply(phrases.askWhatHappened(), { expectReply: true });
+      if (state.stage === "awaiting_confirmation" && state.question) {
+        return reply(`${phrases.whatToDo()} ${state.question}`, { expectReply: true });
+      }
+      return reply(phrases.whatToDo(state.stage === "waiting" ? state.offered : undefined));
+    }
     case "whats_new":
       return news(state, tools);
     case "pay_question":
@@ -530,12 +616,6 @@ export async function simplifiedTurn(
     case "bare_no":
     case "describe":
       break;
-  }
-
-  // Danger and a caller still on the line outrank any open question: "Someone is at my door"
-  // is never read as the answer to "Should I text Michael?".
-  if (state.stage !== "idle" && (isDanger(text) || isCallerOnLine(text))) {
-    return describe(text, { ...state, stage: "assessed" }, tools);
   }
 
   if (state.stage === "awaiting_confirmation") return confirm(text, state, tools);

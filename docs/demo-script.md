@@ -41,7 +41,7 @@ over Alexa.
 | Time | Ruth says | Alexa answers |
 |---|---|---|
 | 0:45 | "So can I pay him?" | "Let's not send any money yet. First, call your family on a number you know." |
-| 0:55 | "He's still on the other phone, he says I have to hurry." | "You can hang up now. A real family member will understand." |
+| 0:55 | "He's still on the other phone, he says I have to hurry." | "You can hang up now. A real family member will understand. Then tell me what happened." |
 | 1:05 | "My card number is four one two two..." | Interrupts while she is still speaking: "Let me stop you there. Please don't share numbers like that with me or anyone on the phone. We don't need them." |
 | 1:15 | "Call back the number that called me." | "I won't call that number, because scammers control it. Please call your family on a number you know." |
 | 1:22 | "There's a man at my door, he says he's here for the money." | "Don't open the door and don't hand over money. If you feel unsafe, call 911 now." |
