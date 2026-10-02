@@ -153,12 +153,16 @@ assistant rules carried in the server instructions.
 
 ```bash
 pnpm check         # lint, format, copy rules, types, then 500+ unit, contract and red team tests
-pnpm test:e2e      # Playwright: the Echo and the family page in a real Chromium, plus axe WCAG 2.2 AA
+pnpm test:e2e      # Playwright: the Echo and the family page in a real Chromium, axe WCAG 2.2 AA, 200% zoom
+pnpm smoke         # pages, security headers, Echo and MCP auth of a running site, local or deployed
 pnpm measure       # answer time per turn and time to the check message
+pnpm demo:play     # plays the demo video script on the Echo, for screen recording
 ```
 
-Every contract test also runs on the DynamoDB store through an in memory table, so the cloud
-storage is tested on every push without an AWS account.
+Both the test suites and Playwright run in CI on every push. Every contract test also runs on
+the DynamoDB store through an in memory table, so the cloud storage is tested without an AWS
+account, and the full conversation mode is tested with a scripted stand in for Bedrock that
+issues real tool calls.
 
 ## Project documents
 
