@@ -18,6 +18,8 @@ async function expectNoViolations(page: Page, name: string) {
 }
 
 async function familyHome(page: Page) {
+  // Sign in links appear on screen only in local runs; a deployed site sends them by email.
+  test.skip(!!process.env.E2E_BASE_URL, "needs on screen sign in links (local runs only)");
   await page.goto("/family/sign-in");
   await page.getByLabel("Your email").fill(`a11y-${Date.now()}@example.com`);
   await page.getByRole("button", { name: "Email me a link" }).click();

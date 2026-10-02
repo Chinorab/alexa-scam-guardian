@@ -1,6 +1,9 @@
 /** Visual captures of the family page for review (not an assertion suite). */
 import { test } from "@playwright/test";
 
+// Sign in links appear on screen only in local runs; a deployed site sends them by email.
+test.skip(!!process.env.E2E_BASE_URL, "needs on screen sign in links (local runs only)");
+
 const OUT = process.env.SHOTS_DIR ?? "test-results/shots";
 test.use({ viewport: { width: 390, height: 844 } });
 

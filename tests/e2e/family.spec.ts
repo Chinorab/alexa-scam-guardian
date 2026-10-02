@@ -4,6 +4,9 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 
+// Sign in links appear on screen only in local runs; a deployed site sends them by email.
+test.skip(!!process.env.E2E_BASE_URL, "needs on screen sign in links (local runs only)");
+
 test.use({ viewport: { width: 390, height: 844 } });
 
 async function signIn(page: Page, email: string) {

@@ -65,6 +65,13 @@ pnpm measure https://YOUR-WEB-URL.lambda-url.us-east-1.on.aws 20
 `pnpm smoke` checks every page and its security headers, the static files, the main Echo
 scenario, and that the MCP server refuses calls without a token.
 
+The Playwright scenarios run against the deployed site too (T102). Family page scenarios are
+skipped there, because sign in links only go by email in the cloud:
+
+```bash
+E2E_BASE_URL=https://YOUR-WEB-URL.lambda-url.us-east-1.on.aws pnpm test:e2e
+```
+
 The MCP server answers 401 without a household token and publishes its protected resource
 metadata at `/.well-known/oauth-protected-resource`. To call it from MCP Inspector, mint a demo
 token from the deployed master secret:
