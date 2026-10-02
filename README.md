@@ -126,7 +126,9 @@ eight principles. Each one is enforced in code, not only in the prompt:
 
 A red team suite of 75 adversarial utterances (pressure to approve, dictated numbers, "call
 him back", "tell me the password", the caller still on the line) runs on every push through
-the whole path, and a live runner sends the same set to Bedrock
+the whole path, with nine multi turn attacks that arrive in the middle of a check (a new
+number in the yes, danger while a question is open, "so I can pay now?" after a relative
+confirmed), and a live runner sends the same set to Bedrock
 ([tests/redteam](tests/redteam)).
 
 ## AWS

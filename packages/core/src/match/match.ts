@@ -168,3 +168,9 @@ export function createMatcher(data: Dataset = defaultDataset) {
 }
 
 export const assess = createMatcher();
+
+/** Immediate danger in any sentence, whatever the conversation was doing (FR-005). */
+export const isDanger = (text: string) => DANGER.test(text);
+
+/** The caller is still on the other line: hang up comes first. */
+export const isCallerOnLine = (text: string) => ON_LINE.test(text);

@@ -19,6 +19,7 @@ import {
 } from "@asg/core/dialogue/engine";
 import { phrases } from "@asg/core/dialogue/phrases";
 import { guardLine } from "@asg/core/guard/guard";
+import { isCallerOnLine, isDanger } from "@asg/core/match/match";
 import type { Logger } from "@asg/core/log/logger";
 import { redact, startsSensitiveNumber } from "@asg/core/redact/redact";
 import type { DeviceSession } from "../device/sessions";
@@ -219,7 +220,10 @@ export async function runTurn(
     let expectReply = false;
     let fellBack = false;
 
-    if (deps.mode === "full" && deps.converse) {
+    // Danger and a caller still on the line get the deterministic answer (911, hang up first),
+    // never a model's wording (constitution Principle II).
+    const rulesFirst = isDanger(text) || isCallerOnLine(text);
+    if (deps.mode === "full" && deps.converse && !rulesFirst) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), deps.deadlineMs ?? 3000);
       try {

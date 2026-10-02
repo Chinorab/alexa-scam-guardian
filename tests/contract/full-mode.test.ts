@@ -217,3 +217,17 @@ describe("what the model says about messages", () => {
     expect(claimsUnsentMessage("As I said, please don't send money.", [])).toBe(false);
   });
 });
+
+describe("danger in the full mode", () => {
+  it("answers 911 with the fixed rules and never asks the model", async () => {
+    let asked = 0;
+    const s = setUp(async () => {
+      asked++;
+      return text("Okay, tell me more.");
+    });
+    await s.start();
+    const reply = await s.say("There's a man at my door, he says he's here for the money.");
+    expect(reply.say).toMatch(/911/);
+    expect(asked).toBe(0);
+  });
+});

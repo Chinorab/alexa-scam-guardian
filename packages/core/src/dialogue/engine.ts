@@ -4,6 +4,7 @@
  * answers only with lines from the phrase catalog. Also the reference behavior in tests.
  */
 import type { Channel, PaymentMethod, Relationship } from "../ports/index";
+import { isCallerOnLine, isDanger } from "../match/match";
 import { phrases, type Person } from "./phrases";
 
 export type Member = Person & { memberId: string };
@@ -168,8 +169,11 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "pay_question",
-    /\b((can|should|may|do) i (just )?(pay|send|wire|buy)|is it (safe|ok|okay|fine) to (pay|send)|so i can pay|go ahead and pay)\b/i,
+    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy))\b/i,
   ],
+  // Any other mention of the password asks for it ("he wants the family password"); after
+  // payment questions, so "he knew the password so I can send it" stays a payment question.
+  ["say_password", /\b(password|secret word|code word)\b/i],
   [
     "off_topic",
     /\b(weather|what time is it|play (some )?music|set a timer|tell me a joke|recipe|turn (on|off) the)\b/i,
@@ -520,6 +524,12 @@ export async function simplifiedTurn(
     case "bare_no":
     case "describe":
       break;
+  }
+
+  // Danger and a caller still on the line outrank any open question: "Someone is at my door"
+  // is never read as the answer to "Should I text Michael?".
+  if (state.stage !== "idle" && (isDanger(text) || isCallerOnLine(text))) {
+    return describe(text, { ...state, stage: "assessed" }, tools);
   }
 
   if (state.stage === "awaiting_confirmation") return confirm(text, state, tools);
