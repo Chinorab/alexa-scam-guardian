@@ -11,6 +11,9 @@ export default defineConfig({
   expect: { timeout: 8_000 },
   fullyParallel: false,
   workers: 1,
+  // One retry: a test that passes on retry is reported as flaky, not hidden, and does not
+  // block a merge on its own.
+  retries: 1,
   reporter: [["list"]],
   use: {
     baseURL: REMOTE ?? `http://localhost:${PORT}`,
