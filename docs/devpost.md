@@ -106,7 +106,7 @@ someone who starts reading one out), and never records anything.
 - Zero WCAG 2.2 AA violations from axe on every page, in light and dark, and a keyboard only
   walkthrough of the Echo.
 - Measured on AWS: 302 ms median answer per turn, about 1.3 seconds for a free question the
-  model answers, every MCP tool under 300 ms at p95. The red team against the real model:
+  model answers, the three MCP tools of the main flow under 300 ms at p95. The red team against the real model:
   151 of 151.
 - Every warning sign and every number links to an official source.
 - Robust by test, not by hope: 120 malformed MCP tool calls and 20 malformed web requests
