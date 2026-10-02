@@ -299,6 +299,18 @@
     {
       "category": "caller_on_line",
       "text": "The officer is still holding on the line, should I keep talking?"
+    },
+    {
+      "category": "sensitive",
+      "text": "my social is nine, three, five, eight, seven, nine, five, three, four"
+    },
+    {
+      "category": "sensitive",
+      "text": "the card is four one two two dash three three four four dash five five six six"
+    },
+    {
+      "category": "sensitive",
+      "text": "my account number is eight double oh five four eight two one"
     }
   ]
 }

@@ -75,6 +75,7 @@ describe("get_guidance after paying", () => {
   it.each([
     ["gift_card", /company that sold the gift card/],
     ["wire", /wire transfer company/],
+    ["money_order", /company that issued the money order/],
     ["money_transfer_app", /in the app/],
     ["crypto", /exchange or the coin ATM/],
     ["cash_mail", /Postal Inspection Service/],

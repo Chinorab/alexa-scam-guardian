@@ -6,19 +6,35 @@ const sarah = { memberId: "m2", name: "Sarah", nicknames: [] };
 const both = [michael, sarah];
 
 describe("parseConfirmation", () => {
-  it.each(["Yes", "yes please", "Yeah.", "Sure, go ahead", "Okay do it", "please do", "yep"])(
-    "'%s' sends to everyone named in the question",
-    (reply) => {
-      expect(parseConfirmation(reply, both)).toEqual({ kind: "yes", memberIds: ["m1", "m2"] });
-    },
-  );
+  it.each([
+    "Yes",
+    "yes please",
+    "Yeah.",
+    "Sure, go ahead",
+    "Okay do it",
+    "please do",
+    "yep",
+    "absolutely",
+    "uh huh",
+    "mm hmm",
+  ])("'%s' sends to everyone named in the question", (reply) => {
+    expect(parseConfirmation(reply, both)).toEqual({ kind: "yes", memberIds: ["m1", "m2"] });
+  });
 
-  it.each(["No", "no thanks", "Stop", "cancel that", "Wait", "don't", "not now", "never mind"])(
-    "'%s' sends nothing",
-    (reply) => {
-      expect(parseConfirmation(reply, both)).toEqual({ kind: "no" });
-    },
-  );
+  it.each([
+    "No",
+    "no thanks",
+    "Stop",
+    "cancel that",
+    "Wait",
+    "don't",
+    "not now",
+    "never mind",
+    "not yet",
+    "I would rather not",
+  ])("'%s' sends nothing", (reply) => {
+    expect(parseConfirmation(reply, both)).toEqual({ kind: "no" });
+  });
 
   it.each([
     "",

@@ -19,6 +19,7 @@ const TOPICS = [
 const METHODS = [
   "gift_card",
   "wire",
+  "money_order",
   "money_transfer_app",
   "crypto",
   "cash_mail",

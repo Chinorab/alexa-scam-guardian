@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { guardLine } from "./guard";
+import { findViolations, guardLine } from "./guard";
 
 const SAFE = "Let's not send any money for now.";
 
@@ -71,5 +71,27 @@ describe("guardLine blocks other unsafe content", () => {
   it("blocks more than three sentences or more than one question", () => {
     expect(violations("One. Two. Three. Four.")).toContain("length");
     expect(violations("Is it Michael? Or is it Daniel?")).toContain("questions");
+  });
+});
+
+describe("approval in roundabout words (full mode last line of defense)", () => {
+  it.each([
+    "There's no harm in paying.",
+    "That sounds legit to me.",
+    "It's probably really him, so you can help him out.",
+    "Paying is the right call here.",
+    "You can go ahead and send it.",
+    "Since Michael confirmed, it's okay to wire it.",
+  ])("catches %s", (line) => {
+    expect(findViolations(line)).toContain("approval");
+  });
+
+  it.each([
+    "It is not safe to pay.",
+    "It's never okay to pay with gift cards.",
+    "Please don't send any money.",
+    "Michael says it was him. Before you send anything, please call him on the number you know.",
+  ])("lets the warning %s through", (line) => {
+    expect(findViolations(line)).toEqual([]);
   });
 });

@@ -59,6 +59,9 @@ const TENS: Record<string, string> = {
 
 const REPEATERS: Record<string, number> = { double: 2, triple: 3 };
 
+/** Words people say between groups of digits. */
+const SPOKEN_SEPARATORS = new Set(["dash", "hyphen", "and"]);
+
 /** Word tokens with their separators kept, so the rest of the text is untouched. */
 function tokenize(text: string): string[] {
   return text.split(/(\s+|[,;:!?]+(?=\s|$))/).filter((part) => part !== "");
@@ -98,8 +101,11 @@ export function normalizeSpokenDigits(text: string): string {
     const slot = slots[i];
     if (!slot || slot.consumed) continue;
     const next = slots[i + 1];
-    if (slot.word in REPEATERS && plain(next?.word) !== undefined && next) {
-      slot.value = Array(REPEATERS[slot.word]).fill(plain(next.word)).join(" ");
+    // "double four", and "double oh" for two zeros.
+    const repeated =
+      plain(next?.word) ?? (next?.word === "oh" || next?.word === "o" ? "0" : undefined);
+    if (slot.word in REPEATERS && repeated !== undefined && next) {
+      slot.value = Array(REPEATERS[slot.word]).fill(repeated).join(" ");
       slot.standalone = true;
       slot.trailing = next.trailing;
       next.consumed = true;
@@ -119,17 +125,24 @@ export function normalizeSpokenDigits(text: string): string {
   }
 
   const live = slots.filter((slot) => !slot.consumed);
+  // "409 dash 86", "4122 and 3344": a separator word between digits is still dictation.
+  const neighbor = (i: number, step: 1 | -1) => {
+    const near = live[i + step];
+    return near && SPOKEN_SEPARATORS.has(near.word) ? live[i + 2 * step] : near;
+  };
   live.forEach((slot, i) => {
     if (slot.value !== undefined || (slot.word !== "oh" && slot.word !== "o")) return;
-    const prev = live[i - 1]?.value;
-    const next = live[i + 1]?.value;
-    if (prev !== undefined && next !== undefined) slot.value = "0";
+    // "oh" next to a digit is a zero: "eight oh", "seven five oh".
+    if (neighbor(i, -1)?.value !== undefined || neighbor(i, 1)?.value !== undefined) {
+      slot.value = "0";
+    }
   });
 
   const out = [...tokens];
   live.forEach((slot, i) => {
     if (slot.value === undefined) return;
-    const numericNeighbor = live[i - 1]?.value !== undefined || live[i + 1]?.value !== undefined;
+    const numericNeighbor =
+      neighbor(i, -1)?.value !== undefined || neighbor(i, 1)?.value !== undefined;
     if (slot.standalone || numericNeighbor) out[slot.index] = `${slot.value}${slot.trailing}`;
   });
   for (const slot of slots) {
@@ -142,8 +155,13 @@ export function normalizeSpokenDigits(text: string): string {
   return out.join("");
 }
 
-/** Digits joined by single spaces, dashes or dots. */
-const DIGIT_RUN = /\d(?:[ .-]?\d)*/g;
+/**
+ * Digits joined by single spaces, dashes, dots or commas, or by the spoken words "and",
+ * "dash" or "hyphen". Speech recognition writes slowly dictated digits as "9, 3, 5, 8", and
+ * people read card groups as "4122 and 3344" or "409 dash 86 dash 4254".
+ */
+const DIGIT_RUN_SOURCE = String.raw`\d(?:(?:[ .-]|\s?,\s?|\s(?:and|dash|hyphen)\s)?\d)*`;
+const DIGIT_RUN = new RegExp(DIGIT_RUN_SOURCE, "gi");
 
 const MONEY_BEFORE = /\$\s?$/;
 const MONEY_AFTER = /^,?\d*\s*(dollars?|bucks|usd)\b/i;
@@ -238,7 +256,9 @@ export function startsSensitiveNumber(partial: string): boolean {
   for (const keyword of text.matchAll(SENSITIVE_KEYWORD)) {
     const rest = text.slice((keyword.index ?? 0) + keyword[0].length);
     // the number usually follows within a few words: "number is", "on the back is"
-    const nearby = rest.match(/^(?:\W+\w+){0,5}?\W+(\d(?:[ .-]?\d)*)/);
+    const nearby = rest.match(
+      new RegExp(String.raw`^(?:\W+\w+){0,5}?\W+(${DIGIT_RUN_SOURCE})`, "i"),
+    );
     const run = nearby?.[1];
     if (run && digitCount(run) >= 4) {
       const afterRun = rest.slice((nearby?.index ?? 0) + (nearby?.[0].length ?? 0));

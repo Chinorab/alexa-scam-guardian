@@ -73,3 +73,39 @@ describe("assess", () => {
     expect(assess("The pharmacy called about my refill").signs).toEqual([]);
   });
 });
+
+describe("company impersonation (FTC consumer alert, March 2024)", () => {
+  it("names a caller claiming to be from a company about an order", () => {
+    const result = assess(
+      "Amazon called about a big order on my account and wants me to confirm my card.",
+    );
+    expect(result.signs.map((s) => s.sign.id)).toContain("company-caller");
+    expect(result.pattern?.id).toBe("business-impersonation");
+  });
+});
+
+describe("company impersonation, false positives", () => {
+  it("does not flag a company named only as where gift cards come from", () => {
+    expect(ids("He told me to buy Amazon gift cards with my account money.")).not.toContain(
+      "company-caller",
+    );
+  });
+});
+
+describe("already paid, more ways of saying it", () => {
+  it("counts cash put into a coin ATM as paid, by cryptocurrency", () => {
+    expect(assess("I already put cash in a Bitcoin ATM like he said.").alreadyPaid).toEqual({
+      method: "crypto",
+    });
+  });
+
+  it("recognizes a money order", () => {
+    expect(assess("I already paid him with a money order.").alreadyPaid).toEqual({
+      method: "money_order",
+    });
+  });
+
+  it("does not treat putting the phone down as paying", () => {
+    expect(assess("I put the phone down and called you.").alreadyPaid).toBeUndefined();
+  });
+});

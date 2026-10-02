@@ -76,7 +76,7 @@ Latest news for a check, or unread news for the household ("What's new?").
 Official guidance for a situation.
 
 - **Input**: `topic` = `already_paid`, `caller_on_line`, `danger`, `no_answer`,
-  `confirmed_real`, `general`; `paymentMethod?` = `gift_card`, `wire`, `money_transfer_app`,
+  `confirmed_real`, `general`; `paymentMethod?` = `gift_card`, `wire`, `money_order`, `money_transfer_app`,
   `crypto`, `cash_mail`, `cash_courier`, `bank_transfer`, `other`
 - **Output**: `steps[]` (short speakable lines), `sources[]`, `helpResources[]` (DOJ hotline
   for `already_paid`)

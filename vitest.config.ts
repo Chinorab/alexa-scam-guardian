@@ -18,7 +18,11 @@ export default defineConfig({
       {
         test: {
           name: "contract",
-          include: ["tests/contract/**/*.test.ts", "tests/redteam/offline.test.ts"],
+          include: [
+            "tests/contract/**/*.test.ts",
+            "tests/redteam/offline.test.ts",
+            "tests/redteam/multiturn.test.ts",
+          ],
         },
       },
       {

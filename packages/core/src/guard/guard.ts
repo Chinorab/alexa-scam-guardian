@@ -32,8 +32,21 @@ const ALLOWED_NUMBERS = new Set(["911", "8333728311", "8778762455"]);
 
 const PAY_VERBS = "(pay|send|wire|transfer|buy|give|hand over|mail)";
 
+const PAYING = "(paying|sending|wiring|buying|giving|mailing|transferring)";
+
 const APPROVAL_PATTERNS: RegExp[] = [
-  new RegExp(`\\b(safe|ok|okay|fine|alright|all right|good)\\s+to\\s+${PAY_VERBS}\\b`, "i"),
+  // "not safe to pay" is a warning, not an approval.
+  new RegExp(
+    `(?<!\\b(?:not|never|isn'?t|is not)\\s{1,3})\\b(safe|ok|okay|fine|alright|all right|good)\\s+to\\s+${PAY_VERBS}\\b`,
+    "i",
+  ),
+  new RegExp(`\\bno\\s+(harm|problem|risk)\\s+(in|with)\\s+${PAYING}\\b`, "i"),
+  new RegExp(
+    `\\b${PAYING}(\\s+(it|him|her|them|the money|money|the cash|the gift cards?))?\\s+(is|would be|seems|sounds)\\s+(the right (call|thing|choice)|fine|ok|okay|safe|a good idea|reasonable)\\b`,
+    "i",
+  ),
+  /\b(sounds|seems|looks)\s+(legit|legitimate|real|genuine|safe)\b/i,
+  /\b(it'?s|it is|that'?s|that was|it was)\s+(probably|likely|definitely|surely|most likely)\s+(really\s+)?(him|her|them|your \w+)\b/i,
   new RegExp(
     `\\b(go ahead|you can|you may|feel free to|you should)\\s+(and\\s+)?${PAY_VERBS}\\b`,
     "i",
