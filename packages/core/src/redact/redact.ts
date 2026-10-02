@@ -250,7 +250,9 @@ export function startsSensitiveNumber(partial: string): boolean {
     const start = match.index ?? 0;
     const before = text.slice(0, start);
     const after = text.slice(start + match[0].length);
-    if (!MONEY_BEFORE.test(before) && !MONEY_AFTER.test(after)) return true;
+    // The number the caller used ("he called from 212 555 0199") is kept for the report.
+    const callerPhone = digitCount(match[0]) <= 11 && CALLER_CONTEXT.test(before);
+    if (!callerPhone && !MONEY_BEFORE.test(before) && !MONEY_AFTER.test(after)) return true;
   }
 
   for (const keyword of text.matchAll(SENSITIVE_KEYWORD)) {

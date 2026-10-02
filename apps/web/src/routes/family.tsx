@@ -19,6 +19,7 @@ import {
 } from "../family/forms";
 import type { DeviceSessions } from "../device/sessions";
 import { STARTS_PER_HOUR, visitorKey } from "./api";
+import { reportText } from "../family/report-text";
 import {
   endSession,
   looksLikeEmail,
@@ -151,6 +152,7 @@ export function familyRoutes(options: FamilyOptions) {
     "/family/password/*",
     "/family/settings",
     "/family/activity",
+    "/family/activity/*",
     "/family/delete-all",
   ];
   for (const path of protectedPaths) {
@@ -376,6 +378,17 @@ export function familyRoutes(options: FamilyOptions) {
       items.push(item);
     }
     return c.html(<ActivityPage household={household} items={items} />);
+  });
+
+  // The report summary as plain text, to keep or paste into ReportFraud.ftc.gov or ic3.gov.
+  app.get("/family/activity/:checkId/report.txt", async (c) => {
+    const household = c.get("household");
+    const report = await deps.store.getReport(household.householdId, c.req.param("checkId"));
+    if (!report) return c.text("No report summary for this check.", 404);
+    return c.text(reportText(report, household.olderAdultFirstName), 200, {
+      "content-disposition": "inline",
+      "cache-control": "no-store",
+    });
   });
 
   // Delete everything (FR-029)

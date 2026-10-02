@@ -356,3 +356,43 @@ describe("names on the family page", () => {
     expect(home).toContain("José O&#39;Brien-Nguyễn");
   });
 });
+
+describe("report summary on the family page (FR-019)", () => {
+  it("shows the facts, and offers them as plain text behind sign in", async () => {
+    const f = family();
+    const post = (path: string, body: unknown) =>
+      f.request(path, {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: ORIGIN },
+        body: JSON.stringify(body),
+      });
+    const { deviceId } = (await (await post("/api/device/start", {})).json()) as {
+      deviceId: string;
+    };
+    await post("/api/converse", {
+      deviceId,
+      text: "My grandson called from 212 555 0199, he is in jail and needs two thousand dollars in gift cards.",
+    });
+    await post("/api/converse", { deviceId, text: "No" });
+    await post("/api/converse", { deviceId, text: "Help me report it." });
+    await f.form("/family/demo", { deviceId });
+
+    const activity = await (await f.request("/family/activity")).text();
+    expect(activity).toContain("Report summary");
+    expect(activity).toContain("They asked for");
+    expect(activity).toContain("Money by gift cards");
+    expect(activity).toContain("(212) 555 0199");
+    const checkId = activity.match(/\/family\/activity\/([^/]+)\/report\.txt/)?.[1];
+    expect(checkId).toBeTruthy();
+
+    const text = await (await f.request(`/family/activity/${checkId}/report.txt`)).text();
+    expect(text).toContain("Scam report summary for Ruth");
+    expect(text).toContain("Warning signs:");
+    expect(text).toContain("https://reportfraud.ftc.gov");
+    expect(text).toContain("nothing was sent to any agency");
+
+    f.clearCookie();
+    const anonymous = await f.request(`/family/activity/${checkId}/report.txt`);
+    expect(anonymous.status).toBe(303);
+  });
+});

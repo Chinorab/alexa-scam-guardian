@@ -2,6 +2,7 @@
 import type { Check, FamilyMember, Household, ReportSummary } from "@asg/core/ports/index";
 import type { Errors, MemberValues } from "../../family/forms";
 import { WAIT_CHOICES } from "../../family/forms";
+import { reportFacts } from "../../family/report-text";
 import { Layout } from "../layout";
 
 function ErrorSummary(props: { errors: Errors }) {
@@ -594,6 +595,20 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
               {item.report && (
                 <div class="callout">
                   <h3>Report summary</h3>
+                  <dl class="facts">
+                    {reportFacts(item.report).map(([label, value]) => (
+                      <div>
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p>
+                    <a href={`/family/activity/${item.check.checkId}/report.txt`}>
+                      Open the summary as plain text
+                    </a>
+                    , to keep it or paste it into a report form.
+                  </p>
                   <p>Nothing was sent to any agency. You can file it here:</p>
                   <ul>
                     {item.report.links.map((link) => (

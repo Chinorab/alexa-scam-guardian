@@ -100,3 +100,15 @@ describe("startsSensitiveNumber", () => {
     expect(startsSensitiveNumber("my grandson called about his card")).toBe(false);
   });
 });
+
+describe("the caller's own number", () => {
+  it("is not interrupted, and is kept apart for the report", () => {
+    const text = "My grandson called from 212 555 0199 and needs bail";
+    expect(startsSensitiveNumber(text)).toBe(false);
+    expect(redact(text).callerNumber).toBe("2125550199");
+  });
+
+  it("a card number after 'called from' wording is still stopped", () => {
+    expect(startsSensitiveNumber("he called from my card 4111 1111 1111 1111")).toBe(true);
+  });
+});
