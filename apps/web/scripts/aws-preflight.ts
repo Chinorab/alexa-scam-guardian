@@ -126,7 +126,7 @@ note(
   toolkit ? toolkit : "not bootstrapped; run: pnpm --filter @asg/infra exec cdk bootstrap",
 );
 const stack = await stackStatus("ScamGuardian");
-note("info", "ScamGuardian stack", stack ?? "not deployed yet; run: pnpm deploy");
+note("info", "ScamGuardian stack", stack ?? "not deployed yet; run: pnpm run deploy");
 
 const todo = results.filter((r) => r.status === "todo").length;
 console.warn(todo === 0 ? "\nReady to deploy." : `\n${todo} thing(s) to do before deploying.`);

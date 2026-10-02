@@ -121,3 +121,18 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium (blocks the first deploy; easy once understood).
 - **Workaround:** `docs/deploy.md` now describes the use case banner; `pnpm aws:check` recognizes "not authorized to perform" and says to attach a policy to the IAM user.
 - **Suggestion:** The IAM create user flow could warn when no permission is attached; the Bedrock getting started page could say first in bold that the Model access page no longer exists.
+
+---
+
+## #8 — `pnpm deploy` runs pnpm's own deploy command, not the project script
+
+- **Date:** 2026-10-02
+- **Task attempted:** First real deploy (T080) with the command from `docs/deploy.md`.
+- **Steps:**
+  1. Before running it, checked `pnpm deploy --help`: it prints pnpm's experimental workspace deploy command ("Deploy a package from a workspace"), which takes a target directory.
+  2. The root script was `"deploy": "pnpm --filter @asg/infra deploy"`, which hits the same built in command one level down.
+- **Expected:** `pnpm <script>` runs a script when one exists, as it does for `test` or `check`.
+- **Actual:** Built in commands win over scripts with the same name. The documented command would have failed or done something else, and the rehearsal never caught it because it deploys through its own path.
+- **Severity:** Medium (the one documented deploy command was wrong).
+- **Workaround:** `pnpm run deploy` everywhere (README, docs, quickstart, preflight hint) and `pnpm --filter @asg/infra run deploy` in the root script.
+- **Suggestion:** pnpm could warn when a package.json script shadows a built in command name.

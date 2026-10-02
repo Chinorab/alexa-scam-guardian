@@ -143,7 +143,7 @@ confirmed), and a live runner sends the same set to Bedrock
 | AWS Secrets Manager, SSM Parameter Store | One generated master secret; no key in code or template |
 | AWS CDK | The whole stack in TypeScript ([infra/src/stack.ts](infra/src/stack.ts)), tested with CDK assertions |
 
-Deploy with one command after `cdk bootstrap`: `pnpm deploy`. Details, costs and limits:
+Deploy with one command after `cdk bootstrap`: `pnpm run deploy`. Details, costs and limits:
 [docs/deploy.md](docs/deploy.md). Measurements: [docs/measurements.md](docs/measurements.md).
 
 ## Alexa+ readiness

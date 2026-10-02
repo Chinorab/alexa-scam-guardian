@@ -61,16 +61,16 @@ pnpm --filter @asg/infra exec cdk bootstrap
 ## Deploy
 
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 With a verified SES sender:
 
 ```bash
-pnpm deploy -- -c "sesFrom=Scam Guardian <alerts@example.org>"
+pnpm run deploy -- -c "sesFrom=Scam Guardian <alerts@example.org>"
 ```
 
-`pnpm deploy` bundles both functions with esbuild (`infra/scripts/bundle.ts`), builds the Echo
+`pnpm run deploy` bundles both functions with esbuild (`infra/scripts/bundle.ts`), builds the Echo
 client, then runs `cdk deploy`. The outputs print `WebUrl` and `McpUrl`.
 
 Other settings, all optional, passed the same way with `-c`:

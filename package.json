@@ -20,7 +20,7 @@
     "test:a11y": "pnpm --filter @asg/tests a11y",
     "test:redteam:live": "pnpm --filter @asg/tests redteam:live",
     "token:demo": "pnpm --filter @asg/web token:demo",
-    "deploy": "pnpm --filter @asg/infra deploy",
+    "deploy": "pnpm --filter @asg/infra run deploy",
     "check": "pnpm lint && pnpm format:check && pnpm lint:copy && pnpm typecheck && pnpm test",
     "measure": "tsx scripts/measure.ts",
     "synth": "pnpm --filter @asg/infra synth",
