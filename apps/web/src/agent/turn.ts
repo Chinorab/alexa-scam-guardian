@@ -103,6 +103,37 @@ function recordingSession(
   } satisfies McpSession;
 }
 
+/**
+ * What the model may do with the outreach tools (constitution Principle IV). The model never
+ * speaks for the person: confirm_outreach always receives the person's own words from this
+ * turn, and a question prepared in this turn cannot be confirmed before the person has heard
+ * it and answered in a later turn.
+ */
+export function modelSession(session: McpSession, userText: string): McpSession {
+  const preparedThisTurn = new Set<string>();
+  return {
+    ...session,
+    async call(name, args) {
+      if (name === "confirm_outreach") {
+        const pendingId = typeof args.pendingId === "string" ? args.pendingId : "";
+        if (preparedThisTurn.has(pendingId)) {
+          return {
+            isError: true,
+            text: "Nothing was sent. Ask the question out loud, then end your turn and wait for the person's answer.",
+          };
+        }
+        return session.call(name, { ...args, userReply: userText });
+      }
+      const outcome = await session.call(name, args);
+      const pendingId = outcome.structured?.pendingId;
+      if (name === "prepare_outreach" && typeof pendingId === "string") {
+        preparedThisTurn.add(pendingId);
+      }
+      return outcome;
+    },
+  };
+}
+
 export async function runTurn(
   device: DeviceSession,
   rawText: string,
@@ -165,7 +196,7 @@ export async function runTurn(
           system: systemPrompt(device.olderAdultFirstName),
           history: device.history,
           userText: text,
-          session,
+          session: modelSession(session, text),
           converse: deps.converse,
           signal: controller.signal,
         });

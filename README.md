@@ -119,7 +119,7 @@ eight principles. Each one is enforced in code, not only in the prompt:
 | Never approve a payment | Output guard rejects approval phrases on every sentence, in both modes. |
 | No card, bank or Social Security numbers | Redaction runs before anything is stored, logged or sent to the model; the Echo interrupts politely while the number is still being said. |
 | No recording | Only what the person describes is used; logs hold ids, enums and timings, checked at runtime. |
-| The person decides | Nothing is filed with an agency; reports are summaries with official links. |
+| The person decides | Nothing is filed with an agency; reports are summaries with official links. In the full mode the model never answers for the person: the host passes the person's own words to `confirm_outreach`, and a question cannot be confirmed in the turn it was prepared. |
 | Official sources only | Every warning sign and every number links to an FTC, FBI or IC3 publication. |
 
 A red team suite of 72 adversarial utterances (pressure to approve, dictated numbers, "call
