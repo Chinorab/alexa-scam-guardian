@@ -51,6 +51,11 @@ runs above):
 The demo start limit (200 per hour per address) stopped a second batch of runs the same
 hour, as designed.
 
+Time until Alexa starts speaking (SC-004 counts the start of speech): the answer, then the
+whole Polly neural audio for it (the Echo plays it once downloaded). 8 runs of the main
+opening from France, with curl: answer 0.49 to 0.72 s, Polly 0.72 to 0.79 s for the three
+sentence line (56 KB of audio), so about 1.2 to 1.5 s in all.
+
 ## Automated checks
 
 | Check | Result | Where |
