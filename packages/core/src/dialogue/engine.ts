@@ -178,8 +178,11 @@ const INTENTS: [Intent, RegExp][] = [
     "off_topic",
     /\b(weather|what time is it|play (some )?music|set a timer|tell me a joke|recipe|turn (on|off) the)\b/i,
   ],
-  ["bare_yes", /^(yes|yeah|yep|sure|ok|okay|please|please do|go ahead|do it|yes please)[.!]?$/i],
-  ["bare_no", /^(no|nope|no thanks|not now|stop|cancel|never mind)[.!]?$/i],
+  [
+    "bare_yes",
+    /^(yes|yeah|yep|sure|ok|okay|please|please do|go ahead|do it|yes please|absolutely|certainly|uh huh|mm hmm|sure thing|you bet)[.!]?$/i,
+  ],
+  ["bare_no", /^(no|nope|nah|no thanks|not now|not yet|stop|cancel|never mind)[.!]?$/i],
   ["closing", /^(ok(ay)? )?(thanks|thank you|bye|goodbye|that'?s all)\b/i],
 ];
 

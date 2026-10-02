@@ -17,9 +17,9 @@ export type Confirmation =
   | { kind: "unclear" };
 
 const YES =
-  /\b(yes|yeah|yep|yup|sure|ok|okay|alright|all right|please do|please|go ahead|do it|do that|correct|that'?s right|sounds good|of course|definitely)\b/;
+  /\b(yes|yeah|yep|yup|sure|ok|okay|alright|all right|please do|please|go ahead|do it|do that|correct|that'?s right|sounds good|of course|definitely|absolutely|certainly|uh huh|mm hmm|you bet)\b/;
 const NO =
-  /\b(no|nope|nah|don'?t|do not|stop|cancel|wait|hold on|not now|never ?mind|nevermind|forget it|no thanks)\b/;
+  /\b(no|nope|nah|don'?t|do not|stop|cancel|wait|hold on|not now|not yet|rather not|never ?mind|nevermind|forget it|no thanks)\b/;
 const NARROW = /\b(just|only)\b/;
 /** Hesitation is never consent: "not sure", "maybe", "I guess" send nothing. */
 const HESITANT =
