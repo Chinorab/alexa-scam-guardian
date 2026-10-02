@@ -23,11 +23,16 @@ export interface ApiContext {
 }
 
 const DAY_SECONDS = 24 * 60 * 60;
-/** New demo families per visitor address per hour; keeps a public demo from being flooded. */
-export const STARTS_PER_HOUR = 20;
+/**
+ * New demo families per visitor address per hour. High enough for a whole judging team behind
+ * one office address reloading the page; low enough to stop a script flooding the table.
+ */
+export const STARTS_PER_HOUR = 200;
 /** Model backed turns per household per hour. Past this the rule based mode answers, so a
  *  person in the middle of a call is never refused, and the model bill stays bounded. */
 export const FULL_TURNS_PER_HOUR = 120;
+/** Model backed turns per hour for the whole site: the hard ceiling on the model bill. */
+export const SITE_TURNS_PER_HOUR = 3000;
 
 /**
  * The visitor address behind the Lambda Function URL, hashed: it is only a rate limit key and
@@ -106,8 +111,10 @@ export function apiRoutes(ctx: ApiContext) {
     if (!device) return c.json({ error: "unknown_device" }, 404);
 
     const turns = await ctx.deps.store.incrementRate(`turns#${device.householdId}`, 3600);
-    const agent =
-      turns > FULL_TURNS_PER_HOUR ? { mode: "simplified" as const, modelId: "none" } : ctx.agent;
+    const siteTurns =
+      ctx.agent.mode === "full" ? await ctx.deps.store.incrementRate("turns#site", 3600) : 0;
+    const overBudget = turns > FULL_TURNS_PER_HOUR || siteTurns > SITE_TURNS_PER_HOUR;
+    const agent = overBudget ? { mode: "simplified" as const, modelId: "none" } : ctx.agent;
     const { result, device: updated } = await runTurn(device, parsed.data.text, {
       ...agent,
       logger: ctx.deps.logger,

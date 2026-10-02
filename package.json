@@ -31,7 +31,8 @@
     "smoke": "tsx scripts/smoke.ts",
     "demo:play": "pnpm --filter @asg/tests demo:play",
     "video:cards": "pnpm --filter @asg/tests video:cards",
-    "aws:check": "pnpm --filter @asg/web aws:check"
+    "aws:check": "pnpm --filter @asg/web aws:check",
+    "rehearse": "pnpm --filter @asg/infra rehearse"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

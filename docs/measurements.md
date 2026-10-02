@@ -26,6 +26,15 @@ with the MCP server mounted at `/mcp`. Server time only: speech is not included.
 | Family setup on a 390 px screen, scripted (SC-005) | under 5 minutes, guarded | `tests/e2e/family.spec.ts` |
 | Contract tests on the DynamoDB store | 175 of 175 pass | `vitest` project `contract-dynamo` |
 
+## 2026-10-02, cloud rehearsal (real Lambda bundles, emulated AWS)
+
+`pnpm rehearse --keep`, then `E2E_BASE_URL=http://localhost:8892 pnpm test:e2e`, twice:
+17 passed, 11 skipped (family page scenarios need on screen sign in links, local only), 0
+failed. The bundles read the secret and the web URL once per cold start and used GetItem,
+PutItem, Query and UpdateItem on the table. It found two real problems, both fixed: the 20
+per hour demo start limit would have blocked a judging team behind one address, and the
+Echo's text field stayed disabled until the device started, so early typing was lost.
+
 ## Still to measure
 
 - Cloud: answer time per turn in full mode (Bedrock), tool p95 from the MCP server logs.
