@@ -61,7 +61,7 @@ It never takes card numbers. And it never records the call."
 
 | Time | Screen (phone size) | Audio (narrator) |
 |---|---|---|
-| 2:00 | Home page, then Family page sign in with an email link. | "A grandchild sets it up from their phone in a few minutes." |
+| 2:00 | Home page, then Family page sign in with an email link (or, on the Echo, "Open Ruth's family page"). | "A grandchild sets it up from their phone in a few minutes." |
 | 2:08 | Add Michael (text, confirm calls), add Sarah (email, heads up). | "Who Alexa can check with, and who gets a heads up." |
 | 2:16 | Family password saved, never shown again. Activity page with the check from the cold open. | "An optional family password, and a history of every check. One button deletes it all." |
 

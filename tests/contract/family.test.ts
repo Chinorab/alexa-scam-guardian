@@ -244,3 +244,68 @@ describe("activity and delete all", () => {
     expect(await f.deps.store.findHouseholdByEmail("anna@example.com")).toBeUndefined();
   });
 });
+
+describe("public demo family (FR-026)", () => {
+  const json = (f: ReturnType<typeof family>, path: string, body: unknown) =>
+    f.request(path, {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: ORIGIN },
+      body: JSON.stringify(body),
+    });
+
+  it("opens the family page of the Echo's own demo family, with its checks", async () => {
+    const f = family();
+    const { deviceId } = (await (await json(f, "/api/device/start", {})).json()) as {
+      deviceId: string;
+    };
+    await json(f, "/api/converse", {
+      deviceId,
+      text: "My grandson is in jail and needs gift cards for bail.",
+    });
+    const opened = await f.form("/family/demo", { deviceId });
+    expect(opened.status).toBe(303);
+    const home = await (await f.request("/family")).text();
+    expect(home).toContain("Ruth&#39;s family");
+    expect(home).toContain("Demo family.");
+    expect(home).toContain("Michael");
+    const activity = await (await f.request("/family/activity")).text();
+    expect(activity).toContain("gift cards");
+  });
+
+  it("opens a fresh demo family without an Echo, with no email", async () => {
+    const f = family();
+    expect((await f.form("/family/demo", {})).status).toBe(303);
+    const home = await (await f.request("/family")).text();
+    expect(home).toContain("Demo family.");
+  });
+
+  it("never opens a real household through the demo door", async () => {
+    const f = family();
+    await signIn(f);
+    await f.form("/family/settings", { firstName: "Ada", waitMinutes: "10" });
+    const { deviceId, householdKind } = (await (await json(f, "/api/device/start", {})).json()) as {
+      deviceId: string;
+      householdKind: string;
+    };
+    expect(householdKind).toBe("real");
+    f.clearCookie();
+    await f.form("/family/demo", { deviceId });
+    const home = await (await f.request("/family")).text();
+    expect(home).not.toContain("Ada&#39;s family");
+    expect(home).toContain("Ruth&#39;s family");
+    expect(home).toContain("Demo family.");
+  });
+
+  it("lets a reloaded Echo keep its demo family", async () => {
+    const f = family();
+    const first = (await (await json(f, "/api/device/start", {})).json()) as { deviceId: string };
+    const again = (await (
+      await json(f, "/api/device/start", { deviceId: first.deviceId })
+    ).json()) as { deviceId: string };
+    expect(again.deviceId).toBe(first.deviceId);
+    const unknown = (await (
+      await json(f, "/api/device/start", { deviceId: "not-a-device" })
+    ).json()) as { deviceId: string };
+    expect(unknown.deviceId).not.toBe(first.deviceId);
+  });
+});

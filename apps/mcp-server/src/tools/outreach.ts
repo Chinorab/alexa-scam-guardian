@@ -17,6 +17,9 @@ import { checkMessage, headsUpMessage } from "../messages/messages";
 import { toolError, toolResult } from "../server";
 import { CHECK_STATUS_URI } from "../ui/register";
 import { deliver } from "./delivery";
+import { whatWasAsked } from "./prepare-report";
+
+const withAsked = (asked: string | undefined) => (asked ? { asked } : {});
 
 const PENDING_SECONDS = 120;
 const REPLY_LINK_SECONDS = 24 * 60 * 60;
@@ -210,6 +213,7 @@ export function registerOutreach(server: McpServer, deps: Deps, caller: Caller) 
             signLabels: labels,
             stopUrl,
             detailsUrl: `${deps.webUrl}/family/activity`,
+            ...withAsked(whatWasAsked(check.matchedSigns.map((s) => s.signId))),
           });
           const delivery = await deliver(deps, household, member, message);
           await deps.store.putHeadsUp({

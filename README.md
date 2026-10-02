@@ -38,6 +38,8 @@ Guardian turns that advice into a conversation a frightened person can follow.
 
 The family organizer sets everything up from a phone: who Alexa can check with, who gets a
 heads up, an optional family password, and a history of checks. One button deletes it all.
+To look around without an email, "Open Ruth's family page" on the Echo opens the demo family's
+page, with the checks just made.
 
 <img src="docs/images/family-phone.png" alt="The family page on a phone" width="260">
 

@@ -45,7 +45,24 @@ async function get<T>(path: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export const startDevice = () => post<StartResponse>("/api/device/start", {});
+const DEVICE_KEY = "scam-guardian-device";
+
+/** Starts the Echo, keeping this tab's demo family across reloads when it still exists. */
+export async function startDevice(): Promise<StartResponse> {
+  let saved: string | null = null;
+  try {
+    saved = sessionStorage.getItem(DEVICE_KEY);
+  } catch {
+    // storage can be blocked; a new demo family is fine
+  }
+  const started = await post<StartResponse>("/api/device/start", saved ? { deviceId: saved } : {});
+  try {
+    sessionStorage.setItem(DEVICE_KEY, started.deviceId);
+  } catch {
+    // see above
+  }
+  return started;
+}
 
 export const converse = (deviceId: string, text: string) =>
   post<ConverseResponse>("/api/converse", { deviceId, text });

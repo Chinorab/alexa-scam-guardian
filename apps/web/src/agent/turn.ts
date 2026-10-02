@@ -152,6 +152,20 @@ export function modelSession(session: McpSession, userText: string): McpSession 
   };
 }
 
+/** Courtesy sentences that carry no instruction; a repeat leaves them out. */
+const COURTESY = new Set([phrases.thanks(), phrases.thanksPaid(), "Okay."]);
+
+/**
+ * The repeated line in simpler form (FR-023): the same sentences without the courtesy ones,
+ * so only the warning, the step and the question remain. Never adds words, so it stays as safe
+ * as the line it repeats.
+ */
+export function simplerRepeat(line: string): string {
+  // A plain split keeps the text as is; abbreviations split oddly but are joined back unchanged.
+  const kept = line.split(/(?<=[.!?])\s+/).filter((sentence) => !COURTESY.has(sentence.trim()));
+  return kept.length > 0 ? kept.join(" ") : line;
+}
+
 export async function runTurn(
   device: DeviceSession,
   rawText: string,
@@ -171,11 +185,11 @@ export async function runTurn(
     return { result, device: next };
   };
 
-  // "Repeat" replays the last line more slowly (FR-023), whatever the mode.
+  // "Repeat" replays the last line more slowly and in fewer words (FR-023), whatever the mode.
   if (classify(rawText) === "repeat" && device.engine.lastSay) {
     return finish(
       {
-        say: device.engine.lastSay,
+        say: simplerRepeat(device.engine.lastSay),
         rate: "slow",
         mode: "simplified",
         cards: [],

@@ -7,6 +7,7 @@ import { hashFamilyPassword } from "@asg/core/auth/family-password";
 import { stopToken } from "@asg/core/auth/link-tokens";
 import { newId } from "@asg/core/ids";
 import type { FamilyMember, Household } from "@asg/core/ports/index";
+import { seedDemoHousehold } from "@asg/core/demo/seed";
 import { dataset } from "@asg/scam-patterns";
 import { deliver, PRODUCT_NAME, type Deps } from "@asg/mcp-server";
 import {
@@ -16,6 +17,8 @@ import {
   parseSettings,
   type FormBody,
 } from "../family/forms";
+import type { DeviceSessions } from "../device/sessions";
+import { STARTS_PER_HOUR, visitorKey } from "./api";
 import {
   endSession,
   looksLikeEmail,
@@ -43,6 +46,8 @@ import {
 export interface FamilyOptions {
   deps: Deps;
   session: FamilySessionConfig;
+  /** Echo devices, to open the family page of the demo family an Echo is using. */
+  sessions?: DeviceSessions;
   /** Local runs only: show the sign in link on screen when no email service is set up. */
   showSignInLink?: boolean;
 }
@@ -109,6 +114,27 @@ export function familyRoutes(options: FamilyOptions) {
     const household = await useSignInLink(deps, c.req.param("token"));
     if (!household) return c.html(<ConfirmSignInPage token="" expired />, 410);
     await startSession(c, options.session, household.householdId);
+    return c.redirect("/family", 303);
+  });
+
+  /**
+   * The public demo family (FR-026): no sign in, sample data only, gone within 24 hours.
+   * From an Echo, it opens that Echo's own demo family, so its checks show in Activity.
+   * Never a real household: a real device falls back to a new demo family.
+   */
+  app.post("/family/demo", async (c) => {
+    const body = await c.req.parseBody();
+    const deviceId = typeof body.deviceId === "string" ? body.deviceId.slice(0, 64) : "";
+    const device = deviceId ? await options.sessions?.get(deviceId) : undefined;
+    let householdId = device?.kind === "demo" ? device.householdId : undefined;
+    if (!householdId) {
+      const visitor = visitorKey(c);
+      const starts = visitor ? await deps.store.incrementRate(`start#${visitor}`, 3600) : 0;
+      if (starts > STARTS_PER_HOUR)
+        return c.text("Too many demo families from here. Try later.", 429);
+      householdId = (await seedDemoHousehold(deps.store, deps.clock.now())).householdId;
+    }
+    await startSession(c, options.session, householdId);
     return c.redirect("/family", 303);
   });
 

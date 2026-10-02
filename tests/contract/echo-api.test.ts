@@ -92,6 +92,23 @@ describe("repeat", () => {
     };
     expect(again).toMatchObject({ say: first.say, rate: "slow" });
   });
+
+  it("leaves out courtesy sentences, so only the warning, step and question remain", async () => {
+    const w = web();
+    const deviceId = await started(w);
+    const first = (await (
+      await w.post("/api/converse", {
+        deviceId,
+        text: "My grandson is in jail and needs gift cards for bail.",
+      })
+    ).json()) as { say: string };
+    expect(first.say).toMatch(/^I'm glad you asked me first\. /);
+    const again = (await (
+      await w.post("/api/converse", { deviceId, text: "Say that again" })
+    ).json()) as { say: string; rate: string };
+    expect(again.rate).toBe("slow");
+    expect(again.say).toBe(first.say.replace("I'm glad you asked me first. ", ""));
+  });
 });
 
 describe("POST /api/demo/reset", () => {

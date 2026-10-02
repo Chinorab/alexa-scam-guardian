@@ -52,6 +52,20 @@ function Field(props: {
 const describedBy = (id: string, hint: boolean, error?: string) =>
   [hint ? `${id}-hint` : "", error ? `${id}-error` : ""].filter(Boolean).join(" ") || undefined;
 
+/** Shown on every page of the public demo family (FR-026). */
+function DemoNotice(props: { household: Household }) {
+  if (props.household.kind !== "demo") return null;
+  return (
+    <div class="callout demo-notice">
+      <p>
+        <span class="sign-diamond" aria-hidden="true" /> <strong>Demo family.</strong> The people
+        here are made up. Messages go to the demo phone on the Echo page, and everything is deleted
+        within 24 hours.
+      </p>
+    </div>
+  );
+}
+
 export function SignInPage(props: { error?: string; email?: string }) {
   return (
     <Layout
@@ -76,6 +90,13 @@ export function SignInPage(props: { error?: string; email?: string }) {
         </Field>
         <button class="button" type="submit">
           Email me a link
+        </button>
+      </form>
+      <h2>Just looking?</h2>
+      <p>Open a demo family with made up people. No email needed.</p>
+      <form method="post" action="/family/demo">
+        <button class="button button-secondary" type="submit">
+          Open a demo family
         </button>
       </form>
     </Layout>
@@ -238,6 +259,7 @@ export function FamilyHome(props: {
   return (
     <Layout title={`${name}'s family`} description="Who Alexa can check with." current="family">
       <h1>{name}'s family</h1>
+      <DemoNotice household={props.household} />
       {props.notice && (
         <p class="notice" role="status">
           {props.notice}
@@ -541,6 +563,7 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
         <a href="/family">Back to {props.household.olderAdultFirstName}'s family</a>
       </p>
       <h1>Recent checks</h1>
+      <DemoNotice household={props.household} />
       <p class="lead">Kept for 30 days. Long numbers were removed before anything was saved.</p>
       {props.items.length === 0 ? (
         <p>No checks yet.</p>

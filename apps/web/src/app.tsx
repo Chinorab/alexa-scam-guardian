@@ -93,6 +93,7 @@ export function createWebApp(options: WebAppOptions) {
     familyRoutes({
       deps: options.deps,
       session: options.session,
+      sessions: options.sessions,
       ...(options.showSignInLink ? { showSignInLink: true } : {}),
     }),
   );

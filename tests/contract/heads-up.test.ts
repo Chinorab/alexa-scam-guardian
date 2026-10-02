@@ -51,6 +51,7 @@ describe("heads up", () => {
       /Ruth got a suspicious call at \d{1,2}:\d\d [AP]M E[SD]T from someone saying they were Ruth's grandson\./,
     );
     expect(body).toMatch(/Warning signs: the rush, the emergency story and the gift cards\./);
+    expect(body).toContain("What they asked for: money by gift cards.");
     expect(body).toMatch(/We advised Ruth not to send any money and to check with family first\./);
     expect(body).toMatch(/family page: https:\/\/guardian\.test\/family\/activity/);
     expect(body).toMatch(
