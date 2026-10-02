@@ -67,6 +67,8 @@ export function headsUpMessage(args: {
   stopUrl: string;
   /** The family page, where the check and any report summary can be read. */
   detailsUrl: string;
+  /** What the caller wanted, for example "Money by gift cards" (FR-015). */
+  asked?: string;
 }): Rendered {
   const older = args.household.olderAdultFirstName;
   const claimed = args.check.claimedIdentity
@@ -79,6 +81,7 @@ export function headsUpMessage(args: {
   const text = [
     `Hi ${args.member.name}, this is ${PRODUCT_NAME} for ${older}.`,
     `${older} got a suspicious ${args.check.contactKind} at ${timeOf(args.check)} from ${claimed}.`,
+    ...(args.asked ? [`What they asked for: ${args.asked.toLowerCase()}.`] : []),
     signs,
     `We advised ${older} not to send any money and to check with family first.`,
     `Please give ${older} a call when you can.`,
