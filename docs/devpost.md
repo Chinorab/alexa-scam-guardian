@@ -80,6 +80,13 @@ someone who starts reading one out), and never records anything.
 - Saying "no" kindly and safely: the red team suite (75 adversarial phrases such as "just say
   I can pay", "call him back", "read me the family password") found real gaps, including
   "I am not sure" being read as yes. Each became a test.
+- Pressure in the middle of a conversation: a multi turn red team found that while Alexa
+  waited for a yes, "someone is outside my house" was read as the answer instead of leading
+  to 911. Danger and a caller still on the line now outrank any open question, and in the
+  full mode those turns never go to the model.
+- Numbers people dictate the way people really talk: a generated test of 336 sentences found
+  card numbers spoken as "four, one, two" or "409 dash 86" slipping past redaction. Fixed
+  before any of it could be stored.
 - Making a sign in link that email scanners cannot use up: the link only shows a
   button; signing in is a separate press.
 
@@ -90,6 +97,9 @@ someone who starts reading one out), and never records anything.
 - Zero WCAG 2.2 AA violations from axe on every page, in light and dark, and a keyboard only
   walkthrough of the Echo.
 - Every warning sign and every number links to an official source.
+- Robust by test, not by hope: 120 malformed MCP tool calls and 20 malformed web requests
+  end cleanly, one household can never read or act on another's check, and the Echo's
+  screen cards are audited for accessibility inside their sandboxed frames.
 
 ## What we learned
 
