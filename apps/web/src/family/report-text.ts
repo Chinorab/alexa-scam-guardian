@@ -2,6 +2,7 @@
  * A report summary as plain facts (FR-019): shown on the family page and offered as text a
  * family member can keep or paste into ReportFraud.ftc.gov or ic3.gov. Nothing is sent.
  */
+import { claimedIdentityWords } from "@asg/core/copy/identity";
 import type { ReportSummary } from "@asg/core/ports/index";
 
 const CONTACT: Record<string, string> = {
@@ -35,13 +36,21 @@ const phone = (digits: string) =>
     ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)} ${digits.slice(6)}`
     : digits;
 
-export function reportFacts(report: ReportSummary): [string, string][] {
+export function reportFacts(
+  report: ReportSummary,
+  olderAdultFirstName: string,
+): [string, string][] {
   const f = report.facts;
   const rows: [string, string][] = [
     ["When", time(f.toldAt)],
     ["How", CONTACT[f.contactKind] ?? "Phone call"],
   ];
-  if (f.claimedIdentity) rows.push(["Caller said they were", f.claimedIdentity]);
+  if (f.claimedIdentity) {
+    rows.push([
+      "Caller said they were",
+      claimedIdentityWords(f.claimedIdentity, olderAdultFirstName),
+    ]);
+  }
   if (f.whatWasAsked) rows.push(["They asked for", f.whatWasAsked]);
   if (f.paymentMethod) rows.push(["Already paid by", METHODS[f.paymentMethod] ?? "Other"]);
   if (f.amountText) rows.push(["Amount", f.amountText]);
@@ -54,7 +63,7 @@ export function reportText(report: ReportSummary, olderAdultFirstName: string): 
   const lines = [
     `Scam report summary for ${olderAdultFirstName}`,
     "",
-    ...reportFacts(report).map(([label, value]) => `${label}: ${value}`),
+    ...reportFacts(report, olderAdultFirstName).map(([label, value]) => `${label}: ${value}`),
     "",
     "Where to report it (nothing was sent to any agency):",
     ...report.links.map(

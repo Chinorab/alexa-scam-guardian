@@ -126,3 +126,18 @@ describe("red team, multi turn", () => {
     }
   });
 });
+
+describe("heads up wording", () => {
+  it("names an organization as it is, never as a relative", async () => {
+    const d = demo();
+    await d.start();
+    const offer = await d.say(
+      "The IRS left a voicemail saying I owe back taxes and must pay with gift cards today.",
+    );
+    expect(offer.say).toContain("Should I tell Sarah");
+    await d.say("Yes");
+    const email = (await d.phone()).find((m) => m.to === "Sarah");
+    expect(email?.body).toContain("from someone saying they were the IRS");
+    expect(email?.body).not.toContain("Ruth's the IRS");
+  });
+});

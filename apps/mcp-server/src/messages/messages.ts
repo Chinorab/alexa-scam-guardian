@@ -2,6 +2,7 @@
  * Message templates (FR-008, FR-015). Plain words, no dashes, no sensitive numbers, never the
  * older adult's own words: only the claimed identity and the warning sign labels.
  */
+import { claimedIdentityWords } from "@asg/core/copy/identity";
 import { listWithAnd } from "@asg/core/dialogue/phrases";
 import type { Check, FamilyMember, Household } from "@asg/core/ports/index";
 
@@ -72,7 +73,7 @@ export function headsUpMessage(args: {
 }): Rendered {
   const older = args.household.olderAdultFirstName;
   const claimed = args.check.claimedIdentity
-    ? `someone saying they were ${older}'s ${args.check.claimedIdentity}`
+    ? `someone saying they were ${claimedIdentityWords(args.check.claimedIdentity, older)}`
     : "someone they did not know";
   const signs =
     args.signLabels.length > 0
