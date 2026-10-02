@@ -21,7 +21,7 @@ import { phrases } from "@asg/core/dialogue/phrases";
 import { guardLine } from "@asg/core/guard/guard";
 import { isCallerOnLine, isDanger } from "@asg/core/match/match";
 import type { Logger } from "@asg/core/log/logger";
-import { redact, startsSensitiveNumber } from "@asg/core/redact/redact";
+import { CALLER_NUMBER, redact, startsSensitiveNumber } from "@asg/core/redact/redact";
 import type { DeviceSession } from "../device/sessions";
 import { runAgentTurn, type ConverseFn } from "./bedrock-agent";
 import type { McpSession, ToolCallOutcome } from "./mcp-client";
@@ -210,7 +210,15 @@ export async function runTurn(
       [],
     );
   }
-  const text = redacted.text;
+  // The number the suspicious caller used is not the person's data: it goes on, so the check
+  // can keep it for the report. It is never used as a destination (no tool accepts one).
+  const caller = redacted.callerNumber;
+  const text = caller
+    ? redacted.text.replace(
+        CALLER_NUMBER,
+        `${caller.slice(0, 3)} ${caller.slice(3, 6)} ${caller.slice(6)}`,
+      )
+    : redacted.text;
 
   const calls: { name: string; outcome: ToolCallOutcome }[] = [];
   const session = recordingSession(await deps.openSession(device), calls);

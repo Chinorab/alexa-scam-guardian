@@ -22,6 +22,11 @@ with the MCP server mounted at `/mcp`. Server time only: speech is not included.
 | WCAG 2.2 AA with axe, light and dark (SC-007) | 0 violations on every page | `tests/e2e/a11y.spec.ts` |
 | MCP Apps cards inside their sandboxed frames: warning signs, check status, report (SC-007) | 0 violations once the signs have risen; each view now has a document title | `tests/e2e/a11y.spec.ts` |
 | Redaction, generated: 336 sentences of card, Social Security, routing and account numbers, written and spoken (Principle III) | no six digit window survives; early interruption fires | `packages/core/src/redact/redact.generated.test.ts` |
+| Reply and stop pages a relative opens, 390 px, light and dark (SC-007) | 0 violations | `tests/e2e/a11y.spec.ts` |
+| Malformed input: 120 MCP tool calls, 20 web requests | no exception, no server error, nothing sent | `tests/contract/mcp-fuzz.test.ts`, `web-fuzz.test.ts` |
+| Household isolation: another household's token, forged cookies | nothing read, nothing sent, sign in required | `tests/contract/isolation.test.ts` |
+| Multi turn red team (Principles I, II, IV) | 14 of 14 attacks mid check handled | `tests/redteam/multiturn.test.ts` |
+| Dependency audit | no known vulnerabilities (weekly in CI) | `.github/workflows/sources.yml` |
 | 200% zoom and reflow, 640 px and 320 px wide (SC-007) | no sideways scrolling on any page, Echo after a turn included | `tests/e2e/a11y.spec.ts` |
 | At most three sentences and one question per spoken turn (SC-003) | every turn of every scripted dialogue passes the output guard, which checks both | `tests/contract/dialogue-us2.test.ts` |
 | Red team phrases, offline (SC-001), updated | 75 of 75 pass | `tests/redteam/offline.test.ts` |
@@ -38,7 +43,8 @@ per hour demo start limit would have blocked a judging team behind one address, 
 Echo's text field stayed disabled until the device started, so early typing was lost.
 
 Later the same day, with the public demo family (FR-026): 22 passed, 7 skipped, 0 failed
-against the Lambda bundles; the family page accessibility checks now run there too.
+against the Lambda bundles; the family page accessibility checks now run there too. After the
+probes and fuzzing: 24 passed, 7 skipped, 0 failed.
 
 ## Still to measure
 

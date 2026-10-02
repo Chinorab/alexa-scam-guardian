@@ -42,7 +42,10 @@ export function PrivacyPage() {
       </ul>
       <h3>Each check</h3>
       <ul>
-        <li>What you told us about the call, with any long numbers removed.</li>
+        <li>
+          What you told us about the call, with card, bank and Social Security numbers removed. The
+          phone number the caller used is kept for the report summary, and we never call it.
+        </li>
         <li>The warning signs we found, the messages we sent with your yes, and the replies.</li>
         <li>The report summary, if you asked for one.</li>
       </ul>
@@ -67,10 +70,10 @@ export function PrivacyPage() {
         Amazon DynamoDB, emails go through Amazon SES, and Amazon Polly reads Alexa's answers aloud.
       </p>
       <p>
-        To understand what you said, the text of what you told us, with long numbers already
-        removed, is sent to a language model on Amazon Bedrock. Amazon runs the model itself: the
-        company that made the model does not see what is sent to it. If that service is slow or
-        unavailable, Scam Guardian answers with its own fixed sentences instead.
+        To understand what you said, the text of what you told us, with card, bank and Social
+        Security numbers already removed, is sent to a language model on Amazon Bedrock. Amazon runs
+        the model itself: the company that made the model does not see what is sent to it. If that
+        service is slow or unavailable, Scam Guardian answers with its own fixed sentences instead.
       </p>
 
       <h2>Speaking instead of typing</h2>
