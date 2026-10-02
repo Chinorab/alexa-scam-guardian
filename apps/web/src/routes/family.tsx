@@ -52,6 +52,11 @@ export interface FamilyOptions {
   sessions?: DeviceSessions;
   /** Local runs only: show the sign in link on screen when no email service is set up. */
   showSignInLink?: boolean;
+  /**
+   * False when no email service is set up and links are not shown on screen (a cloud deploy
+   * without SES): the page says so and offers the demo family instead of a link that never comes.
+   */
+  emailSignIn?: boolean;
 }
 
 export const TEST_MESSAGES_PER_HOUR = 3;
@@ -90,9 +95,11 @@ export function familyRoutes(options: FamilyOptions) {
   app.use("/family/*", sameOrigin(deps.webUrl));
 
   // Sign in
-  app.get("/family/sign-in", (c) => c.html(<SignInPage />));
+  const emailOff = options.emailSignIn === false && !options.showSignInLink;
+  app.get("/family/sign-in", (c) => c.html(<SignInPage emailOff={emailOff} />));
 
   app.post("/family/sign-in", async (c) => {
+    if (emailOff) return c.html(<SignInPage emailOff />);
     const body = await c.req.parseBody();
     const email = normalizeEmail(typeof body.email === "string" ? body.email : "");
     if (!looksLikeEmail(email)) {

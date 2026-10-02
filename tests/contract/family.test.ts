@@ -400,3 +400,35 @@ describe("report summary on the family page (FR-019)", () => {
     expect(anonymous.status).toBe(303);
   });
 });
+
+describe("sign in without an email service (cloud without SES)", () => {
+  it("says so and offers the demo family, instead of a link that never comes", async () => {
+    const made = makeDeps();
+    let mailed = 0;
+    const send = made.deps.mailer.send.bind(made.deps.mailer);
+    made.deps.mailer.send = async (message) => {
+      mailed++;
+      return send(message);
+    };
+    const app = createWebApp({
+      deps: made.deps,
+      sessions: new MemoryDeviceSessions(),
+      agent: { mode: "simplified", modelId: "none" },
+      mcpUrl: `${ORIGIN}/mcp`,
+      session: SESSION,
+      emailSignIn: false,
+    });
+    const page = await (await app.request(`${ORIGIN}/family/sign-in`)).text();
+    expect(page).toContain("email is not turned on for this demo yet");
+    expect(page).toContain('action="/family/demo"');
+    expect(page).not.toContain('name="email"');
+    const posted = await app.request(`${ORIGIN}/family/sign-in`, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", origin: ORIGIN },
+      body: "email=anna%40example.com",
+    });
+    expect(posted.status).toBe(200);
+    expect(await posted.text()).toContain("email is not turned on for this demo yet");
+    expect(mailed).toBe(0);
+  });
+});
