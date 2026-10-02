@@ -56,11 +56,25 @@ describe("guardLine blocks other unsafe content", () => {
   it("blocks offers to contact the caller", () => {
     expect(violations("I'll call that number back for you.")).toContain("contact-caller");
     expect(violations("Let me text the caller.")).toContain("contact-caller");
+    // Seen from the live model: talking more with the caller is never advice.
+    expect(violations("You can hang up or ask them to call back on a number you know.")).toContain(
+      "contact-caller",
+    );
+    expect(violations("Ask him to prove it is really him.")).toContain("contact-caller");
   });
 
   it("blocks asking for sensitive numbers", () => {
     expect(violations("What is your card number?")).toContain("asks-sensitive");
     expect(violations("Please read me the PIN.")).toContain("asks-sensitive");
+  });
+
+  it("blocks asking for a phone number or an address (seen from the live model)", () => {
+    expect(violations("Do you have Michael's phone number?")).toContain("asks-sensitive");
+    expect(violations("What is the number that called you?")).toContain("asks-sensitive");
+    expect(violations("Can you give me Sarah's email address?")).toContain("asks-sensitive");
+    // Saying which saved number is used is not asking for one.
+    expect(violations("Should I text Michael on the number your family saved?")).toEqual([]);
+    expect(violations("Please call your family on a number you know.")).toEqual([]);
   });
 
   it("blocks copy rule breaks", () => {

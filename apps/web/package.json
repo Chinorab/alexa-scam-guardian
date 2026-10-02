@@ -14,7 +14,8 @@
     "dev:server": "node --watch --env-file-if-exists=../../.env --import tsx src/local.ts",
     "start": "vite build && tsx --env-file-if-exists=../../.env src/local.ts",
     "token:cloud": "tsx scripts/cloud-token.ts",
-    "aws:check": "tsx scripts/aws-preflight.ts"
+    "aws:check": "tsx scripts/aws-preflight.ts",
+    "tool-latency": "tsx scripts/tool-latency.ts"
   },
   "dependencies": {
     "@asg/core": "workspace:^",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-cloudformation": "3.1144.0",
+    "@aws-sdk/client-cloudwatch-logs": "3.1144.0",
     "@aws-sdk/client-secrets-manager": "3.1144.0",
     "@aws-sdk/client-sesv2": "3.1144.0",
     "@aws-sdk/client-sts": "3.1144.0",

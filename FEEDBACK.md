@@ -122,3 +122,13 @@ One section per tool, SDK or API used. Updated as the project goes.
 - **Onboarding:** Smooth.
 - **Would I build with it again:** Yes.
 
+
+---
+
+## Amazon Bedrock (Converse API, Claude Haiku 4.5) and AWS Lambda Function URLs
+
+- **Used for:** The full mode of the simulated Alexa+: Converse with the MCP server's tools as Bedrock tools, and two Lambda functions behind Function URLs (web app and MCP server).
+- **What worked well:** Converse's tool use maps one to one onto MCP tools, so the same JSON schemas serve both. Haiku 4.5 answers a plain turn in about 1.2 s from France, and follows "at most three sentences" and "ask the question word for word" most of the time. First deploy to a working stack took under 2 minutes with CDK.
+- **What needs work:** A turn that needs a tool is two Converse calls, about 3 s together, which is the whole budget of a voice turn; streaming the first sentence or a lighter tool round would help voice products. The model often writes em dashes and a preamble before its tool call. Lambda Function URLs rename the `WWW-Authenticate` header to `x-amzn-Remapped-www-authenticate`, which MCP authorization discovery relies on (FRICTION_LOG.md #9).
+- **Onboarding:** The Model access page is gone; the Anthropic use case banner in the Model catalog is easy to find once you know (FRICTION_LOG.md #7).
+- **Would I build with it again:** Yes, with the rules answering what must be instant and the model answering what is open.

@@ -157,6 +157,9 @@ importers:
       '@aws-sdk/client-cloudformation':
         specifier: 3.1144.0
         version: 3.1144.0
+      '@aws-sdk/client-cloudwatch-logs':
+        specifier: 3.1144.0
+        version: 3.1144.0
       '@aws-sdk/client-secrets-manager':
         specifier: 3.1144.0
         version: 3.1144.0
@@ -274,6 +277,10 @@ packages:
 
   '@aws-sdk/client-cloudformation@3.1144.0':
     resolution: {integrity: sha512-36Z45LaZPqhxJLi85XspP9by4iNr3MeW0KFgjhpsq8ypY66Rr8+gbi0AZo+t5z77AYieZxY/guNc7BUeWOqtCw==}
+    engines: {node: '>=20.0.0'}
+
+  '@aws-sdk/client-cloudwatch-logs@3.1144.0':
+    resolution: {integrity: sha512-7KOUeq6mWiNrKhv59TJ3zzD2lQq5TcurIQ5TDZbDwWTDauUOouDv09XQC9yR9Yl1ZUVVZv03a1ZU0uMI0zGZSg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/client-dynamodb@3.1144.0':
@@ -1920,6 +1927,17 @@ snapshots:
       tslib: 2.8.1
 
   '@aws-sdk/client-cloudformation@3.1144.0':
+    dependencies:
+      '@aws-sdk/core': 3.978.1
+      '@aws-sdk/credential-provider-node': 3.972.84
+      '@aws-sdk/types': 3.974.6
+      '@smithy/core': 3.35.1
+      '@smithy/fetch-http-handler': 5.8.0
+      '@smithy/node-http-handler': 4.12.1
+      '@smithy/types': 4.19.0
+      tslib: 2.8.1
+
+  '@aws-sdk/client-cloudwatch-logs@3.1144.0':
     dependencies:
       '@aws-sdk/core': 3.978.1
       '@aws-sdk/credential-provider-node': 3.972.84

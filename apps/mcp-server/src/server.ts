@@ -53,8 +53,42 @@ export function buildServer(deps: Deps, caller: Caller): McpServer {
     { name: SERVER_NAME, version: SERVER_VERSION },
     { instructions: INSTRUCTIONS },
   );
+  timeTools(server, deps, caller);
   registerTools(server, deps, caller);
   return server;
+}
+
+type ToolHandler = (...args: unknown[]) => unknown;
+
+/** Every tool logs its own time, so tool latency can be read from the logs (T080). */
+function timeTools(server: McpServer, deps: Deps, caller: Caller) {
+  const register = server.registerTool.bind(server) as (
+    name: string,
+    config: unknown,
+    handler: ToolHandler,
+  ) => unknown;
+  Object.assign(server, {
+    registerTool: (name: string, config: unknown, handler: ToolHandler) =>
+      register(name, config, async (...args: unknown[]) => {
+        const started = Date.now();
+        const log = (ok: boolean) =>
+          deps.logger.log({
+            event: "tool_call",
+            tool: name,
+            ok,
+            durationMs: Date.now() - started,
+            householdKind: caller.kind,
+          });
+        try {
+          const result = await handler(...args);
+          log((result as { isError?: boolean } | undefined)?.isError !== true);
+          return result;
+        } catch (error) {
+          log(false);
+          throw error;
+        }
+      }),
+  });
 }
 
 export function callerFrom(extra: Record<string, unknown> | undefined): Caller {

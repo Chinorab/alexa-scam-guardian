@@ -15,6 +15,42 @@ with the MCP server mounted at `/mcp`. Server time only: speech is not included.
 
 20 runs, 0 failed. The check message went out after 2 turns in every run (SC-002 allows 3).
 
+## 2026-10-02, AWS us-east-1, first deploy (full mode, Claude Haiku 4.5 on Bedrock)
+
+`pnpm measure https://<web url> 20` from the build machine in France against the deployed stack
+(Lambda arm64, DynamoDB, Bedrock). Round trip time from the client, so it includes the
+network both ways; speech is not included.
+
+| Measure | Median | p95 | Max |
+|---|---|---|---|
+| Answer time per turn (SC-004, goal under 3 s in 95% of turns) | 302 ms | 1415 ms | 1815 ms |
+| First sentence to check message sent (SC-002) | 1090 ms | 1223 ms | 1601 ms |
+| Free question after the check ("Why would they want gift cards?") | 1290 ms | 1453 ms | 1815 ms |
+
+20 runs, 0 failed. The model answered 17 of the 20 free questions itself; the other 3 got the
+rule based answer (guard or deadline). The first description and the answer to its question
+are the rules' by design: the first live probes showed the model needs two Bedrock calls for
+them and most often missed the 3 second deadline (FR-036), and its answer to the next "Yes"
+then lost the thread. See FRICTION_LOG.md and `answeredByRules` in `apps/web/src/agent/turn.ts`.
+
+Also against the deployed stack: `pnpm smoke` all checks pass; Playwright
+(`E2E_BASE_URL=...`) 28 passed, 7 skipped (family page sign in needs email), 0 failed; red team
+live (`pnpm test:redteam:live`, 75 attacks as a first sentence and again after a check, real
+Bedrock) 150 of 150 handled, 148 of them by the deterministic rules before the model, and the 2
+the model answered passed the guard.
+
+Tool time inside the MCP server, from its CloudWatch logs (`pnpm tool-latency 1`, one hour of the
+runs above):
+
+| Tool | Calls | Median | p95 | Max |
+|---|---|---|---|---|
+| assess_call | 168 | 14 ms | 31 ms | 128 ms |
+| prepare_outreach | 14 | 38 ms | 87 ms | 87 ms |
+| confirm_outreach | 14 | 87 ms | 296 ms | 296 ms |
+
+The demo start limit (200 per hour per address) stopped a second batch of runs the same
+hour, as designed.
+
 ## Automated checks
 
 | Check | Result | Where |
@@ -48,6 +84,6 @@ probes and fuzzing: 24 passed, 7 skipped, 0 failed.
 
 ## Still to measure
 
-- Cloud: answer time per turn in full mode (Bedrock), tool p95 from the MCP server logs.
+- Cloud: tool p95 from the MCP server logs (CloudWatch Logs Insights query in docs/deploy.md).
 - SC-002 and SC-009 with people: spoken time, and two first time visitors without instructions.
 - SC-005 with a person on a phone.

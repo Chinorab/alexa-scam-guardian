@@ -72,7 +72,12 @@ await check("MCP server refuses calls without a token", async () => {
     headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
   });
-  const header = response.headers.get("www-authenticate") ?? "";
+  // Lambda Function URLs rename WWW-Authenticate; clients then find the metadata at the
+  // well known address, checked below.
+  const header =
+    response.headers.get("www-authenticate") ??
+    response.headers.get("x-amzn-remapped-www-authenticate") ??
+    "";
   return response.status === 401 && header.includes("resource_metadata")
     ? undefined
     : `status ${response.status}`;

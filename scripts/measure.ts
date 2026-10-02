@@ -1,6 +1,7 @@
 /**
  * Times the main scenario against a running web app, local or deployed (T080, T103):
- * SC-002 turns from first sentence to check message sent, SC-004 answer time per turn.
+ * SC-002 turns from first sentence to check message sent, SC-004 answer time per turn, and
+ * one free question after the check, which the model answers in the full mode.
  * Speech time is not included; the timed runs with a person cover it.
  *
  *   pnpm measure                         # http://localhost:8787, 10 runs
@@ -26,7 +27,12 @@ async function post<T>(path: string, body: unknown): Promise<{ ms: number; data:
 
 type Reply = { say: string; mode: string };
 
+/** A question the rules do not know: in the full mode, the model answers it. */
+const FREE_QUESTION = "Why would they want gift cards?";
+
 const turnTimes: number[] = [];
+const freeTimes: number[] = [];
+const freeModes = new Map<string, number>();
 const scenarioTimes: number[] = [];
 const modes = new Map<string, number>();
 let failures = 0;
@@ -51,6 +57,13 @@ for (let run = 0; run < runs; run++) {
     }
     if (!sent) throw new Error("no check message after the scripted turns");
     scenarioTimes.push(performance.now() - started);
+    const free = await post<Reply>("/api/converse", {
+      deviceId: device.deviceId,
+      text: FREE_QUESTION,
+    });
+    freeTimes.push(free.ms);
+    turnTimes.push(free.ms);
+    freeModes.set(free.data.mode, (freeModes.get(free.data.mode) ?? 0) + 1);
     if (turns > 3) throw new Error(`took ${turns} turns`);
   } catch (error) {
     failures++;
@@ -76,6 +89,9 @@ console.log(
 );
 console.log(
   `| First sentence to check message sent, server time (SC-002) | ${ms(percentile(scenarioTimes, 50))} | ${ms(percentile(scenarioTimes, 95))} | ${ms(Math.max(...scenarioTimes))} |`,
+);
+console.log(
+  `| Free question after the check, answered by ${JSON.stringify(Object.fromEntries(freeModes))} | ${ms(percentile(freeTimes, 50))} | ${ms(percentile(freeTimes, 95))} | ${ms(Math.max(...freeTimes))} |`,
 );
 process.exitCode = failures > 0 ? 1 : 0;
 

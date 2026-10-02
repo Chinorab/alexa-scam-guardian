@@ -183,7 +183,13 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "pay_question",
-    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy)|i (still |really )?(want|need|have|will|am going|'m going) to (pay|send|wire|buy|give|mail)|i'?m (just )?gonna (pay|send|wire|buy|give|mail))\b/i,
+    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy)|i (still |really |just )?(want|am going|'m going) to (pay|send|wire|buy|give|mail)|i'?m (just )?gonna (pay|send|wire|buy|give|mail))\b/i,
+  ],
+  [
+    // Asking for approval in other words ("Just tell me I can pay", "would paying be okay?",
+    // "approve the payment") gets the same fixed answer, never a model's wording.
+    "pay_question",
+    /\b(tell me|say|confirm|approve)\b[^.?!]{0,30}\b(i can|it'?s (safe|ok|okay|fine)|yes|go ahead|the payment|to (pay|send|wire|buy))\b|\b(paying|sending|wiring) (be|is|would be) (ok|okay|fine|safe|alright)\b|\bdecided to (pay|send|wire|buy)\b/i,
   ],
   [
     "what_to_do",

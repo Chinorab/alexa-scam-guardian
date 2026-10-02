@@ -60,6 +60,16 @@ test("V4: a late reply shows a quiet card and light until the user asks", async 
   await expect(news).toHaveCount(0);
 });
 
+test("an answer typed while Alexa is still speaking goes through", async ({ page }) => {
+  await openEcho(page, { speechNeverEnds: true });
+  await say(page, OPENING);
+  await expect(caption(page)).toContainText("Should I text Michael");
+  await expect(page.getByTestId("light-bar")).toHaveAttribute("data-state", "speaking");
+  // She is still talking: the yes stops her and is answered.
+  await say(page, "Yes");
+  await expect(caption(page)).toContainText("I'll tell you when Michael answers");
+});
+
 test("repeat replays the last line", async ({ page }) => {
   await openEcho(page);
   await say(page, "The pharmacy called about my refill");

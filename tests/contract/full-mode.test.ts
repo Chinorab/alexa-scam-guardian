@@ -7,11 +7,17 @@ import type {
   ContentBlock,
   ConverseCommandInput,
   ConverseCommandOutput,
+  Message,
 } from "@aws-sdk/client-bedrock-runtime";
 import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
-import type { ConverseFn } from "../../apps/web/src/agent/bedrock-agent";
-import { claimsUnsentMessage } from "../../apps/web/src/agent/turn";
+import { textOnly, type ConverseFn } from "../../apps/web/src/agent/bedrock-agent";
+import {
+  claimsUnsentMessage,
+  fitToThree,
+  houseStyle,
+  trimHistory,
+} from "../../apps/web/src/agent/turn";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import { makeDeps, SESSION } from "./helpers";
 
@@ -102,6 +108,19 @@ function setUp(converse: ConverseFn) {
 
 const OPENING = "My grandson just called. He's in jail and needs gift cards for bail.";
 const QUESTION = "Should I text Michael to check?";
+/** New details after the first check: the model answers them, with the tools. */
+const DETAIL = "He also said not to tell his parents.";
+
+/**
+ * The first description and the answer to its question are the rules' (no model round is
+ * used); after a no, new details go to the model.
+ */
+async function primed(s: ReturnType<typeof setUp>) {
+  await s.start();
+  const first = await s.say(OPENING);
+  expect(first.mode).toBe("simplified");
+  expect((await s.say("No")).say).toBe("Okay, I didn't send anything.");
+}
 
 /** Turn one as a well behaved model plays it: assess, prepare, ask. */
 function turnOne(ids: { checkId?: string; pendingId?: string }): Round[] {
@@ -136,9 +155,8 @@ describe("full mode with tool use", () => {
       },
     ]);
     const s = setUp(converse);
-    await s.start();
-
-    const first = await s.say(OPENING);
+    await primed(s);
+    const first = await s.say(DETAIL);
     expect(first.mode).toBe("full");
     expect(first.say).toContain(QUESTION);
     expect(first.cards.map((c) => c.tool)).toContain("assess_call");
@@ -165,8 +183,8 @@ describe("full mode with tool use", () => {
       () => text(`The emergency story is a common sign of a scam. ${QUESTION}`),
     ]);
     const s = setUp(converse);
-    await s.start();
-    const reply = await s.say(OPENING);
+    await primed(s);
+    const reply = await s.say(DETAIL);
     expect(reply.say).toContain(QUESTION);
     expect(await s.sent()).toEqual([]);
   });
@@ -182,8 +200,8 @@ describe("full mode with tool use", () => {
       },
     ]);
     const s = setUp(converse);
-    await s.start();
-    await s.say(OPENING);
+    await primed(s);
+    await s.say(DETAIL);
     await s.say("No, don't text him.");
     expect(await s.sent()).toEqual([]);
   });
@@ -196,8 +214,8 @@ describe("what the model says about messages", () => {
       () => text("Done. I texted Michael and he will call you."),
     ]);
     const s = setUp(converse);
-    await s.start();
-    const reply = await s.say(OPENING);
+    await primed(s);
+    const reply = await s.say(DETAIL);
     expect(reply.say).toBe("Let's not send any money for now.");
     expect(await s.sent()).toEqual([]);
   });
@@ -229,5 +247,117 @@ describe("danger in the full mode", () => {
     const reply = await s.say("There's a man at my door, he says he's here for the money.");
     expect(reply.say).toMatch(/911/);
     expect(asked).toBe(0);
+  });
+});
+
+describe("who answers in the full mode", () => {
+  it("assesses the first description by rules at once, without the model", async () => {
+    let asked = 0;
+    const s = setUp(async () => {
+      asked++;
+      return text("Tell me more.");
+    });
+    await s.start();
+    const reply = await s.say(OPENING);
+    expect(reply.mode).toBe("simplified");
+    expect(reply.say).toContain("Should I text Michael");
+    // Its yes goes to the rules too, which hold the pending message.
+    expect((await s.say("Yes")).say).toMatch(/^Done. I'll tell you when Michael answers./);
+    expect(await s.sent()).toEqual(expect.arrayContaining(["Michael"]));
+    expect(asked).toBe(0);
+  });
+
+  it("answers a free question during the rules' question with no tools, then asks it again", async () => {
+    const { converse, seen } = scripted([
+      () => text("Scammers want gift cards because the money is gone once the codes are shared."),
+    ]);
+    const s = setUp(converse);
+    await s.start();
+    const first = await s.say(OPENING);
+    const question = first.say.slice(first.say.indexOf("Should I"));
+    const reply = await s.say("Why would they want gift cards?");
+    expect(reply.mode).toBe("full");
+    expect(reply.say).toBe(
+      `Scammers want gift cards because the money is gone once the codes are shared. ${question}`,
+    );
+    expect(seen[0]?.toolConfig).toBeUndefined();
+    expect(await s.sent()).toEqual([]);
+    // The answer to the question is still the rules', with their pending message.
+    expect((await s.say("Yes")).say).toMatch(/^Done./);
+    expect(await s.sent()).toEqual(expect.arrayContaining(["Michael"]));
+  });
+
+  it("a blocked answer during the rules' question still asks the question again", async () => {
+    const { converse } = scripted([() => text("It's safe to pay him.")]);
+    const s = setUp(converse);
+    await s.start();
+    const first = await s.say(OPENING);
+    const question = first.say.slice(first.say.indexOf("Should I"));
+    const reply = await s.say("Is it really him?");
+    expect(reply.say).toBe(`Let's not send any money for now. ${question}`);
+  });
+
+  it("the model reads the lines the rules said", async () => {
+    const { converse, seen } = scripted([() => text("He asked for secrecy, a common trick.")]);
+    const s = setUp(converse);
+    await primed(s);
+    await s.say(DETAIL);
+    const history = (seen[0]?.messages ?? []).map((m) => m.content?.[0]?.text ?? "");
+    expect(history[0]).toBe(OPENING);
+    expect(history[1]).toContain("Should I text Michael");
+    expect(history[2]).toBe("No");
+    expect(history[3]).toBe("Okay, I didn't send anything.");
+  });
+});
+
+describe("model output and history helpers", () => {
+  it("keeps three sentences, the closing question last", () => {
+    expect(fitToThree("One. Two. Three. Four?")).toBe("One. Two. Four?");
+    expect(fitToThree("One. Two. Three. Four.")).toBe("One. Two. Three.");
+    expect(fitToThree("One. Two?")).toBe("One. Two?");
+  });
+
+  it("turns dashes and line breaks into the house style", () => {
+    expect(houseStyle("Gift cards are like cash—the money is gone.\n\nShould I?")).toBe(
+      "Gift cards are like cash, the money is gone. Should I?",
+    );
+  });
+
+  it("keeps only text, joined by speaker, starting with the user", () => {
+    const messages: Message[] = [
+      { role: "assistant", content: [{ text: "Earlier." }] },
+      { role: "user", content: [{ text: "Hi" }] },
+      {
+        role: "assistant",
+        content: [{ toolUse: { toolUseId: "u1", name: "assess_call", input: {} } }],
+      },
+      {
+        role: "user",
+        content: [{ toolResult: { toolUseId: "u1", content: [{ text: "ok" }] } }],
+      },
+      { role: "assistant", content: [{ text: "Signs." }] },
+    ];
+    expect(textOnly(messages)).toEqual([
+      { role: "user", content: [{ text: "Hi" }] },
+      { role: "assistant", content: [{ text: "Signs." }] },
+    ]);
+  });
+
+  it("never cuts the history between a tool use and its result", () => {
+    const messages: Message[] = [
+      { role: "user", content: [{ text: "A" }] },
+      {
+        role: "assistant",
+        content: [{ toolUse: { toolUseId: "u1", name: "get_updates", input: {} } }],
+      },
+      {
+        role: "user",
+        content: [{ toolResult: { toolUseId: "u1", content: [{ text: "ok" }] } }],
+      },
+      { role: "assistant", content: [{ text: "No news." }] },
+      { role: "user", content: [{ text: "B" }] },
+      { role: "assistant", content: [{ text: "Okay." }] },
+    ];
+    expect(trimHistory(messages, 4)).toEqual(messages.slice(4));
   });
 });

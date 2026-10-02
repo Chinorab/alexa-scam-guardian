@@ -136,3 +136,33 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium (the one documented deploy command was wrong).
 - **Workaround:** `pnpm run deploy` everywhere (README, docs, quickstart, preflight hint) and `pnpm --filter @asg/infra run deploy` in the root script.
 - **Suggestion:** pnpm could warn when a package.json script shadows a built in command name.
+
+---
+
+## #9 — Lambda Function URLs rename `WWW-Authenticate`
+
+- **Date:** 2026-10-02
+- **Task attempted:** `pnpm smoke` against the first real deploy (T080).
+- **Steps:**
+  1. The MCP server answers 401 with `WWW-Authenticate: Bearer resource_metadata="..."`, as MCP authorization asks, and the local server and the rehearsal both showed it.
+  2. Through the Function URL, the 401 arrived with `x-amzn-Remapped-www-authenticate` instead, so the smoke check failed.
+- **Expected:** Headers set by the function reach the client as set, or the documentation of Function URLs says which ones are renamed.
+- **Actual:** An MCP client that looks only at `WWW-Authenticate` cannot find the protected resource metadata from the 401. Our emulator could not have caught it.
+- **Severity:** Low for this project (MCP clients also try `/.well-known/oauth-protected-resource`, which works), higher for any service that relies on the header.
+- **Workaround:** The smoke check accepts the renamed header and checks the well known address separately.
+- **Suggestion:** Document the renamed headers on the Function URL page, or let `WWW-Authenticate` through on 401 responses.
+
+---
+
+## #10 — The Echo dropped words while Alexa spoke (only visible with real Polly audio)
+
+- **Date:** 2026-10-02
+- **Task attempted:** The Playwright suite against the deployed site (T102).
+- **Steps:**
+  1. Locally, speech ends at once in a headless browser; in the cloud the Echo plays Polly audio, about 10 s per line.
+  2. Several scenarios failed remotely: a "Yes" typed while Alexa was still speaking, or while her answer was on its way, was ignored without a word.
+- **Expected:** Talking over Alexa stops her and is heard, as on a real Echo.
+- **Actual:** A real product bug that only real audio and real network time could show. The person would have had to repeat themselves, or think the device was broken.
+- **Severity:** High for the people this is for: answering before the end of a question is common.
+- **Workaround:** New words now stop the speech and go through; words sent while an answer is on its way are sent right after it. A Playwright scenario keeps Alexa talking forever and checks that a typed "Yes" is answered; remote runs now stub audio the same way locally and in the cloud.
+- **Suggestion:** For our own process: run the suite against the deployed stack early, not only the emulator.

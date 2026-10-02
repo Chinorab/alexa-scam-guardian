@@ -57,7 +57,13 @@ export function EchoShow(props: { pollMs: number }) {
 
   const openUntil = useRef(0);
   const unreadSeen = useRef(0);
+  /** A request is on its way. Speaking is not busy: new words interrupt Alexa. */
   const busyRef = useRef(false);
+  const speakingRef = useRef(false);
+  /** Counts turns, so a turn interrupted by the next one leaves the light alone. */
+  const turnRef = useRef(0);
+  /** Words sent while a request was on its way: sent as soon as its answer is in. */
+  const queued = useRef<{ text: string; quiet: boolean }>();
   const mic = useRef<Listening>();
   const lastInputWasVoice = useRef(false);
   const deviceRef = useRef<StartResponse>();
@@ -90,13 +96,24 @@ export function EchoShow(props: { pollMs: number }) {
 
   const send = useCallback(
     async (text: string, options: { quiet?: boolean } = {}) => {
-      if (busyRef.current || !text.trim()) return;
+      if (!text.trim()) return;
+      if (busyRef.current) {
+        // Never drop words: they go out right after the answer on its way.
+        if (!options.quiet) queued.current = { text, quiet: false };
+        return;
+      }
       const current = deviceRef.current ?? (await started.current);
-      if (!current || busyRef.current) return;
+      if (!current) return;
+      if (busyRef.current) {
+        if (!options.quiet) queued.current = { text, quiet: false };
+        return;
+      }
       busyRef.current = true;
+      const turn = ++turnRef.current;
       setBusy(true);
       setProblem(undefined);
       stopSpeaking();
+      speakingRef.current = false;
       // News Alexa announces on her own was not said by anyone: no "You said" line.
       setHeard(options.quiet ? undefined : shownWords(text.trim()));
       setLight("thinking");
@@ -108,16 +125,32 @@ export function EchoShow(props: { pollMs: number }) {
           ? 0
           : Date.now() + CONVERSATION_OPEN_MS;
         void refreshPhone();
+        // The answer is in: from here on, new words (a "yes" while Alexa still speaks) go
+        // through and stop her, like talking over Alexa on a real Echo.
+        busyRef.current = false;
+        setBusy(false);
+        const next = queued.current;
+        queued.current = undefined;
+        if (next) {
+          void send(next.text, { quiet: next.quiet });
+          return;
+        }
+        speakingRef.current = true;
         setLight("speaking");
         await speak(current.deviceId, reply.say, reply.rate);
+        if (turnRef.current !== turn) return;
+        speakingRef.current = false;
         setLight("idle");
         if (reply.expectReply && lastInputWasVoice.current && voiceInputSupported) startListening();
       } catch {
+        if (turnRef.current !== turn) return;
         setProblem("That did not go through. Please try again.");
         setLight("idle");
       } finally {
-        busyRef.current = false;
-        setBusy(false);
+        if (turnRef.current === turn) {
+          busyRef.current = false;
+          setBusy(false);
+        }
       }
     },
     // startListening only reads refs, so it does not need to be a dependency.
@@ -128,6 +161,7 @@ export function EchoShow(props: { pollMs: number }) {
     const current = deviceRef.current;
     if (!current || mic.current) return;
     stopSpeaking();
+    speakingRef.current = false;
     let interimTimer: ReturnType<typeof setTimeout> | undefined;
     mic.current = listen({
       onInterim: (text) => {
@@ -183,7 +217,7 @@ export function EchoShow(props: { pollMs: number }) {
         setLight((state) => (state === "notification" ? "idle" : state));
         return;
       }
-      if (busyRef.current || mic.current) return;
+      if (busyRef.current || speakingRef.current || mic.current) return;
       if (Date.now() < openUntil.current) {
         void send(NEWS_PROMPT, { quiet: true });
         return;
@@ -198,6 +232,8 @@ export function EchoShow(props: { pollMs: number }) {
   async function startOver() {
     if (!device) return;
     stopSpeaking();
+    speakingRef.current = false;
+    turnRef.current++;
     mic.current?.stop();
     await resetDemo(device.deviceId).catch(() => undefined);
     setCards([]);

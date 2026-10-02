@@ -121,5 +121,6 @@ amazon-ses, amazon-polly, aws-cdk, typescript, hono, preact, playwright
 
 - Code: https://github.com/Chinorab/alexa-scam-guardian
 - Dataset: https://github.com/Chinorab/us-scam-patterns
-- Live demo: (after deploy)
+- Live demo (simulated Echo Show, no sign in): https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo
+- MCP server (Streamable HTTP, household token required): https://r6jd3gasvhmgofaffa3ninxgpy0sewoc.lambda-url.us-east-1.on.aws/mcp
 - Video: (after recording)

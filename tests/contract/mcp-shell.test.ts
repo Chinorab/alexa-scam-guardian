@@ -1,6 +1,7 @@
 import { Client } from "@modelcontextprotocol/client";
 import { describe, expect, it } from "vitest";
-import { makeApp, makeDeps, tokenFor } from "./helpers";
+import { openMcpSession } from "../../apps/web/src/agent/mcp-client";
+import { HOUSEHOLD_ID, SECRET, makeApp, makeDeps, tokenFor } from "./helpers";
 
 const ACCEPT = "application/json, text/event-stream";
 
@@ -71,5 +72,32 @@ describe("MCP server shell", () => {
     const { tools } = await client.listTools();
     expect(Array.isArray(tools)).toBe(true);
     await client.close();
+  });
+});
+
+describe("tool latency in the logs (T080)", () => {
+  it("every tool logs its name, outcome and time", async () => {
+    const events: { event: string; tool?: string; ok?: boolean; durationMs?: number }[] = [];
+    const { deps } = makeDeps({
+      logger: { log: (event) => events.push(event as (typeof events)[number]) },
+    } as Partial<ReturnType<typeof makeDeps>["deps"]>);
+    const app = makeApp(deps);
+    const session = await openMcpSession(
+      { householdId: HOUSEHOLD_ID, kind: "demo" },
+      {
+        url: "http://mcp.test/mcp",
+        tokenSecret: SECRET,
+        fetch: (async (input: string | URL | Request, init?: RequestInit) =>
+          app.request(input instanceof URL ? input.href : String(input), init)) as typeof fetch,
+      },
+    );
+    await session.call("assess_call", { description: "The IRS called about gift cards." });
+    await session.call("get_updates", {});
+    await session.call("prepare_report", { checkId: "missing" });
+    await session.close();
+    const timed = events.filter((e) => e.event === "tool_call");
+    expect(timed.map((e) => e.tool)).toEqual(["assess_call", "get_updates", "prepare_report"]);
+    expect(timed.map((e) => e.ok)).toEqual([true, true, false]);
+    for (const e of timed) expect(typeof e.durationMs).toBe("number");
   });
 });

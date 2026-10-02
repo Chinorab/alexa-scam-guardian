@@ -99,10 +99,13 @@ flowchart LR
   select partners only (see [FRICTION_LOG.md](FRICTION_LOG.md) #1), so the web app plays the
   device. It is a real MCP Apps host (`AppBridge`) and its agent reaches the MCP server through
   the official MCP client, the way Alexa+ would.
-- **Two conversation modes**: the full mode lets Claude Haiku 4.5 on Amazon Bedrock choose
-  the tools within a 3 second deadline; the rule based mode answers when the model is slow,
-  unavailable, or over budget, with the same tools. Every sentence goes through the same
-  output guard either way.
+- **Two conversation modes, one conversation**: rules answer what must be exact or instant
+  (danger, a caller still on the line, the first description with its official warning signs,
+  the answer to a question they asked, known requests like "any news?"); Claude Haiku 4.5 on
+  Amazon Bedrock answers free questions and new details with the same MCP tools, within a 3
+  second deadline, and reads every line the rules said. Rules also answer when the model is
+  slow, unavailable, or over budget. Every sentence goes through the same output guard either
+  way. Measured on AWS: [docs/measurements.md](docs/measurements.md).
 - **Scam patterns** ([packages/scam-patterns](packages/scam-patterns)): 9 patterns and 17
   warning signs written only from FTC and FBI alerts; every pattern and sign cites its source,
   the schema is checked on every push and a weekly CI job checks that every link still works.
