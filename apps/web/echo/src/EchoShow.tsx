@@ -267,7 +267,11 @@ export function EchoShow(props: { pollMs: number }) {
               {heard ? `You said: ${heard}` : `Hi ${device?.olderAdultFirstName ?? ""}`}
             </p>
             <p class="echo-caption" data-testid="caption" aria-live="polite">
-              {caption}
+              {/* A new line arrives as a new element, so it can rise into place; the live
+                  region itself stays, so screen readers still announce it. */}
+              <span class="echo-caption-text" key={caption}>
+                {caption}
+              </span>
             </p>
             {light === "notification" && (
               // FR-009: a quiet card; what the family said is only spoken when asked.

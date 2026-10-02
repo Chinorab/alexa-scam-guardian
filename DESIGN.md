@@ -54,9 +54,25 @@ borders at least 4.7:1. axe WCAG 2.2 AA runs on every page in both themes in CI.
 
 ## Motion
 
-Signs rise into place once (`--duration-sign`, 420 ms, ease out), one after another. The Echo
-light ring shows listening, thinking, speaking and news. Everything respects
-`prefers-reduced-motion`: no rise, no ring sweep.
+One authored moment, taken from the world: **headlights crossing retroreflective sheeting**.
+Real road signs flare when a car's lights pass over them; here a single soft beam
+(`--glint`, `@keyframes headlights`, about 1.1 s) crosses a sign once, after it lands, and never
+loops.
+
+| Where | What moves | Why |
+|---|---|---|
+| Home hero | The post rises from the ground (520 ms), the three signs drop onto it top to bottom, then the beam crosses them in order | The focal sequence: the product's promise assembled |
+| Home "Try the Echo demo" sign | The beam crosses it on hover or keyboard focus | The sign you are about to take catches the light |
+| Echo screen cards | Warning diamonds rise one by one (420 ms) and each catches the beam as it lands; a yellow "it was not them" row or "money already sent" panel does too | A sign Alexa names becomes a sign on the screen |
+| Echo caption | Each new line settles in from just below (280 ms) | A new turn, without a show |
+| Demo phone | A new message slides in at the top (360 ms) | A notification arriving |
+| Buttons | Settle 1 px when pressed (120 ms) | The tap is felt before the answer comes |
+| Echo light ring | Listening, thinking, speaking, news | Device state |
+
+Ease is always `cubic-bezier(0.16, 1, 0.3, 1)`; nothing bounces. With
+`prefers-reduced-motion`, nothing moves and no beam passes; new lines and messages only fade in
+(160 ms) so the change is still seen (tested in `tests/e2e/a11y.spec.ts`). The video cards use the
+same vocabulary (`tests/e2e/video-cards-content.ts`).
 
 ## Voice and copy
 

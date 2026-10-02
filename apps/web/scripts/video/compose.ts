@@ -13,6 +13,9 @@ import { VOICES } from "./lines";
 const CARDS = resolve(import.meta.dirname, "../../../../docs/video");
 const SEG = join(OUT, "segments");
 const FPS = 30;
+/** Crossfade between segments, picture and sound together. */
+const FADE = 0.4;
+const MOTION = join(OUT, "cards");
 const BACKDROP = "0x1f2326";
 
 interface Voice {
@@ -139,13 +142,38 @@ function card(png: string, length: number, narration?: string, delay = 0.3): Seg
         const v = voiceOf(narration);
         sounds.push({ file: v.file, at: delay, seconds: v.seconds, caption: v.text });
       }
-      encode(
-        file,
-        ["-loop", "1", "-framerate", String(FPS), "-t", length.toFixed(3), "-i", join(CARDS, png)],
-        `[0:v]scale=1920:1080,format=yuv420p,setsar=1[v]`,
-        sounds,
-        length,
-      );
+      // The animated card (pnpm video:motion) when it was recorded, else the still.
+      const name = png.replace(/\.png$/, "");
+      const motion = join(MOTION, `${name}.webm`);
+      if (existsSync(motion)) {
+        const { offset } = JSON.parse(readFileSync(join(MOTION, `${name}.json`), "utf8")) as {
+          offset: number;
+        };
+        encode(
+          file,
+          ["-ss", offset.toFixed(3), "-i", motion],
+          `[0:v]fps=${FPS},scale=1920:1080:flags=lanczos,format=yuv420p,setsar=1,tpad=stop_mode=clone:stop_duration=2[v]`,
+          sounds,
+          length,
+        );
+      } else {
+        encode(
+          file,
+          [
+            "-loop",
+            "1",
+            "-framerate",
+            String(FPS),
+            "-t",
+            length.toFixed(3),
+            "-i",
+            join(CARDS, png),
+          ],
+          `[0:v]scale=1920:1080,format=yuv420p,setsar=1[v]`,
+          sounds,
+          length,
+        );
+      }
       return { length, sounds };
     },
   };
@@ -314,6 +342,7 @@ const familyNarration = voiceOf("n-family");
 
 mkdirSync(SEG, { recursive: true });
 const list: string[] = [];
+const lengths: number[] = [];
 const captions: { from: number; to: number; text: string }[] = [];
 let clock = 0;
 for (const [i, segment] of segments.entries()) {
@@ -339,19 +368,22 @@ for (const [i, segment] of segments.entries()) {
     );
     sounds = [placed];
     list.push(withVoice);
+    lengths.push(length);
     for (const s of sounds)
       captions.push({ from: clock + s.at, to: clock + s.at + s.seconds, text: s.caption });
-    clock += length;
+    clock += length - FADE;
     console.log(`${segment.name.padEnd(22)} ${length.toFixed(1)} s`);
     continue;
   }
   list.push(file);
+  lengths.push(built.length);
   for (const s of sounds)
     captions.push({ from: clock + s.at, to: clock + s.at + s.seconds, text: s.caption });
-  clock += built.length;
+  // The next segment starts as this one fades out.
+  clock += built.length - FADE;
   console.log(`${segment.name.padEnd(22)} ${built.length.toFixed(1)} s`);
 }
-console.log(`total ${clock.toFixed(1)} s`);
+console.log(`total ${(clock + FADE).toFixed(1)} s`);
 
 // Captions: one cue per spoken line, split into two line chunks so they stay readable.
 const stamp = (t: number) => {
@@ -384,20 +416,43 @@ for (const c of captions) {
   }
 }
 writeFileSync(join(OUT, "captions.srt"), cues.join("\n"));
-writeFileSync(
-  join(OUT, "segments.txt"),
-  list.map((f) => `file '${f.replaceAll("\\", "/")}'`).join("\n"),
-);
-
+// Segments joined by short crossfades: each one fades into the next, picture and sound.
+const chain: string[] = [];
+let video = "[0:v]";
+let audio = "[0:a]";
+let end = lengths[0] ?? 0;
+for (let i = 1; i < list.length; i++) {
+  const offset = end - FADE;
+  chain.push(
+    `${video}[${i}:v]xfade=transition=fade:duration=${FADE}:offset=${offset.toFixed(3)}[v${i}]`,
+  );
+  chain.push(`${audio}[${i}:a]acrossfade=d=${FADE}[a${i}]`);
+  video = `[v${i}]`;
+  audio = `[a${i}]`;
+  end = offset + (lengths[i] ?? 0);
+}
 ffmpeg([
-  "-f",
-  "concat",
-  "-safe",
-  "0",
-  "-i",
-  join(OUT, "segments.txt"),
-  "-c",
-  "copy",
+  ...list.flatMap((f) => ["-i", f]),
+  "-filter_complex",
+  chain.join(";"),
+  "-map",
+  video,
+  "-map",
+  audio,
+  "-c:v",
+  "libx264",
+  "-preset",
+  "medium",
+  "-crf",
+  "18",
+  "-pix_fmt",
+  "yuv420p",
+  "-r",
+  String(FPS),
+  "-c:a",
+  "aac",
+  "-b:a",
+  "192k",
   join(OUT, "joined.mp4"),
 ]);
 const style =

@@ -11,7 +11,8 @@
     "a11y": "node e2e/run.mjs a11y",
     "demo:play": "node e2e/run.mjs demo-play --headed",
     "video:cards": "node e2e/run.mjs video-cards",
-    "video:record": "node e2e/run.mjs video-record"
+    "video:record": "node e2e/run.mjs video-record",
+    "video:motion": "node e2e/run.mjs video-motion"
   },
   "dependencies": {
     "@asg/core": "workspace:^",
