@@ -169,7 +169,7 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "pay_question",
-    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy))\b/i,
+    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy))\b/i,
   ],
   // Any other mention of the password asks for it ("he wants the family password"); after
   // payment questions, so "he knew the password so I can send it" stays a payment question.
