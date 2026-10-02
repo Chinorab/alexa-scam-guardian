@@ -53,7 +53,7 @@ try {
   note(
     "todo",
     "Bedrock",
-    `${reason(error)}. In the Bedrock console (us-east-1), Model access: enable Anthropic Claude Haiku 4.5.`,
+    `${reason(error)}. In the Bedrock console (us-east-1), Model catalog, open Claude Haiku 4.5 and submit the use case details if asked.`,
   );
 }
 
