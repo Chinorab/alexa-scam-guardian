@@ -224,3 +224,22 @@ describe("asking to hear it again", () => {
     },
   );
 });
+
+describe("asking for news from family", () => {
+  it.each([
+    "Any word from Michael?",
+    "Has he written back?",
+    "Did my grandson reply?",
+    "What did Michael say?",
+    "Did anyone get back to me?",
+    "Have you heard from Michael?",
+    "Did Sarah get the message?",
+    "Is there an update?",
+  ])("'%s' asks what's new", (text) => {
+    expect(classify(text)).toBe("whats_new");
+  });
+
+  it("'My grandson called and said he needs bail' is still a description", () => {
+    expect(classify("My grandson called and said he needs bail")).toBe("describe");
+  });
+});

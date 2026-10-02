@@ -152,7 +152,7 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "whats_new",
-    /\b(what'?s new|any news|did \w+ (answer|reply|write back|text back|call back)|has \w+ (answered|replied))\b/i,
+    /\b(what'?s new|any (news|word|update)|is there (any |an )?(news|update|word)|did (\w+|my \w+|anyone|anybody) (answer|reply|respond|write back|text back|call back|get back( to me)?|get (my|the) message)|has (\w+|my \w+|anyone|anybody) (answered|replied|responded|written back|texted back|gotten back)|have you heard (from|back)|what did (\w+|my \w+) (say|answer|reply))\b/i,
   ],
   ["file_for_me", /\b(send|file|submit) (it|the report|a report) for me\b/i],
   [
