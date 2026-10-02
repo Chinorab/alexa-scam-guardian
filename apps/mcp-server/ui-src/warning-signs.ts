@@ -1,5 +1,5 @@
 /** ui://guardian/warning-signs: the signs found in a described call, each with its source. */
-import { DIAMOND, escapeHtml, runView, type Structured } from "./shared";
+import { diamond, escapeHtml, runView, type Structured } from "./shared";
 
 interface Sign {
   id: string;
@@ -25,8 +25,8 @@ function render(data: Structured): string {
   const items = signs
     .slice(0, 4)
     .map(
-      (sign) => `<li class="sign">
-  ${DIAMOND}
+      (sign, index) => `<li class="sign">
+  ${diamond(index)}
   <div>
     <h2>${escapeHtml(sign.label)}</h2>
     <p>${escapeHtml(sign.explanation)}</p>

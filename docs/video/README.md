@@ -20,12 +20,14 @@ Record the Echo beats hands free with `pnpm demo:play`.
 
 ```bash
 pnpm video:voices                                   # Ruth and narrator lines, Polly neural
+pnpm video:motion                                   # the cards, animated with the site's own motion
 E2E_BASE_URL=https://<web url> pnpm video:record     # the Echo beats and the family page, with a timeline
 pnpm video:compose                                  # cut, voices, held frames, captions, loudness
 ```
 
 Output: `video-out/scam-guardian-demo.mp4` (1920 x 1080, 30 fps, AAC, loudness -16 LUFS,
-captions burned in) and `video-out/captions.srt`; `video-out/` is not committed. Alexa speaks
+captions burned in, 0.4 s crossfades between segments; still cards are used when
+`pnpm video:motion` has not run) and `video-out/captions.srt`; `video-out/` is not committed. Alexa speaks
 with the product's own Polly voice (Joanna), Ruth with the Polly voice Ruth, the narrator with
 Matthew. Every Alexa line and every screen is the deployed product at recording time; each
 Alexa line is placed where its caption appeared, and only whole sentences are dropped to fit

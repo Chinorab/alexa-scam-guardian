@@ -190,6 +190,18 @@ main {
   filter: brightness(1.08);
 }
 
+/* Pressed: the control settles a pixel, so the tap is felt before the answer comes. */
+.button {
+  transition:
+    translate 120ms var(--ease-out),
+    filter 120ms var(--ease-out);
+}
+
+.button:active:not([disabled], [aria-disabled="true"]) {
+  translate: 0 1px;
+  filter: brightness(0.95);
+}
+
 .button-secondary {
   background: transparent;
   color: var(--ink);

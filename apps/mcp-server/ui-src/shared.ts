@@ -85,5 +85,10 @@ export function runView(name: string, render: (data: Structured) => string): voi
   }, 250);
 }
 
-/** Road sign diamond drawn in SVG: yellow, black inset border, exclamation legend. */
-export const DIAMOND = `<svg class="diamond" viewBox="0 0 64 64" aria-hidden="true"><rect x="11" y="11" width="42" height="42" rx="6" transform="rotate(45 32 32)" fill="#FFCD1C" stroke="#111417" stroke-width="2"/><rect x="15" y="15" width="34" height="34" rx="4" transform="rotate(45 32 32)" fill="none" stroke="#111417" stroke-width="2.5"/><path d="M32 20v15" stroke="#111417" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="43" r="3.2" fill="#111417"/></svg>`;
+/**
+ * Road sign diamond drawn in SVG: yellow, black inset border, exclamation legend. Its glint
+ * (headlights crossing the sheeting) is clipped to the diamond and passes once as the sign
+ * lands; the id is per sign, since a card can hold four.
+ */
+export const diamond = (index: number) =>
+  `<svg class="diamond" viewBox="0 0 64 64" aria-hidden="true"><defs><clipPath id="diamond-${index}"><rect x="11" y="11" width="42" height="42" rx="6" transform="rotate(45 32 32)"/></clipPath></defs><rect x="11" y="11" width="42" height="42" rx="6" transform="rotate(45 32 32)" fill="#FFCD1C" stroke="#111417" stroke-width="2"/><g clip-path="url(#diamond-${index})"><rect class="glint" x="0" y="-8" width="12" height="80" fill="#ffffff"/></g><rect x="15" y="15" width="34" height="34" rx="4" transform="rotate(45 32 32)" fill="none" stroke="#111417" stroke-width="2.5"/><path d="M32 20v15" stroke="#111417" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="43" r="3.2" fill="#111417"/></svg>`;
