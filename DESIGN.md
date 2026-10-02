@@ -78,11 +78,12 @@ build time and the output guard at run time for everything Alexa says.
 
 ## Images and their provenance
 
-No stock photos, no generated pictures. Every sign on screen is drawn in CSS from the tokens.
+No stock photos, no generated pictures. Every sign on screen is drawn in CSS from the tokens;
+interface icons come from Lucide.
 
 | File | Made by |
 |---|---|
-| `apps/web/public/favicon.svg` | Hand written SVG: a yellow diamond with a phone |
+| `apps/web/public/favicon.svg` | Hand written SVG: a yellow diamond around the Lucide phone icon (ISC) |
 | `favicon.ico`, `apple-touch-icon.png` | `pnpm --filter @asg/web favicons` from the SVG |
 | `docs/images/*.png` | Playwright screenshots of the running product (`tests/e2e/capture*.spec.ts`) |
 | `docs/video/*.png` | `pnpm video:cards`, the product's own CSS rendered in Chromium |
