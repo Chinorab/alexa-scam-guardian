@@ -185,6 +185,9 @@ export const phrases = {
   cantHelpHere: () => "I can't help with that here.",
 
   closing: () => "Okay. I'm here if you need me again.",
+
+  /** The Echo's opening invitation, also its answer to "What?" before anything was said. */
+  askWhatHappened: () => "Tell me what happened on the call.",
 };
 
 export type PhraseKey = keyof typeof phrases;

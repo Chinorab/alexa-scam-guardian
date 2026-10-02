@@ -1,4 +1,4 @@
-name: Official sources
+name: Weekly checks
 
 # Every scam pattern cites an FTC, FBI or IC3 page; this checks weekly that each link still
 # answers, so a moved page is caught before a judge or a family member clicks it.
@@ -23,3 +23,16 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @asg/scam-patterns check-sources:online
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit

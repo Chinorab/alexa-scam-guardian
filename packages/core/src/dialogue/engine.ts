@@ -147,16 +147,18 @@ export type Intent =
 const INTENTS: [Intent, RegExp][] = [
   [
     "repeat",
-    /^(please )?(repeat|say (that|it) again|what did you say|pardon|come again|sorry what)\b/i,
+    // Short forms only as the whole reply ("What?"), so "What should I do?" is not a repeat.
+    /^(?:(?:what|huh|pardon(?: me)?|sorry|sorry what|come again|again|one more time|slower|louder|say it slower)(?: please)?[?.!]*$|(?:please |sorry,? |excuse me,? )?(?:repeat|say (?:that|it) (?:again|slower)|what did you say|what was that|(?:can|could|would) you (?:please )?(?:repeat|say (?:that|it) again|speak (?:up|slower|louder|more slowly))|i (?:didn'?t|did not|can'?t|couldn'?t) (?:hear|catch|understand)(?: (?:you|that|it|what you said))?[?.!]*$))/i,
   ],
   [
     "whats_new",
-    /\b(what'?s new|any news|did \w+ (answer|reply|write back|text back|call back)|has \w+ (answered|replied))\b/i,
+    /\b(what'?s new|any (news|word|update)|is there (any |an )?(news|update|word)|did (\w+|my \w+|anyone|anybody) (answer|reply|respond|write back|text back|call back|get back( to me)?|get (my|the) message)|has (\w+|my \w+|anyone|anybody) (answered|replied|responded|written back|texted back|gotten back)|have you heard (from|back)|what did (\w+|my \w+) (say|answer|reply))\b/i,
   ],
   ["file_for_me", /\b(send|file|submit) (it|the report|a report) for me\b/i],
   [
     "report",
-    /\b(report (it|this|the call|that)|help (me )?(to )?report|how (do|can) i report|file a report|make a report)\b/i,
+    // Danger is checked first elsewhere, so "call the police" here means reporting the scam.
+    /\b(report (it|this|the call|that|a scam|the scam)|help (me )?(to )?report|how (do|can) i report|file a (report|complaint)|make a (report|complaint)|who (should|do) i tell|(should|can) i (call|tell) the police)\b/i,
   ],
   [
     "say_password",
@@ -483,7 +485,8 @@ export async function simplifiedTurn(
 
   switch (intent) {
     case "repeat":
-      return reply(state.lastSay ?? phrases.closing());
+      // Nothing said yet: repeat the invitation the Echo shows on screen.
+      return reply(state.lastSay ?? phrases.askWhatHappened());
     case "whats_new":
       return news(state, tools);
     case "pay_question":

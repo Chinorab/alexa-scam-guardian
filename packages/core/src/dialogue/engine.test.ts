@@ -200,3 +200,64 @@ describe("simplifiedTurn", () => {
     );
   });
 });
+
+describe("asking to hear it again", () => {
+  it.each([
+    "What?",
+    "Huh?",
+    "Can you say that again?",
+    "Could you repeat that",
+    "I didn't hear you",
+    "I didn't catch that",
+    "Sorry, what was that?",
+    "Say it slower please",
+    "Slower please",
+    "One more time",
+  ])("'%s' is a repeat", (text) => {
+    expect(classify(text)).toBe("repeat");
+  });
+
+  it.each(["What should I do?", "I didn't hear from Michael yet", "Sorry, my grandson called"])(
+    "'%s' is not a repeat",
+    (text) => {
+      expect(classify(text)).not.toBe("repeat");
+    },
+  );
+});
+
+describe("asking for news from family", () => {
+  it.each([
+    "Any word from Michael?",
+    "Has he written back?",
+    "Did my grandson reply?",
+    "What did Michael say?",
+    "Did anyone get back to me?",
+    "Have you heard from Michael?",
+    "Did Sarah get the message?",
+    "Is there an update?",
+  ])("'%s' asks what's new", (text) => {
+    expect(classify(text)).toBe("whats_new");
+  });
+
+  it("'My grandson called and said he needs bail' is still a description", () => {
+    expect(classify("My grandson called and said he needs bail")).toBe("describe");
+  });
+});
+
+describe("asking how to report", () => {
+  it.each([
+    "Who should I tell about this?",
+    "Should I call the police?",
+    "Help me file a complaint",
+    "Where can I report a scam?",
+  ])("'%s' asks for the report summary", (text) => {
+    expect(classify(text)).toBe("report");
+  });
+});
+
+describe("repeat before anything was said", () => {
+  it("repeats the opening invitation", async () => {
+    const reply = await simplifiedTurn("What?", initialState(), {} as never);
+    expect(reply.say).toBe("Tell me what happened on the call.");
+  });
+});

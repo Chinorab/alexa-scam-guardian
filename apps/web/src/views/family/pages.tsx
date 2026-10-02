@@ -449,13 +449,15 @@ export function MemberFormPage(props: {
           id="nicknames"
           label={`Other names ${older} uses for them`}
           hint="Separate with commas. For example: Mike, Mikey."
+          error={e.nicknames}
         >
           <input
             id="nicknames"
             name="nicknames"
             type="text"
             value={v.nicknames}
-            aria-describedby="nicknames-hint"
+            aria-invalid={e.nicknames ? "true" : undefined}
+            aria-describedby={describedBy("nicknames", true, e.nicknames)}
           />
         </Field>
         <fieldset class="field">
