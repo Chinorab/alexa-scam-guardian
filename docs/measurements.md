@@ -1,7 +1,7 @@
 # Measurements
 
 Every number here was measured by a script or a test in this repository, with the date and
-the target. Cloud figures are added after the first deploy (docs/deploy.md).
+the target. Cloud figures come from the deployed stack (docs/deploy.md).
 
 ## 2026-10-02, local run (simplified mode, in memory store)
 
@@ -50,6 +50,11 @@ runs above):
 
 The demo start limit (200 per hour per address) stopped a second batch of runs the same
 hour, as designed.
+
+Time until Alexa starts speaking (SC-004 counts the start of speech): the answer, then the
+whole Polly neural audio for it (the Echo plays it once downloaded). 8 runs of the main
+opening from France, with curl: answer 0.49 to 0.72 s, Polly 0.72 to 0.79 s for the three
+sentence line (56 KB of audio), so about 1.2 to 1.5 s in all.
 
 ## Automated checks
 

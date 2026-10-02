@@ -45,7 +45,9 @@ page, with the checks just made.
 
 ## Try it
 
-- **Hosted demo**: link added after the first deploy (see [docs/deploy.md](docs/deploy.md)).
+- **Hosted demo**, no sign in, on AWS:
+  [the simulated Echo Show](https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo).
+  Type or talk as Ruth, and answer as Michael on the demo phone beside it.
 - **Locally** in two minutes, no AWS account needed:
 
 ```bash
@@ -152,18 +154,22 @@ Deploy with one command after `cdk bootstrap`: `pnpm run deploy`. Details, costs
 ## Alexa+ readiness
 
 When the Alexa+ MCP toolkit opens to all developers, the same server plugs in as an add-on:
-Streamable HTTP at `/mcp`, protocol 2025-11-25, fast tool answers (see
+Streamable HTTP at `/mcp`, protocol 2025-11-25, tool answers well under the toolkit's 500 ms
+(p95 on AWS: assess_call 31 ms, confirm_outreach 296 ms, see
 [docs/measurements.md](docs/measurements.md)), MCP Apps views for Echo Show screens, protected resource metadata for account linking, and
 assistant rules carried in the server instructions.
 
 ## Checks
 
 ```bash
-pnpm check         # lint, format, copy rules, types, then 500+ unit, contract and red team tests
+pnpm check         # lint, format, copy rules, types, then 700+ unit, contract and red team tests
 pnpm test:e2e      # Playwright: the Echo and the family page in a real Chromium, axe WCAG 2.2 AA, 200% zoom
 pnpm smoke         # pages, security headers, Echo and MCP auth of a running site, local or deployed
 pnpm measure       # answer time per turn and time to the check message
 pnpm demo:play     # plays the demo video script on the Echo, for screen recording
+pnpm test:redteam:live  # the red team against the real model on Bedrock
+pnpm tool-latency  # tool median and p95 from the deployed MCP server's CloudWatch logs
+pnpm aws:check     # what an AWS account still needs before the first deploy
 ```
 
 Both the test suites and Playwright run in CI on every push. Every contract test also runs on

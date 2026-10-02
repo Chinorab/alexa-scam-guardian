@@ -232,6 +232,7 @@ describe("activity and delete all", () => {
     });
     const html = await (await f.request("/family/activity")).text();
     expect(html).toContain("Warning signs: emergency story, gift cards.");
+    expect(html).toContain("Kept for 30 days.");
   });
 
   it("deletes everything only after the first name is typed", async () => {
@@ -270,6 +271,9 @@ describe("public demo family (FR-026)", () => {
     expect(home).toContain("Michael");
     const activity = await (await f.request("/family/activity")).text();
     expect(activity).toContain("gift cards");
+    // The demo family is gone within 24 hours: the page never promises 30 days.
+    expect(activity).toContain("Deleted with the demo family.");
+    expect(activity).not.toContain("Kept for 30 days");
   });
 
   it("opens a fresh demo family without an Echo, with no email", async () => {
@@ -394,5 +398,37 @@ describe("report summary on the family page (FR-019)", () => {
     f.clearCookie();
     const anonymous = await f.request(`/family/activity/${checkId}/report.txt`);
     expect(anonymous.status).toBe(303);
+  });
+});
+
+describe("sign in without an email service (cloud without SES)", () => {
+  it("says so and offers the demo family, instead of a link that never comes", async () => {
+    const made = makeDeps();
+    let mailed = 0;
+    const send = made.deps.mailer.send.bind(made.deps.mailer);
+    made.deps.mailer.send = async (message) => {
+      mailed++;
+      return send(message);
+    };
+    const app = createWebApp({
+      deps: made.deps,
+      sessions: new MemoryDeviceSessions(),
+      agent: { mode: "simplified", modelId: "none" },
+      mcpUrl: `${ORIGIN}/mcp`,
+      session: SESSION,
+      emailSignIn: false,
+    });
+    const page = await (await app.request(`${ORIGIN}/family/sign-in`)).text();
+    expect(page).toContain("email is not turned on for this demo yet");
+    expect(page).toContain('action="/family/demo"');
+    expect(page).not.toContain('name="email"');
+    const posted = await app.request(`${ORIGIN}/family/sign-in`, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", origin: ORIGIN },
+      body: "email=anna%40example.com",
+    });
+    expect(posted.status).toBe(200);
+    expect(await posted.text()).toContain("email is not turned on for this demo yet");
+    expect(mailed).toBe(0);
   });
 });

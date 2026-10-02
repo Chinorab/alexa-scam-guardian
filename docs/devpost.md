@@ -1,6 +1,6 @@
 # Devpost submission draft
 
-Paste section by section into the Devpost form. Fill the two links after the first deploy.
+Paste section by section into the Devpost form. The live demo link is filled in; add the video link after recording.
 Numbers: only the ones listed in docs/number-audit.md.
 
 ## Images
@@ -65,9 +65,11 @@ someone who starts reading one out), and never records anything.
 - Alexa+ MCP onboarding is open to select partners only, so a web app simulates the Echo Show:
   speech in and out, captions, a light ring, and an MCP Apps host. Its agent reaches the MCP
   server through the official MCP client, the way Alexa+ would.
-- Claude Haiku 4.5 on Amazon Bedrock picks the tools in the full mode, with a 3 second
-  deadline; a rule based mode answers with the same tools when the model is slow or
-  unavailable. Every sentence passes the same output guard.
+- Rules and Claude Haiku 4.5 on Amazon Bedrock share one conversation. Rules answer what
+  must be exact or instant: danger, a caller still on the line, the first description with
+  its official warning signs, the answer to a question Alexa asked. The model answers free
+  questions ("Could it be a real lawyer?") with the same MCP tools, within a 3 second
+  deadline, and reads every line the rules said. Every sentence passes the same output guard.
 - AWS: Lambda (Node.js 24, arm64) with Function URLs, DynamoDB with TTL, SES, Polly neural
   voices, Secrets Manager, all in one CDK stack.
 - The scam patterns are an open dataset, published separately under MIT:
@@ -87,6 +89,13 @@ someone who starts reading one out), and never records anything.
 - Numbers people dictate the way people really talk: a generated test of 336 sentences found
   card numbers spoken as "four, one, two" or "409 dash 86" slipping past redaction. Fixed
   before any of it could be stored.
+- The live model: once deployed, a tool turn took two Bedrock calls, about 3 seconds, so the
+  first answer always fell back, and the model then lost the thread ("Yes" got "What
+  happened?"). It also asked for a phone number, suggested asking the caller to call back,
+  and said "this happens to thousands of people". Routing the exact parts to rules, sharing
+  the history, and four new guard checks fixed each one, re-tested against the real model.
+- Real audio: with Polly speaking about ten seconds per line, a "yes" said while Alexa was
+  still talking was dropped. Talking over Alexa now stops her and is heard.
 - Making a sign in link that email scanners cannot use up: the link only shows a
   button; signing in is a separate press.
 
@@ -96,6 +105,9 @@ someone who starts reading one out), and never records anything.
   relative's answer heard.
 - Zero WCAG 2.2 AA violations from axe on every page, in light and dark, and a keyboard only
   walkthrough of the Echo.
+- Measured on AWS: 302 ms median answer per turn, about 1.3 seconds for a free question the
+  model answers, the three MCP tools of the main flow under 300 ms at p95. The red team against the real model:
+  151 of 151.
 - Every warning sign and every number links to an official source.
 - Robust by test, not by hope: 120 malformed MCP tool calls and 20 malformed web requests
   end cleanly, one household can never read or act on another's check, and the Echo's

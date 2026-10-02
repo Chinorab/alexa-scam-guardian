@@ -68,7 +68,27 @@ function DemoNotice(props: { household: Household }) {
   );
 }
 
-export function SignInPage(props: { error?: string; email?: string }) {
+export function SignInPage(props: { error?: string; email?: string; emailOff?: boolean }) {
+  if (props.emailOff) {
+    return (
+      <Layout
+        title="Family sign in"
+        description="Sign in to set up your family's Scam Guardian."
+        current="family"
+      >
+        <h1>Family sign in</h1>
+        <p class="lead">
+          Sign in links go by email, and email is not turned on for this demo yet. The demo family
+          shows the same family page, with made up people.
+        </p>
+        <form method="post" action="/family/demo">
+          <button class="button" type="submit">
+            Open a demo family
+          </button>
+        </form>
+      </Layout>
+    );
+  }
   return (
     <Layout
       title="Family sign in"
@@ -577,8 +597,8 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
       <h1>Recent checks</h1>
       <DemoNotice household={props.household} />
       <p class="lead">
-        Kept for 30 days. Card, bank and Social Security numbers were removed before anything was
-        saved.
+        {props.household.kind === "demo" ? "Deleted with the demo family." : "Kept for 30 days."}{" "}
+        Card, bank and Social Security numbers were removed before anything was saved.
       </p>
       {props.items.length === 0 ? (
         <p>No checks yet.</p>

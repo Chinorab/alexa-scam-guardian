@@ -32,6 +32,7 @@ async function build() {
     session: { secret: deps.sessionSecret, secure: true },
     // Never show sign in links on screen in the cloud: they only go by email.
     showSignInLink: false,
+    emailSignIn: Boolean(process.env.SES_FROM),
     speech: pollySpeech(region, process.env.POLLY_VOICE ?? "Joanna"),
     pollMs: Number(process.env.DEMO_POLL_MS ?? 3000),
     staticFiles: [serveStatic({ root: "./dist" }), serveStatic({ root: "./public" })],

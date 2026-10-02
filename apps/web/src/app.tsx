@@ -27,6 +27,8 @@ export interface WebAppOptions {
   session: FamilySessionConfig;
   /** Local runs without an email service: show the sign in link on screen. */
   showSignInLink?: boolean;
+  /** False when sign in links cannot be emailed (no SES sender): the page offers the demo. */
+  emailSignIn?: boolean;
   /** Serves /assets, /favicon.* from disk (local) or the bundle (Lambda). */
   staticFiles?: MiddlewareHandler[];
   /** Local runs mount the MCP server on the same origin at /mcp. */
@@ -95,6 +97,7 @@ export function createWebApp(options: WebAppOptions) {
       session: options.session,
       sessions: options.sessions,
       ...(options.showSignInLink ? { showSignInLink: true } : {}),
+      ...(options.emailSignIn === false ? { emailSignIn: false } : {}),
     }),
   );
 

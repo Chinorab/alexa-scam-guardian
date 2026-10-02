@@ -105,8 +105,11 @@ token from the deployed master secret:
 pnpm token:cloud
 ```
 
-It prints the MCP URL and a 15 minute token, reading the stack output and the secret through
-the SDK.
+It creates a fresh demo household in the deployed table (Ruth, with Michael and Sarah, gone
+after 24 hours), then prints the MCP URL and a 15 minute token for it, reading the stack
+outputs and the secret through the SDK. Messages from that household only reach the demo
+outbox, never a phone. Checked with the official MCP client on 2026-10-02: protocol
+2025-11-25, 8 tools, 3 MCP Apps views, `assess_call` answered `offer_verify` in 125 ms.
 
 Tool latency per call is in the logs (`event: tool_call`, `durationMs`). CloudWatch Logs
 Insights, log group of `McpServer`:
