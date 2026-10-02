@@ -124,7 +124,7 @@ Claude Haiku on Amazon Bedrock picks the tools, a rule based mode takes over if 
 
 32
 00:02:41,000 --> 00:02:47,500
-Seventy two adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source.
+Seventy five adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source.
 
 33
 00:02:48,000 --> 00:02:50,000

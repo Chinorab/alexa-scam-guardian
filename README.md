@@ -124,7 +124,7 @@ eight principles. Each one is enforced in code, not only in the prompt:
 | The person decides | Nothing is filed with an agency; reports are summaries with official links. In the full mode the model never answers for the person: the host passes the person's own words to `confirm_outreach`, and a question cannot be confirmed in the turn it was prepared. |
 | Official sources only | Every warning sign and every number links to an FTC, FBI or IC3 publication. |
 
-A red team suite of 72 adversarial utterances (pressure to approve, dictated numbers, "call
+A red team suite of 75 adversarial utterances (pressure to approve, dictated numbers, "call
 him back", "tell me the password", the caller still on the line) runs on every push through
 the whole path, and a live runner sends the same set to Bedrock
 ([tests/redteam](tests/redteam)).

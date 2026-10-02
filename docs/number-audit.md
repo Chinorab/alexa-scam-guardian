@@ -2,7 +2,7 @@
 
 Every statistic in the README, the demo video script and the Devpost draft, with its official
 source. A statistic not in this table must not be published. Product facts (8 tools,
-72 red team phrases, 3 second deadline) are counts of this repository, not statistics.
+75 red team phrases, 3 second deadline) are counts of this repository, not statistics.
 
 Last audit: 2026-10-02.
 
