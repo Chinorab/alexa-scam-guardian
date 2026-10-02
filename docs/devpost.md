@@ -3,6 +3,14 @@
 Paste section by section into the Devpost form. Fill the two links after the first deploy.
 Numbers: only the ones listed in docs/number-audit.md.
 
+## Images
+
+- Thumbnail and first gallery image: [video/devpost-cover.png](video/devpost-cover.png)
+- Gallery: [images/echo-warning-signs.png](images/echo-warning-signs.png),
+  [images/echo-relative-answered.png](images/echo-relative-answered.png),
+  [images/family-phone.png](images/family-phone.png),
+  [video/04-architecture.png](video/04-architecture.png)
+
 ## Name
 
 Scam Guardian for Alexa+
