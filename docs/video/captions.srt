@@ -1,132 +1,163 @@
 1
-00:00:04,000 --> 00:00:09,500
-Ruth: Alexa, my grandson just called. He's in jail and needs two thousand dollars in gift cards for bail.
+00:00:03,846 --> 00:00:05,903
+Ruth: Alexa, my grandson just called.
 
 2
-00:00:10,000 --> 00:00:14,000
-Alexa: I'm glad you asked me first. The emergency story and the gift cards are common signs of a scam.
+00:00:05,903 --> 00:00:10,350
+Ruth: He's in jail and needs two thousand dollars in gift cards for bail.
 
 3
-00:00:14,000 --> 00:00:18,500
-Alexa: Should I text Michael to check, and tell Sarah you got this call?
+00:00:11,150 --> 00:00:12,794
+Alexa: I'm glad you asked me first.
 
 4
-00:00:19,000 --> 00:00:19,800
-Ruth: Yes.
+00:00:12,794 --> 00:00:16,669
+Alexa: The emergency story and the gift cards are common signs of a scam.
 
 5
-00:00:20,000 --> 00:00:22,800
-Alexa: Done. I'll tell you when Michael answers.
+00:00:16,669 --> 00:00:20,486
+Alexa: Should I text Michael to check, and tell Sarah you got this call?
 
 6
-00:00:26,000 --> 00:00:30,000
-Alexa: Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back.
+00:00:21,286 --> 00:00:22,006
+Ruth: Yes.
 
 7
-00:00:30,000 --> 00:00:31,500
-Alexa: Would you like help reporting this call?
+00:00:22,806 --> 00:00:25,638
+Alexa: Done. I'll tell you when Michael answers.
 
 8
-00:00:31,500 --> 00:00:35,000
-Scam Guardian is an Alexa+ add on for the moment right after a scary call.
+00:00:28,238 --> 00:00:32,404
+Alexa: Michael says he did not call you, so you did the right thing by checking.
 
 9
-00:00:35,000 --> 00:00:40,000
-The FTC's advice is simple: hang up and check with your family on a number you know.
+00:00:32,404 --> 00:00:35,771
+Alexa: Please don't send any money, and hang up if they call back.
 
 10
-00:00:40,000 --> 00:00:44,500
-Scam Guardian turns that advice into a conversation.
+00:00:35,771 --> 00:00:38,054
+Alexa: Would you like help reporting this call?
 
 11
-00:00:45,000 --> 00:00:47,000
-Ruth: So can I pay him?
+00:00:38,804 --> 00:00:42,788
+Scam Guardian is an Alexa+ add-on for the moment right after a scary call.
 
 12
-00:00:47,500 --> 00:00:54,500
-Alexa: Let's not send any money yet. First, call your family on a number you know.
+00:00:43,404 --> 00:00:48,273
+The FTC's advice is simple: hang up, and check with your family on a number you know.
 
 13
-00:00:55,000 --> 00:00:58,000
-Ruth: He's still on the other phone, he says I have to hurry.
+00:00:48,273 --> 00:00:51,252
+Scam Guardian turns that advice into a conversation.
 
 14
-00:00:58,500 --> 00:01:04,500
-Alexa: You can hang up now. A real family member will understand.
-Then tell me what happened.
+00:00:52,042 --> 00:00:53,434
+Ruth: So can I pay him?
 
 15
-00:01:05,000 --> 00:01:07,000
-Ruth: My card number is four one two two
+00:00:54,234 --> 00:00:59,226
+Alexa: Let's not send any money yet. First, call your family on a number you know.
 
 16
-00:01:07,000 --> 00:01:14,500
-Alexa: Let me stop you there. Please don't share numbers like that with me or anyone on the phone. We don't need them.
+00:01:00,026 --> 00:01:03,050
+Ruth: He's still on the other phone, he says I have to hurry.
 
 17
-00:01:15,000 --> 00:01:17,000
-Ruth: Call back the number that called me.
+00:01:03,850 --> 00:01:09,514
+Alexa: You can hang up now. A real family member will understand. Then tell me what happened.
 
 18
-00:01:17,500 --> 00:01:21,500
-Alexa: I won't call that number, because scammers control it. Please call your family on a number you know.
+00:01:10,314 --> 00:01:13,194
+Ruth: My card number is four one two two three three
 
 19
-00:01:22,000 --> 00:01:24,500
-Ruth: There's a man at my door, he says he's here for the money.
+00:01:13,994 --> 00:01:15,300
+Alexa: Let me stop you there.
 
 20
-00:01:24,500 --> 00:01:27,000
-Alexa: Don't open the door and don't hand over money. If you feel unsafe, call 911 now.
+00:01:15,300 --> 00:01:20,522
+Alexa: Please don't share numbers like that with me or anyone on the phone. We don't need them.
 
 21
-00:01:27,000 --> 00:01:30,000
-It never says a payment is safe. It never contacts the caller. It never takes card numbers. And it never records the call.
+00:01:21,322 --> 00:01:24,442
+Ruth: There's a man at my door, he says he's here for the money.
 
 22
-00:01:30,000 --> 00:01:32,000
-Ruth: Help me report it.
+00:01:25,242 --> 00:01:30,738
+Alexa: Don't open the door and don't hand over money. If you feel unsafe, call 911 now.
 
 23
-00:01:32,000 --> 00:01:41,500
-Alexa: I put a summary on the screen with where to report it. Nothing was sent to any agency.
+00:01:31,388 --> 00:01:35,090
+It never says a payment is safe. It never contacts the caller.
 
 24
-00:01:42,000 --> 00:01:45,000
-Ruth: I already bought the cards and read him the numbers.
+00:01:35,090 --> 00:01:38,612
+It never takes card numbers. And it never records the call.
 
 25
-00:01:45,000 --> 00:01:52,000
-Alexa: Thank you for telling me. Call the company that sold the gift card right away. Should I tell Sarah you got this call, so she can help?
+00:01:39,036 --> 00:01:40,860
+Ruth: Yes, help me report it.
 
 26
-00:01:55,000 --> 00:01:59,500
-No blame, one first step, and the family knows.
+00:01:41,660 --> 00:01:46,604
+Alexa: I put a summary on the screen with where to report it. Nothing was sent to any agency.
 
 27
-00:02:00,000 --> 00:02:07,500
-A grandchild sets it up from their phone in a few minutes.
+00:01:49,404 --> 00:01:51,996
+Ruth: I already bought the cards and read him the numbers.
 
 28
-00:02:08,000 --> 00:02:15,500
-Who Alexa can check with, and who gets a heads up.
+00:01:52,796 --> 00:01:57,286
+Alexa: Thank you for telling me. Call the company that sold the gift card right away.
 
 29
-00:02:16,000 --> 00:02:24,500
-An optional family password, and a history of every check. One button deletes it all.
+00:01:57,286 --> 00:02:00,452
+Alexa: Should I tell Sarah you got this call, so she can help?
 
 30
-00:02:25,000 --> 00:02:32,500
-Under the hood is a real MCP server with eight tools, running on AWS Lambda. The safety rules live inside the tools: there is no way to pass a destination number.
+00:02:01,252 --> 00:02:01,972
+Ruth: Yes.
 
 31
-00:02:33,000 --> 00:02:40,500
-Claude Haiku on Amazon Bedrock picks the tools, a rule based mode takes over if it is slow, and every sentence passes the same guard.
+00:02:02,772 --> 00:02:04,629
+Alexa: Done, I let Sarah know.
 
 32
-00:02:41,000 --> 00:02:47,500
-Seventy five adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source.
+00:02:04,629 --> 00:02:10,846
+Alexa: The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays.
 
 33
-00:02:48,000 --> 00:02:50,000
+00:02:10,846 --> 00:02:14,076
+Alexa: Would you like help reporting this call?
+
+34
+00:02:15,726 --> 00:02:18,870
+No blame, one first step, and the family knows.
+
+35
+00:02:19,570 --> 00:02:24,442
+A grandchild sets it up from their phone: who Alexa can check with, and who gets a heads up.
+
+36
+00:02:24,442 --> 00:02:27,514
+An optional family password, and a history of every check.
+
+37
+00:02:30,925 --> 00:02:35,019
+Under the hood is a real MCP server with eight tools, on AWS Lambda.
+
+38
+00:02:35,019 --> 00:02:37,368
+The safety rules live inside the tools.
+
+39
+00:02:37,368 --> 00:02:44,533
+Rules answer what must be exact, and Claude Haiku on Amazon Bedrock answers the open questions, through the same guard.
+
+40
+00:02:45,325 --> 00:02:51,248
+Seventy five adversarial phrases run on every push, and the scam patterns are open source.
+
+41
+00:02:51,248 --> 00:02:53,749
 Hang up. Ask Alexa. Check with family.

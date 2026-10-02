@@ -111,7 +111,7 @@ test("video cards and Devpost cover", async ({ page }) => {
       <div class="arch">
         <div class="box"><b>Simulated Echo Show</b><span>speech, captions, MCP Apps cards</span></div>
         <div class="link">${ARROW}</div>
-        <div class="box"><b>Web app on Lambda</b><span>redaction, Claude Haiku 4.5 on Bedrock or rule based mode, output guard</span></div>
+        <div class="box"><b>Web app on Lambda</b><span>redaction, rules for what must be exact, Claude Haiku 4.5 on Bedrock for open questions, one output guard</span></div>
         <div class="link">${ARROW}</div>
         <div class="box guide"><b>MCP server on Lambda</b><span>8 tools, Streamable HTTP, safety rules inside the tools</span></div>
       </div>

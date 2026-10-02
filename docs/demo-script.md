@@ -72,8 +72,8 @@ It never takes card numbers. And it never records the call."
 | Time | Screen | Audio (narrator) |
 |---|---|---|
 | 2:25 | Architecture diagram from the README. | "Under the hood is a real MCP server with eight tools, running on AWS Lambda. The safety rules live inside the tools: there is no way to pass a destination number." |
-| 2:33 | MCP Inspector listing the tools against the hosted `/mcp`. | "Claude Haiku on Amazon Bedrock picks the tools, a rule based mode takes over if it is slow, and every sentence passes the same guard." |
-| 2:41 | Terminal: red team suite passing, 72 utterances. Then the open dataset repository. | "Seventy five adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source." |
+| 2:33 | MCP Inspector listing the tools against the hosted `/mcp`. | "Rules answer what must be exact, and Claude Haiku on Amazon Bedrock answers the open questions, through the same guard." |
+| 2:41 | Terminal: red team suite passing, 75 utterances. Then the open dataset repository. | "Seventy five adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source." |
 | 2:48 | Home page closing sign: TRY THE ECHO DEMO, with the URL. | "Hang up. Ask Alexa. Check with family." |
 
 ## Checklist before recording

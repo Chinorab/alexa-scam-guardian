@@ -127,6 +127,20 @@ test("MCP Apps cards on the Echo screen meet WCAG 2.2 AA", async ({ page }) => {
   }).toPass({ timeout: 15_000 });
 });
 
+test("money already sent: the card says so, never no warning signs, and meets WCAG 2.2 AA", async ({
+  page,
+}) => {
+  await openEcho(page);
+  await say(page, "I already bought the cards and read him the numbers.");
+  await expect(caption(page)).toContainText("Call the company that sold the gift card");
+  await expect(async () => {
+    const card = page.frames().find((f) => f !== page.mainFrame());
+    expect(await card?.locator("body").innerText()).toMatch(/money already sent/i);
+    expect(await card?.locator("body").innerText()).not.toMatch(/no common warning signs/i);
+    expect(await expectCardsAccessible(page)).toContain("Warning signs");
+  }).toPass({ timeout: 15_000 });
+});
+
 test("the pages a relative opens on a phone meet WCAG 2.2 AA", async ({ page }) => {
   await openEcho(page);
   await say(page, OPENING);
