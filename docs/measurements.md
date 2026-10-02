@@ -20,6 +20,8 @@ with the MCP server mounted at `/mcp`. Server time only: speech is not included.
 | Check | Result | Where |
 |---|---|---|
 | WCAG 2.2 AA with axe, light and dark (SC-007) | 0 violations on every page | `tests/e2e/a11y.spec.ts` |
+| MCP Apps cards inside their sandboxed frames: warning signs, check status, report (SC-007) | 0 violations once the signs have risen; each view now has a document title | `tests/e2e/a11y.spec.ts` |
+| Redaction, generated: 336 sentences of card, Social Security, routing and account numbers, written and spoken (Principle III) | no six digit window survives; early interruption fires | `packages/core/src/redact/redact.generated.test.ts` |
 | 200% zoom and reflow, 640 px and 320 px wide (SC-007) | no sideways scrolling on any page, Echo after a turn included | `tests/e2e/a11y.spec.ts` |
 | At most three sentences and one question per spoken turn (SC-003) | every turn of every scripted dialogue passes the output guard, which checks both | `tests/contract/dialogue-us2.test.ts` |
 | Red team phrases, offline (SC-001), updated | 75 of 75 pass | `tests/redteam/offline.test.ts` |

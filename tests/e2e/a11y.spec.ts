@@ -1,9 +1,46 @@
 /** WCAG 2.2 AA automated checks with axe on every page (SC-007), plus keyboard reach. */
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { OPENING, caption, openEcho, say } from "./helpers";
+import { OPENING, caption, openEcho, say, tapOnPhone } from "./helpers";
 
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+const axeSource = readFileSync(
+  createRequire(import.meta.url).resolve("axe-core/axe.min.js"),
+  "utf8",
+);
+
+/**
+ * MCP Apps cards run in sandboxed frames that a page scan does not enter, so axe is injected
+ * into each card's own document. Returns the frames checked, by title.
+ */
+async function expectCardsAccessible(page: Page): Promise<string[]> {
+  const checked: string[] = [];
+  for (const frame of page.frames()) {
+    if (frame === page.mainFrame()) continue;
+    // Signs rise one after another; measure contrast once they have settled.
+    await frame.waitForFunction(() =>
+      document.getAnimations().every((animation) => animation.playState !== "running"),
+    );
+    await frame.evaluate(axeSource);
+    const { title, violations } = await frame.evaluate(async (tags) => {
+      type Violation = { id: string; nodes: { target: string[] }[] };
+      type Axe = { run: (...args: unknown[]) => Promise<{ violations: Violation[] }> };
+      const axe = (window as unknown as { axe: Axe }).axe;
+      const result = await axe.run(document, { runOnly: tags });
+      return {
+        title: document.title,
+        violations: result.violations.map(
+          (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`,
+        ),
+      };
+    }, TAGS);
+    expect(violations, `${title} card accessibility violations`).toEqual([]);
+    checked.push(title);
+  }
+  return checked;
+}
 
 async function expectNoViolations(page: Page, name: string) {
   // Contrast is measured on the settled page, not halfway through a sign fading in.
@@ -66,6 +103,29 @@ for (const scheme of ["light", "dark"] as const) {
     });
   });
 }
+
+test("MCP Apps cards on the Echo screen meet WCAG 2.2 AA", async ({ page }) => {
+  await openEcho(page);
+  await say(page, OPENING);
+  await expect(caption(page)).toContainText("Should I text Michael");
+  await expect(async () => {
+    expect(await expectCardsAccessible(page)).toContain("Warning signs");
+  }).toPass({ timeout: 15_000 });
+  await say(page, "Yes");
+  await expect(caption(page)).toContainText("I'll tell you when Michael answers");
+  await tapOnPhone(page, "Michael", "It wasn't me");
+  await expect(caption(page)).toContainText("Michael says he did not call you", {
+    timeout: 10_000,
+  });
+  await expect(async () => {
+    expect(await expectCardsAccessible(page)).toContain("Check status");
+  }).toPass({ timeout: 15_000 });
+  await say(page, "Yes");
+  await expect(caption(page)).toContainText("summary on the screen");
+  await expect(async () => {
+    expect(await expectCardsAccessible(page)).toContain("Report summary");
+  }).toPass({ timeout: 15_000 });
+});
 
 test("the Echo works from the keyboard alone", async ({ page }) => {
   await openEcho(page);

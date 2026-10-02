@@ -14,6 +14,13 @@ const VIEWS = {
   report: "report",
 } as const;
 
+/** Each view is a document of its own: screen readers announce its title (WCAG 2.4.2). */
+const TITLES: Record<keyof typeof VIEWS, string> = {
+  warningSigns: "Warning signs",
+  checkStatus: "Check status",
+  report: "Report summary",
+};
+
 const require = createRequire(import.meta.url);
 const fontDir = dirname(require.resolve("@fontsource-variable/overpass/package.json"));
 const font = readFileSync(join(fontDir, "files/overpass-latin-wght-normal.woff2")).toString(
@@ -39,7 +46,8 @@ async function bundle(file: string): Promise<string> {
 const entries: string[] = [];
 for (const [key, file] of Object.entries(VIEWS)) {
   const script = (await bundle(file)).replaceAll("</script", "<\\/script");
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head><body><main id="view" aria-live="polite" aria-busy="true"></main><script>${script}</script></body></html>`;
+  const title = TITLES[key as keyof typeof VIEWS];
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}</style></head><body><main id="view" aria-live="polite" aria-busy="true"></main><script>${script}</script></body></html>`;
   entries.push(`  ${key}: ${JSON.stringify(html)},`);
   console.log(`${file}: ${(html.length / 1024).toFixed(0)} KB`);
 }
