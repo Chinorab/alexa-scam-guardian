@@ -5,6 +5,12 @@ Goal: the judge understands the product, sees it work, and trusts its safety in 
 the demo household (checked with `pnpm measure` and the Playwright scenarios). Record with the
 hosted URL once deployed, Polly voice on; until then the local run.
 
+Hands free take: `pnpm demo:play` (or `E2E_BASE_URL=https://... pnpm demo:play` on the hosted
+site) opens a visible Chromium and plays every Echo beat below at a human pace, typing,
+answering on the demo phone and waiting for each spoken answer. Record the window with any
+screen recorder, then cut the takes to the timings. The family page and the build section are
+recorded by hand.
+
 Recording setup: Chrome, 1440 x 900 window, system light theme for the family page, Echo page
 full screen. Phone shots: Chrome device mode at 390 x 844. No background music under speech.
 Captions burned in for every spoken line.
