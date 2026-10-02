@@ -27,7 +27,14 @@ Deleting the stack deletes the table: no family data outlives the service.
    request production access early, it usually takes one to two business days. Without a
    sender, email goes to the on screen demo phone and the family page cannot send sign in
    links.
-4. Bootstrap CDK once per account and region:
+4. Check the account in one command; it lists what is still missing, in order (credentials,
+   Bedrock model access with one tiny request, Polly, SES sender and sandbox, CDK bootstrap):
+
+```bash
+pnpm aws:check
+```
+
+5. Bootstrap CDK once per account and region:
 
 ```bash
 pnpm --filter @asg/infra exec cdk bootstrap
