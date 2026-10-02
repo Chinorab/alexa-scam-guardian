@@ -73,7 +73,8 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
     async ({ description, checkId }) => {
       const started = Date.now();
       const now = deps.clock.now();
-      const redacted = redact(description);
+      // Control and direction override characters never reach storage or the family page.
+      const redacted = redact(description.replace(/[\p{Cc}\p{Cf}]+/gu, " "));
 
       let check: Check | undefined;
       if (checkId) {
