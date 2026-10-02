@@ -44,3 +44,16 @@ jobs:
           name: playwright-results
           path: tests/test-results/
           retention-days: 7
+
+  rehearsal:
+    name: Cloud rehearsal (Lambda bundles, emulated AWS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm rehearse
