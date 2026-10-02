@@ -89,7 +89,8 @@ export function EchoShow(props: { pollMs: number }) {
       setBusy(true);
       setProblem(undefined);
       stopSpeaking();
-      if (!options.quiet) setHeard(text.trim());
+      // News Alexa announces on her own was not said by anyone: no "You said" line.
+      setHeard(options.quiet ? undefined : text.trim());
       setLight("thinking");
       try {
         const reply = await converse(current.deviceId, text.trim());
