@@ -26,7 +26,8 @@
     "synth": "pnpm --filter @asg/infra synth",
     "export:dataset": "tsx scripts/export-dataset.ts",
     "start": "pnpm --filter @asg/web start",
-    "dev:mcp": "pnpm --filter @asg/mcp-server dev"
+    "dev:mcp": "pnpm --filter @asg/mcp-server dev",
+    "token:cloud": "pnpm --filter @asg/web token:cloud"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

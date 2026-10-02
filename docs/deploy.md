@@ -15,8 +15,11 @@ Deleting the stack deletes the table: no family data outlives the service.
 
 ## Before the first deploy
 
-1. Install the AWS CLI v2 and sign in (`aws configure sso` or `aws configure`). Check with
-   `aws sts get-caller-identity`.
+1. Give this machine AWS credentials. The AWS CLI is not required: CDK and the scripts read
+   the standard credential sources. The simplest for a short project is an IAM user's access
+   key in the environment of the terminal you deploy from (never in a committed file):
+   `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_REGION=us-east-1`. With the AWS CLI
+   installed, `aws configure sso` works too.
 2. In the Bedrock console (us-east-1), open Model access and enable Anthropic Claude Haiku 4.5.
    The first Anthropic model needs the short use case form.
 3. Optional, for real email: verify a sender in Amazon SES (us-east-1). A domain identity is
@@ -27,7 +30,7 @@ Deleting the stack deletes the table: no family data outlives the service.
 4. Bootstrap CDK once per account and region:
 
 ```bash
-pnpm --filter @asg/infra exec cdk bootstrap aws://ACCOUNT_ID/us-east-1
+pnpm --filter @asg/infra exec cdk bootstrap
 ```
 
 ## Deploy
@@ -60,11 +63,14 @@ pnpm measure https://YOUR-WEB-URL.lambda-url.us-east-1.on.aws 20
 
 The MCP server answers 401 without a household token and publishes its protected resource
 metadata at `/.well-known/oauth-protected-resource`. To call it from MCP Inspector, mint a demo
-token from the deployed master secret (the stack prints its ARN as `SecretArn`):
+token from the deployed master secret:
 
 ```bash
-APP_SECRET="$(aws secretsmanager get-secret-value --secret-id SECRET_ARN --query SecretString --output text)" pnpm token:demo
+pnpm token:cloud
 ```
+
+It prints the MCP URL and a 15 minute token, reading the stack output and the secret through
+the SDK.
 
 Tool latency per call is in the logs (`event: tool_call`, `durationMs`). CloudWatch Logs
 Insights, log group of `McpServer`:

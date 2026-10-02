@@ -154,6 +154,12 @@ importers:
         specifier: 4.6.5
         version: 4.6.5
     devDependencies:
+      '@aws-sdk/client-cloudformation':
+        specifier: 3.1144.0
+        version: 3.1144.0
+      '@aws-sdk/client-secrets-manager':
+        specifier: 3.1144.0
+        version: 3.1144.0
       '@preact/preset-vite':
         specifier: ^2.10.6
         version: 2.10.6(@babel/core@7.29.7)(preact@10.29.8)(vite@8.3.2(@types/node@24.19.0)(esbuild@0.28.2)(tsx@4.23.15))
@@ -258,6 +264,10 @@ packages:
 
   '@aws-sdk/client-bedrock-runtime@3.1144.0':
     resolution: {integrity: sha512-NaTgcw2dK5jwiDFrhVDkqJDovSxwMYZT2hqwp7JvwRdJsSsCx+LyRB6i+xv200JBfLnvPb2C7hMP78oltHEbnQ==}
+    engines: {node: '>=20.0.0'}
+
+  '@aws-sdk/client-cloudformation@3.1144.0':
+    resolution: {integrity: sha512-36Z45LaZPqhxJLi85XspP9by4iNr3MeW0KFgjhpsq8ypY66Rr8+gbi0AZo+t5z77AYieZxY/guNc7BUeWOqtCw==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/client-dynamodb@3.1144.0':
@@ -1892,6 +1902,17 @@ snapshots:
       '@aws-sdk/middleware-eventstream': 3.972.30
       '@aws-sdk/middleware-websocket': 3.972.54
       '@aws-sdk/token-providers': 3.1144.0
+      '@aws-sdk/types': 3.974.6
+      '@smithy/core': 3.35.1
+      '@smithy/fetch-http-handler': 5.8.0
+      '@smithy/node-http-handler': 4.12.1
+      '@smithy/types': 4.19.0
+      tslib: 2.8.1
+
+  '@aws-sdk/client-cloudformation@3.1144.0':
+    dependencies:
+      '@aws-sdk/core': 3.978.1
+      '@aws-sdk/credential-provider-node': 3.972.84
       '@aws-sdk/types': 3.974.6
       '@smithy/core': 3.35.1
       '@smithy/fetch-http-handler': 5.8.0

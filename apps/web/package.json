@@ -12,7 +12,8 @@
     "favicons": "tsx scripts/build-favicons.ts",
     "dev:assets": "vite build --watch",
     "dev:server": "node --watch --env-file-if-exists=../../.env --import tsx src/local.ts",
-    "start": "vite build && tsx --env-file-if-exists=../../.env src/local.ts"
+    "start": "vite build && tsx --env-file-if-exists=../../.env src/local.ts",
+    "token:cloud": "tsx scripts/cloud-token.ts"
   },
   "dependencies": {
     "@asg/core": "workspace:^",
@@ -35,6 +36,8 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@aws-sdk/client-cloudformation": "3.1144.0",
+    "@aws-sdk/client-secrets-manager": "3.1144.0",
     "@preact/preset-vite": "^2.10.6",
     "tsx": "4.23.15",
     "vite": "^8.3.2"
