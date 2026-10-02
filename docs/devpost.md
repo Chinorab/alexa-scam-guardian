@@ -1,7 +1,19 @@
 # Devpost submission draft
 
 Paste section by section into the Devpost form. The live demo link is filled in; add the video link after recording.
-Numbers: only the ones listed in docs/number-audit.md.
+Statistics: only the ones listed in docs/number-audit.md. Measurements: only the ones in docs/measurements.md.
+
+## Submission checklist (deadline 2026-10-23, 12:00 PDT)
+
+1. Video: watch `video-out/scam-guardian-demo.mp4` (`pnpm video:compose` rebuilds it; see
+   docs/video/README.md), or record a new take with `pnpm demo:play`. Upload it to YouTube or
+   Vimeo as public or unlisted, under 3 minutes, and paste the link below and in the form.
+2. Live site: open the demo link from a clean browser; run `pnpm smoke <web url> <mcp url>`.
+3. Repository: every pull request merged into main, CI green on main.
+4. Form: paste each section below; images from the Images list; links from Links.
+5. Mini challenges, if entered: AWS Builder (README section "AWS") and Open Source (the
+   dataset repository, MIT).
+6. After judging: delete the IAM user used to deploy, or run `pnpm --filter @asg/infra destroy`.
 
 ## Images
 
