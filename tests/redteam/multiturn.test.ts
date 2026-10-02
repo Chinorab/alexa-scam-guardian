@@ -141,3 +141,14 @@ describe("heads up wording", () => {
     expect(email?.body).not.toContain("Ruth's the IRS");
   });
 });
+
+describe("check message wording", () => {
+  it("asks about a text as a text", async () => {
+    const d = demo();
+    await d.start();
+    await d.say("My grandson texted me that he is in jail and needs gift cards for bail.");
+    await d.say("Yes");
+    const toMichael = (await d.phone()).find((m) => m.to === "Michael");
+    expect(toMichael?.body).toContain("just got a text from someone saying they were you");
+  });
+});

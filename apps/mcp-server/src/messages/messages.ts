@@ -21,7 +21,9 @@ function whoCallerClaimed(check: Check, member: FamilyMember, household: Househo
   if (claimed && (claimed === member.relationship || (claimed === "grandchild" && isGrandchild))) {
     return "you";
   }
-  if (check.claimedIdentity) return `${household.olderAdultFirstName}'s ${check.claimedIdentity}`;
+  if (check.claimedIdentity) {
+    return claimedIdentityWords(check.claimedIdentity, household.olderAdultFirstName);
+  }
   return "a family member";
 }
 
@@ -48,7 +50,12 @@ export function checkMessage(args: {
   const older = args.household.olderAdultFirstName;
   const claimed = whoCallerClaimed(args.check, args.member, args.household);
   const isThem = claimed === "you";
-  const subject = isThem ? `Did you just call ${older}?` : `Can you help ${older} check a call?`;
+  const verb = { call: "call", voicemail: "call", text: "text", email: "email" }[
+    args.check.contactKind
+  ];
+  const subject = isThem
+    ? `Did you just ${verb} ${older}?`
+    : `Can you help ${older} check ${aContact(args.check)}?`;
   const text = [
     `Hi ${args.member.name}, this is ${PRODUCT_NAME} for ${older}.`,
     `${older} just got ${aContact(args.check)} from someone saying they were ${claimed}, asking for money.`,
