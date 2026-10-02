@@ -24,6 +24,14 @@ import { LightBar, type LightState } from "./LightBar";
 import { McpAppFrame } from "./mcp-apps-host";
 import { listen, voiceInputSupported, type Listening } from "./speech-in";
 import { speak, stopSpeaking } from "./speech-out";
+import { REDACTED, redact } from "@asg/core/redact/redact";
+
+/**
+ * What the screen shows as "You said" (Principle III): the same redaction as the server, and
+ * any run of four or more digits hidden too, so a number being dictated is never shown back.
+ */
+const shownWords = (text: string) =>
+  redact(text).text.replace(/(?<!\$\s?)\d(?:[\s,.-]*\d){3,}/g, REDACTED);
 
 /** After Alexa's last answer, news is announced right away for this long (FR-009). */
 const CONVERSATION_OPEN_MS = 2 * 60_000;
@@ -90,7 +98,7 @@ export function EchoShow(props: { pollMs: number }) {
       setProblem(undefined);
       stopSpeaking();
       // News Alexa announces on her own was not said by anyone: no "You said" line.
-      setHeard(options.quiet ? undefined : text.trim());
+      setHeard(options.quiet ? undefined : shownWords(text.trim()));
       setLight("thinking");
       try {
         const reply = await converse(current.deviceId, text.trim());
@@ -123,12 +131,13 @@ export function EchoShow(props: { pollMs: number }) {
     let interimTimer: ReturnType<typeof setTimeout> | undefined;
     mic.current = listen({
       onInterim: (text) => {
-        setHeard(text);
+        setHeard(shownWords(text));
         clearTimeout(interimTimer);
         interimTimer = setTimeout(async () => {
           const check = await interim(current.deviceId, text).catch(() => undefined);
           if (check?.interrupt && check.say) {
             mic.current?.stop();
+            setHeard(undefined);
             setCaption(check.say);
             setLight("speaking");
             await speak(current.deviceId, check.say, "normal");
