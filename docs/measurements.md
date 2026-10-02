@@ -19,8 +19,10 @@ with the MCP server mounted at `/mcp`. Server time only: speech is not included.
 
 | Check | Result | Where |
 |---|---|---|
-| Red team utterances, offline (SC-001) | 59 of 59 pass | `tests/redteam/offline.test.ts` |
 | WCAG 2.2 AA with axe, light and dark (SC-007) | 0 violations on every page | `tests/e2e/a11y.spec.ts` |
+| 200% zoom and reflow, 640 px and 320 px wide (SC-007) | no sideways scrolling on any page, Echo after a turn included | `tests/e2e/a11y.spec.ts` |
+| At most three sentences and one question per spoken turn (SC-003) | every turn of every scripted dialogue passes the output guard, which checks both | `tests/contract/dialogue-us2.test.ts` |
+| Red team phrases, offline (SC-001), updated | 72 of 72 pass | `tests/redteam/offline.test.ts` |
 | Family setup on a 390 px screen, scripted (SC-005) | under 5 minutes, guarded | `tests/e2e/family.spec.ts` |
 | Contract tests on the DynamoDB store | 175 of 175 pass | `vitest` project `contract-dynamo` |
 

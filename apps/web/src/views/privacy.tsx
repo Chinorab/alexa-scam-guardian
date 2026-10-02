@@ -51,9 +51,27 @@ export function PrivacyPage() {
       <ul>
         <li>Checks and report summaries: 30 days, then they are deleted.</li>
         <li>Sign in links: 15 minutes, and each works only once.</li>
-        <li>Demo households: 24 hours.</li>
+        <li>Demo households, the demo phone and the simulated Echo conversation: 24 hours.</li>
         <li>Your family page: until your family deletes it.</li>
+        <li>
+          Server logs: one week. They hold only ids, timings and error codes, never what you said.
+        </li>
+        <li>
+          To stop one visitor from starting hundreds of demos, we keep a scrambled version of your
+          internet address for one hour. We cannot turn it back into the address.
+        </li>
       </ul>
+      <h2>Where it runs</h2>
+      <p>
+        Scam Guardian runs on Amazon Web Services in the United States. Your information is kept in
+        Amazon DynamoDB, emails go through Amazon SES, and Amazon Polly reads Alexa's answers aloud.
+      </p>
+      <p>
+        To understand what you said, the text of what you told us, with long numbers already
+        removed, is sent to a language model on Amazon Bedrock. Amazon runs the model itself: the
+        company that made the model does not see what is sent to it. If that service is slow or
+        unavailable, Scam Guardian answers with its own fixed sentences instead.
+      </p>
 
       <h2>Speaking instead of typing</h2>
       <p>
