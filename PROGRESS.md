@@ -7,8 +7,8 @@ Voice anti-scam guardian for US seniors on Alexa+ (grandparent / AI voice-clone 
 Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track. Deadline 2026-10-23 12:00 PDT (21:00 Paris). Target submission: 2026-10-22 evening.
 
 ## Current step
-All code tasks done except the ones that need the owner (2026-10-02). Phase 6 code done (DynamoDB store and outbox on one table, SES mailer, Lambda handlers, CDK stack validated by synth and assertions, docs/deploy.md); deploy blocked: no AWS CLI, account or Bedrock access on this machine yet. Phase 10 done: home page (road sign assembly), README with architecture and AWS, dataset published as github.com/Chinorab/us-scam-patterns (MIT, CI green), demo script, Devpost draft, number audit (IC3 2025 figures read in the PDF), FEEDBACK review, clean clone quickstart (found and fixed pnpm dev hanging on Windows), AgentCore container. 530 tests, 72 red team utterances, 24 Playwright runs.
-NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, install AWS CLI to D:, then `pnpm deploy` (T080); 2) SES sender/domain (production access request early); Then T102 (Playwright on the deployed URL), T103 timed runs with people, `pnpm test:redteam:live`, update docs/measurements.md, record video Oct 21, Devpost Oct 22 from docs/devpost.md.
+2026-10-02, after the owner confirmed the name and said "continue, don't stop": safety hardening of the full mode (host passes the person's own words to confirm_outreach and refuses same turn confirms; claims of sent messages without a send are replaced; password checks capped at 10 per household per hour), privacy page covers AWS and the model, 200% zoom and reflow tests, scripted Bedrock tool_use tests, CLI free deploy (`pnpm token:cloud`), `pnpm smoke`, remote Playwright (`E2E_BASE_URL`), Echo no longer drops early or fast typed input, Playwright in CI, `pnpm demo:play` for the video. PR #1 (feature branch into main) opened so the default branch shows the product. 542 tests, 26 Playwright scenarios.
+NEXT (owner): AWS credentials + Bedrock Claude Haiku 4.5 access in us-east-1, then `pnpm --filter @asg/infra exec cdk bootstrap` and `pnpm deploy` (T080); SES sender/domain. Then `pnpm smoke`, `E2E_BASE_URL=... pnpm test:e2e` (T102), `pnpm test:redteam:live`, `pnpm measure`, timed runs with people (T103), video Oct 21 (`pnpm demo:play`), Devpost Oct 22 from docs/devpost.md.
 
 ## Done
 - [x] Step 1: Alexa+ MCP access check. Conclusion: MCP Toolkit / alexa-ai CLI = select partners only -> official "simulated Alexa+ experience" path.
@@ -26,6 +26,7 @@ NEXT (owner): 1) AWS account + Bedrock Claude Haiku 4.5 access in us-east-1, ins
 
 ## Decisions
 - User validated the path (2026-10-01) and kept the working name alexa-scam-guardian.
+- PR #1 merges the feature branch into main for judges (2026-10-02).
 - Product name confirmed by the owner (2026-10-02): "Scam Guardian" (Devpost: "Scam Guardian for Alexa+").
 - Path: real self-hosted MCP server (spec 2025-11-25, Streamable HTTP) + web app simulating Alexa+ (voice in/out, Echo Show style) driving it through an MCP client. Keep server "Alexa+ ready" (alexa-ai addon.json shape, <500 ms tools, MCP Apps UI) for when access opens.
 - Everything in English, US context only.
