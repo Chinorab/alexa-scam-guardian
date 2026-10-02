@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/pattern.schema.json",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "sources": {
     "ftc-family-emergency": {
       "publisher": "FTC",
@@ -119,6 +119,13 @@
       "title": "Did you get a call or text about a suspicious purchase on Amazon? It’s a scam",
       "label": "FTC consumer alert, March 2024",
       "url": "https://consumer.ftc.gov/consumer-alerts/2024/03/did-you-get-call-or-text-about-suspicious-purchase-amazon-its-scam",
+      "retrievedOn": "2026-10-02"
+    },
+    "ftc-fake-checks": {
+      "publisher": "FTC",
+      "title": "How To Spot, Avoid, and Report Fake Check Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/how-spot-avoid-and-report-fake-check-scams",
       "retrievedOn": "2026-10-02"
     }
   },
@@ -522,6 +529,13 @@
         "Tell them it was a scam and ask them to reverse the transfer."
       ],
       "sourceRefs": ["ftc-if-scammed"]
+    },
+    "money_order": {
+      "steps": [
+        "Contact the company that issued the money order right away and ask them to stop payment.",
+        "If you mailed it, call the U.S. Postal Inspection Service at 877 876 2455."
+      ],
+      "sourceRefs": ["ftc-fake-checks"]
     },
     "money_transfer_app": {
       "steps": [

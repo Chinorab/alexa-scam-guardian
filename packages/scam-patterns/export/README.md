@@ -28,7 +28,7 @@ The dataset has five parts:
   company call about an order, tech support, cash or gold courier, romance, prize,
   cryptocurrency payment), the warning signs each one uses, official advice, and sources.
 - `ifPaid`: the official first steps for each payment method (gift card, wire, money
-  transfer app, cryptocurrency, cash by mail, cash courier, bank transfer, other).
+  order, money transfer app, cryptocurrency, cash by mail, cash courier, bank transfer, other).
 - `resources`: where to report or get help: ReportFraud.ftc.gov, ic3.gov, and the DOJ
   National Elder Fraud Hotline.
 

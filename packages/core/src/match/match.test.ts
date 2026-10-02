@@ -91,3 +91,21 @@ describe("company impersonation, false positives", () => {
     );
   });
 });
+
+describe("already paid, more ways of saying it", () => {
+  it("counts cash put into a coin ATM as paid, by cryptocurrency", () => {
+    expect(assess("I already put cash in a Bitcoin ATM like he said.").alreadyPaid).toEqual({
+      method: "crypto",
+    });
+  });
+
+  it("recognizes a money order", () => {
+    expect(assess("I already paid him with a money order.").alreadyPaid).toEqual({
+      method: "money_order",
+    });
+  });
+
+  it("does not treat putting the phone down as paying", () => {
+    expect(assess("I put the phone down and called you.").alreadyPaid).toBeUndefined();
+  });
+});

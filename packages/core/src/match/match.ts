@@ -59,9 +59,10 @@ const ON_LINE =
 const NOT_PAID =
   /\b(haven'?t|have not|didn'?t|did not|not yet|never) (bought|paid|sent|wired|given|gave|mailed|transferred)\b/i;
 const PAID =
-  /\b((i|we) (already |just )?(bought|paid|sent|wired|gave|mailed|transferred|handed|read (him|her|them) the)|already (bought|paid|sent|wired|gave|mailed|transferred))\b/i;
+  /\b((i|we) (already |just )?(bought|paid|sent|wired|gave|mailed|transferred|handed|read (him|her|them) the)|already (bought|paid|sent|wired|gave|mailed|transferred)|(i|we) (already |just )?(put|deposited|loaded|fed) (the |my |some |all the )?(cash|money|bills|savings))\b/i;
 
 const PAYMENT_CUES: [PaymentMethod, RegExp][] = [
+  ["money_order", /\bmoney orders?\b/i],
   [
     "gift_card",
     /\b(gift ?cards?|card numbers?|numbers? (off|on) the back|(bought|buy|got) (the |some )?cards|read (him|her|them) the numbers|(itunes|google play|apple|steam|target|ebay|amazon) cards?)\b/i,

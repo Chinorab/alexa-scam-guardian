@@ -16,7 +16,7 @@ Last audit: 2026-10-02.
 | Number | Where | Source |
 |---|---|---|
 | DOJ National Elder Fraud Hotline 833 372 8311, weekdays 10 a.m. to 6 p.m. Eastern | Dataset `resources`, Echo report card | DOJ Office for Victims of Crime page cited in the dataset |
-| U.S. Postal Inspection Service 877 876 2455 | Dataset `ifPaid.cash_mail` | FTC page cited in the dataset |
+| U.S. Postal Inspection Service 877 876 2455 | Dataset `ifPaid.cash_mail` and `ifPaid.money_order` | FTC pages cited in the dataset (What To Do if You Were Scammed; How To Spot, Avoid, and Report Fake Check Scams) |
 | 911 | Product, home page | Emergency number |
 
 ## Removed or never used
