@@ -1,0 +1,478 @@
+/* Base styles shared by every server rendered page. Tokens: tokens.css. */
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading-text);
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-sign);
+  font-weight: 750;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--text-3xl);
+}
+h2 {
+  font-size: var(--text-xl);
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-3);
+}
+h3 {
+  font-size: var(--text-lg);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 var(--space-4);
+  max-width: var(--measure);
+}
+
+li + li {
+  margin-top: var(--space-2);
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -10rem;
+  padding: var(--space-3) var(--space-4);
+  background: var(--sign-warning);
+  color: var(--sign-warning-ink);
+  font-weight: 700;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+}
+
+.page {
+  width: min(100% - 2rem, 60rem);
+  margin-inline: auto;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header .page {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-4);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: var(--text-lg);
+  letter-spacing: 0.02em;
+}
+
+.brand img {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav li + li {
+  margin-top: 0;
+}
+
+.site-nav a {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--link);
+}
+
+main {
+  padding-block: var(--space-7) var(--space-9);
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding-block: var(--space-6);
+  color: var(--ink-muted);
+}
+
+.site-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer li + li {
+  margin-top: 0;
+}
+
+.lead {
+  font-size: var(--text-lg);
+  color: var(--ink-muted);
+  margin-top: var(--space-4);
+}
+
+/* Controls: rectangular, 56px tall, green primary like a guide sign */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-5);
+  border: 2px solid transparent;
+  border-radius: var(--radius-control);
+  background: var(--action);
+  color: var(--action-ink);
+  font: 700 var(--text-base) / 1 var(--font-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  filter: brightness(1.08);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--control-border);
+}
+
+.button[disabled],
+.button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.icon {
+  width: 1.5em;
+  height: 1.5em;
+  flex: none;
+}
+
+/* Road sign markers */
+.sign-diamond {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  flex: none;
+}
+
+.sign-diamond::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 70%;
+  height: 70%;
+  transform: rotate(45deg);
+  border-radius: 3px;
+  background: var(--sign-warning);
+  box-shadow:
+    inset 0 0 0 2px var(--sign-warning),
+    inset 0 0 0 3px var(--sign-warning-ink);
+}
+
+.callout {
+  padding: var(--space-5);
+  border-radius: var(--radius-sign);
+  background: var(--ground-raised);
+}
+
+.button-warning {
+  background: var(--sign-warning);
+  color: var(--sign-warning-ink);
+}
+
+.reply-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.reply-actions form {
+  flex: 1 1 14rem;
+}
+
+.reply-actions .button {
+  width: 100%;
+  min-height: 4.5rem;
+  font-size: var(--text-lg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.page-wide {
+  width: min(100% - 2rem, 92rem);
+}
+
+.theme-asphalt {
+  background: var(--ground);
+  color: var(--ink);
+}
+
+/* Forms (family page) */
+.form {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 40rem;
+  margin-block: var(--space-4) var(--space-6);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.field > label,
+.field > legend {
+  font-weight: 700;
+  padding: 0;
+}
+
+.field-hint {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.field-message {
+  margin: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.field-error .field-message::before {
+  content: "";
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.45em;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: var(--sign-warning);
+  box-shadow: inset 0 0 0 2px var(--sign-warning-ink);
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="tel"],
+.form input[type="password"],
+.form select {
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  font: inherit;
+  color: var(--ink);
+  background: var(--ground);
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius-control);
+  width: 100%;
+}
+
+.field-error input,
+.field-error select {
+  border-width: 4px;
+  border-color: var(--ink);
+}
+
+.choice {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  font-weight: 400;
+  min-height: 2.75rem;
+}
+
+.choice input {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.15rem;
+  flex: none;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.error-summary {
+  padding: var(--space-4) var(--space-5);
+  border: 4px solid var(--sign-warning);
+  border-radius: var(--radius-sign);
+}
+
+.error-summary h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.error-summary ul {
+  margin: 0;
+}
+
+.notice {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--sign-guide);
+  color: var(--sign-legend);
+  font-weight: 700;
+  max-width: 40rem;
+}
+
+.button-danger {
+  background: var(--sign-stop);
+  color: var(--sign-legend);
+}
+
+/* People list */
+.people {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  max-width: none;
+}
+
+.person {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--rule);
+  border-radius: var(--radius-sign);
+  margin: 0;
+}
+
+.person h3 {
+  margin: 0;
+}
+
+.person-meta {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--ink-muted);
+}
+
+.person-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tags li + li {
+  margin-top: 0;
+}
+
+.tag {
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+  border: 2px solid var(--sign-guide);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.sign-out {
+  margin-top: var(--space-8);
+}
+
+.remove-person {
+  margin-top: var(--space-6);
+}
+
+.activity {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-5);
+  max-width: none;
+}
+
+.activity-item {
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--rule);
+  border-radius: var(--radius-sign);
+}
+
+.activity-item h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+}

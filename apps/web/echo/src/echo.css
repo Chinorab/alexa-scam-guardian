@@ -1,0 +1,296 @@
+/* Simulated Echo Show: road sign world on asphalt (docs/design/direction.md). */
+
+.echo-intro {
+  color: var(--ink-muted);
+  max-width: 70ch;
+  margin-bottom: var(--space-5);
+}
+
+.echo-intro q {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.echo-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 68rem) {
+  .echo-stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.echo-column {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Device: dark bezel around a 16:10 screen */
+.echo-device {
+  position: relative;
+  margin: 0;
+  padding: 18px 18px 30px;
+  border-radius: 26px;
+  background: #0d0f11;
+  box-shadow:
+    0 30px 60px rgb(0 0 0 / 0.45),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.echo-screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  background: var(--ground);
+  padding: clamp(1rem, 2.4vw, 2rem) clamp(1rem, 2.6vw, 2.25rem);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  scrollbar-width: thin;
+}
+
+@media (max-width: 40rem) {
+  .echo-device {
+    padding: 10px 10px 24px;
+    border-radius: 20px;
+  }
+  .echo-screen {
+    aspect-ratio: auto;
+    min-height: 26rem;
+  }
+}
+
+.echo-heard {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--text-base);
+  max-width: none;
+}
+
+.echo-caption {
+  margin: 0;
+  font-family: var(--font-sign);
+  font-weight: 650;
+  font-size: clamp(1.6rem, 2.7vw, 2.7rem);
+  line-height: 1.18;
+  letter-spacing: -0.005em;
+  max-width: 32ch;
+  text-wrap: pretty;
+}
+
+.echo-cards {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.mcp-app-frame {
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-sign);
+  background: var(--ground);
+  display: block;
+}
+
+/* Light bar along the bottom edge of the screen */
+.light-bar {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 11px;
+  height: 7px;
+  border-radius: 4px;
+  background: #2a2f33;
+  transition: background-color 240ms var(--ease-out);
+}
+
+.light-bar[data-state="listening"] {
+  background: var(--ring-listening, #3fc1e8);
+  box-shadow: 0 0 18px rgb(63 193 232 / 0.55);
+}
+
+.light-bar[data-state="thinking"] {
+  background: repeating-linear-gradient(90deg, #1b6f88 0 20%, #3fc1e8 20% 40%);
+  background-size: 200% 100%;
+  animation: light-travel 900ms linear infinite;
+}
+
+.light-bar[data-state="speaking"] {
+  background: #3fc1e8;
+  animation: light-pulse 1100ms var(--ease-out) infinite;
+}
+
+.light-bar[data-state="notification"] {
+  background: var(--sign-warning);
+  box-shadow: 0 0 18px rgb(255 205 28 / 0.5);
+  animation: light-pulse 1600ms var(--ease-out) infinite;
+}
+
+@keyframes light-travel {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes light-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-bar {
+    animation: none !important;
+  }
+}
+
+/* Controls under the device */
+.echo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.echo-talk {
+  min-width: 10rem;
+}
+
+.echo-talk[aria-pressed="true"] {
+  background: var(--sign-services);
+}
+
+.echo-hint {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.echo-type {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.echo-type label {
+  font-weight: 700;
+}
+
+.echo-type-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 30rem) {
+  .echo-type-row .button {
+    width: 100%;
+  }
+}
+
+.echo-type input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  font: inherit;
+  color: var(--ink);
+  background: var(--ground-raised);
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius-control);
+}
+
+.echo-type input::placeholder {
+  color: var(--ink-muted);
+}
+
+.echo-problem {
+  margin: 0;
+  font-weight: 700;
+  color: var(--sign-warning);
+}
+
+/* Demo phone */
+.demo-phone {
+  border-radius: 34px;
+  padding: 14px;
+  background: #0d0f11;
+  box-shadow:
+    0 24px 48px rgb(0 0 0 / 0.4),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.demo-phone-header {
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.demo-phone-header h2 {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.demo-phone-header p {
+  margin: var(--space-1) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.demo-phone-screen {
+  border-radius: 22px;
+  background: #f4f5f2;
+  color: #15191c;
+  min-height: 30rem;
+  max-height: 44rem;
+  overflow: auto;
+  /* A message shrinking after an answer must not scroll the newest one out of view. */
+  overflow-anchor: none;
+  padding: var(--space-3);
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.demo-phone-empty {
+  color: #4a5257;
+  margin: var(--space-5) auto;
+  text-align: center;
+}
+
+.phone-message {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 2px 8px rgb(21 25 28 / 0.12);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.phone-message p {
+  margin: 0 0 var(--space-2);
+}
+
+.phone-message-meta {
+  color: #4a5257;
+  font-weight: 700;
+}
+
+.phone-message-subject {
+  font-weight: 700;
+}
+
+.phone-message-actions {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.phone-message-actions .button {
+  width: 100%;
+}
+
+.phone-message-answered {
+  font-weight: 700;
+  color: #00703c;
+}

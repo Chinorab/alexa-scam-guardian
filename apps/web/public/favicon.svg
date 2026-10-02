@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Yellow warning diamond with an inset border and a phone legend (icon path: lucide phone, ISC). -->
+  <rect x="11" y="11" width="42" height="42" rx="6" transform="rotate(45 32 32)" fill="#FFCD1C" stroke="#111417" stroke-width="2"/>
+  <rect x="15" y="15" width="34" height="34" rx="4" transform="rotate(45 32 32)" fill="none" stroke="#111417" stroke-width="2.5"/>
+  <g transform="translate(20.5 20.5) scale(0.96)" fill="none" stroke="#111417" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>
+  </g>
+</svg>

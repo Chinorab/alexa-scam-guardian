@@ -1,0 +1,3 @@
+# Only the self contained bundle goes into the image.
+*
+!infra/build/container/

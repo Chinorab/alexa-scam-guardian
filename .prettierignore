@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+coverage/
+cdk.out/
+pnpm-lock.yaml
+.specify/
+specs/
+*.md

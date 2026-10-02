@@ -1,0 +1,25 @@
+# dependencies and builds
+node_modules/
+dist/
+build/
+coverage/
+cdk.out/
+*.tsbuildinfo
+*.log
+
+# secrets: only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# test output
+test-results/
+playwright-report/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

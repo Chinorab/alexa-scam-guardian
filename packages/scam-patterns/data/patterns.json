@@ -1,0 +1,561 @@
+{
+  "$schema": "../schema/pattern.schema.json",
+  "version": "1.0.0",
+  "sources": {
+    "ftc-family-emergency": {
+      "publisher": "FTC",
+      "title": "Family Emergency Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/all-scams/family-emergency-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-voice-cloning": {
+      "publisher": "FTC",
+      "title": "Scammers use AI to enhance their family emergency schemes",
+      "label": "FTC consumer alert, March 2023",
+      "url": "https://consumer.ftc.gov/consumer-alerts/2023/03/scammers-use-ai-enhance-their-family-emergency-schemes",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-door-grandparent": {
+      "publisher": "FTC",
+      "title": "Don't open your door to grandparent scams",
+      "label": "FTC consumer alert, April 2021",
+      "url": "https://consumer.ftc.gov/consumer-alerts/2021/04/dont-open-your-door-grandparent-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ic3-secret-word": {
+      "publisher": "IC3",
+      "title": "Criminals Use Generative Artificial Intelligence to Facilitate Financial Fraud (I-120324-PSA)",
+      "label": "FBI public service announcement, December 2024",
+      "url": "https://www.ic3.gov/PSA/2024/PSA241203",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-government-impersonation": {
+      "publisher": "FTC",
+      "title": "How To Avoid a Government Impersonation Scam",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/how-avoid-government-impersonation-scam",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-tech-support": {
+      "publisher": "FTC",
+      "title": "How To Spot, Avoid, and Report Tech Support Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/how-spot-avoid-and-report-tech-support-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-romance": {
+      "publisher": "FTC",
+      "title": "What To Know About Romance Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/what-know-about-romance-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-prize": {
+      "publisher": "FTC",
+      "title": "Fake Prize, Sweepstakes, and Lottery Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/fake-prize-sweepstakes-and-lottery-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-gift-cards": {
+      "publisher": "FTC",
+      "title": "Avoiding and Reporting Gift Card Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/avoiding-and-reporting-gift-card-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-crypto": {
+      "publisher": "FTC",
+      "title": "What To Know About Cryptocurrency and Scams",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/what-know-about-cryptocurrency-scams",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-how-you-pay": {
+      "publisher": "FTC",
+      "title": "A way to spot scams: how someone asks you to pay",
+      "label": "FTC consumer alert, July 2026",
+      "url": "https://consumer.ftc.gov/consumer-alerts/2026/07/way-spot-scams-how-someone-asks-you-pay",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-move-money": {
+      "publisher": "FTC",
+      "title": "Did someone tell you to move or transfer your money? It could be a scam",
+      "label": "FTC consumer alert, January 2024",
+      "url": "https://consumer.ftc.gov/consumer-alerts/2024/01/did-someone-tell-you-move-or-transfer-your-money-it-could-be-scam",
+      "retrievedOn": "2026-10-01"
+    },
+    "ic3-couriers": {
+      "publisher": "IC3",
+      "title": "Scammers Use Couriers to Retrieve Cash and Precious Metals from Victims of Tech Support and Government Impersonation Scams (I-012924-PSA)",
+      "label": "FBI public service announcement, January 2024",
+      "url": "https://www.ic3.gov/PSA/2024/PSA240129",
+      "retrievedOn": "2026-10-01"
+    },
+    "ftc-if-scammed": {
+      "publisher": "FTC",
+      "title": "What To Do if You Were Scammed",
+      "label": "FTC consumer advice",
+      "url": "https://consumer.ftc.gov/articles/what-do-if-you-were-scammed",
+      "retrievedOn": "2026-10-01"
+    },
+    "ic3-elder-fraud": {
+      "publisher": "IC3",
+      "title": "Elder Fraud",
+      "label": "FBI Internet Crime Complaint Center",
+      "url": "https://www.ic3.gov/CrimeInfo/ElderFraud",
+      "retrievedOn": "2026-10-01"
+    },
+    "doj-elder-hotline": {
+      "publisher": "DOJ",
+      "title": "National Elder Fraud Hotline",
+      "label": "US Department of Justice, Office for Victims of Crime",
+      "url": "https://ovc.ojp.gov/program/elder-fraud-abuse/national-elder-fraud-hotline",
+      "retrievedOn": "2026-10-01"
+    }
+  },
+  "warningSigns": [
+    {
+      "id": "urgency",
+      "label": "rush",
+      "explanation": "Scammers rush you so you have no time to check the story or talk to someone you trust.",
+      "cues": [
+        "\\burgent(ly)?\\b",
+        "\\bright (away|now)\\b",
+        "\\bimmediately\\b",
+        "\\bhurry\\b",
+        "\\bquick(ly)?\\b",
+        "\\btonight\\b",
+        "\\bbefore it'?s too late\\b",
+        "\\basap\\b",
+        "\\bwithin (the )?(hour|an hour|minutes)\\b",
+        "\\bno time\\b"
+      ],
+      "sourceRefs": ["ftc-gift-cards", "ftc-family-emergency"]
+    },
+    {
+      "id": "secrecy",
+      "label": "request to keep it secret",
+      "explanation": "Being told to keep it secret is a warning sign. Real family wants you to check.",
+      "cues": [
+        "\\b(don'?t|do not|not to|never) tell\\b",
+        "\\bkeep (it|this) (a )?secret\\b",
+        "\\bbetween (us|you and me)\\b",
+        "\\bpromise not to\\b",
+        "\\b(don'?t|do not) (let|tell) (mom|dad|my parents|his parents|her parents|anyone)\\b",
+        "\\blie to (the|your|my) bank\\b"
+      ],
+      "sourceRefs": ["ftc-family-emergency", "ftc-move-money"]
+    },
+    {
+      "id": "gift-cards",
+      "label": "gift cards",
+      "explanation": "Only scammers tell you to buy gift cards and give them the numbers on the back.",
+      "cues": [
+        "\\bgift ?cards?\\b",
+        "\\b(itunes|google play|apple|steam|target|ebay|amazon|walmart) cards?\\b",
+        "\\bnumbers? (off|on) the back\\b",
+        "\\bscratch (off )?the back\\b"
+      ],
+      "sourceRefs": ["ftc-gift-cards"]
+    },
+    {
+      "id": "wire-transfer",
+      "label": "wire transfer",
+      "explanation": "Scammers ask for wire transfers because the money is very hard to get back.",
+      "cues": ["\\bwire\\b", "\\bwired\\b", "\\bwestern union\\b", "\\bmoney ?gram\\b"],
+      "sourceRefs": ["ftc-how-you-pay", "ftc-family-emergency"]
+    },
+    {
+      "id": "crypto",
+      "label": "cryptocurrency",
+      "explanation": "No real business or government agency will demand payment in cryptocurrency.",
+      "cues": [
+        "\\bcrypto(currency)?\\b",
+        "\\bbitcoin\\b",
+        "\\bbtc\\b",
+        "\\bcoin (atm|machine|kiosk)\\b",
+        "\\bethereum\\b",
+        "\\btether\\b",
+        "\\busdt\\b"
+      ],
+      "sourceRefs": ["ftc-crypto"]
+    },
+    {
+      "id": "payment-app",
+      "label": "payment app",
+      "explanation": "Money sent through a payment app to a stranger is very hard to get back.",
+      "cues": ["\\bzelle\\b", "\\bvenmo\\b", "\\bcash ?app\\b", "\\bpaypal\\b"],
+      "sourceRefs": ["ftc-how-you-pay"]
+    },
+    {
+      "id": "cash-pickup",
+      "label": "cash pickup",
+      "explanation": "Real officials and real family never send a courier to collect cash or gold.",
+      "cues": [
+        "\\bcourier\\b",
+        "\\bpick (it|the money|the cash|them) up\\b",
+        "\\bpick up the (money|cash|package|box)\\b",
+        "\\bsend(ing)? (someone|a driver|a man|a guy|somebody)\\b",
+        "\\bcome (by|over|to (my|the|your) (house|door|home))\\b",
+        "\\bat (my|the) (door|front door)\\b",
+        "\\bgold bars?\\b",
+        "\\bprecious metals?\\b",
+        "\\bmail (the )?cash\\b",
+        "\\bcash in (a|the) (box|envelope|package)\\b",
+        "\\bovernight (the )?(cash|money)\\b"
+      ],
+      "sourceRefs": ["ic3-couriers", "ftc-door-grandparent"]
+    },
+    {
+      "id": "arrest-story",
+      "label": "emergency story",
+      "explanation": "Scammers often say a loved one is in jail or in an accident, so you panic and pay.",
+      "cues": [
+        "\\bjail\\b",
+        "\\barrest(ed)?\\b",
+        "\\bbail\\b",
+        "\\bbond\\b",
+        "\\blawyer\\b",
+        "\\battorney\\b",
+        "\\bpublic defender\\b",
+        "\\baccident\\b",
+        "\\bcrash(ed)?\\b",
+        "\\bhospital\\b",
+        "\\bpolice station\\b"
+      ],
+      "sourceRefs": ["ftc-family-emergency"]
+    },
+    {
+      "id": "family-voice",
+      "label": "family member asking for money",
+      "explanation": "Scammers can copy a loved one's voice, so a familiar voice is not proof.",
+      "cues": [
+        "\\bgrand(son|daughter|child|kid|baby)\\b",
+        "\\bmy (son|daughter|nephew|niece|cousin|brother|sister|grandkid)\\b",
+        "\\bit'?s me\\b",
+        "\\bsounded (just )?like (him|her|my)\\b",
+        "\\bgrandma\\b",
+        "\\bgrandpa\\b",
+        "\\bnana\\b"
+      ],
+      "sourceRefs": ["ftc-voice-cloning", "ic3-secret-word"]
+    },
+    {
+      "id": "government-caller",
+      "label": "caller claiming to be from the government",
+      "explanation": "Government agencies never call to ask for money or personal information.",
+      "cues": [
+        "\\birs\\b",
+        "\\bsocial security( administration)?\\b",
+        "\\bssa\\b",
+        "\\bmedicare\\b",
+        "\\bfbi\\b",
+        "\\bftc\\b",
+        "\\bgovernment\\b",
+        "\\bfederal (agent|officer)\\b",
+        "\\bmarshal\\b",
+        "\\bsheriff\\b",
+        "\\bjury duty\\b",
+        "\\bbenefits\\b"
+      ],
+      "sourceRefs": ["ftc-government-impersonation"]
+    },
+    {
+      "id": "threats",
+      "label": "threats",
+      "explanation": "Threats of arrest or losing benefits are meant to scare you into paying fast.",
+      "cues": [
+        "\\barrest you\\b",
+        "\\b(be|get) arrested\\b",
+        "\\bwarrant\\b",
+        "\\blose (your|my) (benefits|license|house|home)\\b",
+        "\\bsuspend(ed)?\\b",
+        "\\bdeport(ed)?\\b",
+        "\\bsue (you|me)\\b",
+        "\\blawsuit\\b",
+        "\\bor else\\b"
+      ],
+      "sourceRefs": ["ftc-government-impersonation"]
+    },
+    {
+      "id": "move-money",
+      "label": "request to move your money",
+      "explanation": "No bank or agency will ever tell you to move your money to protect it.",
+      "cues": [
+        "\\bmove (my|your|the|all) (money|savings)\\b",
+        "\\btransfer (my|your|the|all) (money|savings)\\b",
+        "\\bsafe account\\b",
+        "\\bprotect (my|your|the) (money|savings|account)\\b",
+        "\\bfraud (department|team|alert)\\b",
+        "\\bsuspicious activity\\b",
+        "\\b(account|accounts) (was |were |is |are |has been |have been )?(hacked|compromised|frozen)\\b",
+        "\\bverification code\\b",
+        "\\bwithdraw\\b"
+      ],
+      "sourceRefs": ["ftc-move-money"]
+    },
+    {
+      "id": "tech-support",
+      "label": "computer problem call",
+      "explanation": "Real tech companies do not call out of the blue about a virus or ask to get into your computer.",
+      "cues": [
+        "\\bvirus\\b",
+        "\\bmalware\\b",
+        "\\bmicrosoft\\b",
+        "\\bapple support\\b",
+        "\\bgeek squad\\b",
+        "\\bnorton\\b",
+        "\\bmcafee\\b",
+        "\\bpop ?up\\b",
+        "\\bremote (access|control)\\b",
+        "\\btech support\\b",
+        "\\b(anydesk|teamviewer)\\b",
+        "\\bcomputer (is|was) (infected|hacked|locked)\\b"
+      ],
+      "sourceRefs": ["ftc-tech-support"]
+    },
+    {
+      "id": "prize-fee",
+      "label": "fee to collect a prize",
+      "explanation": "Real prizes are free. Paying a fee or taxes to collect one is a scam.",
+      "cues": [
+        "\\b(i|you) (won|have won|'ve won)\\b",
+        "\\bwinner\\b",
+        "\\bprize\\b",
+        "\\blottery\\b",
+        "\\bsweepstakes\\b",
+        "\\bwinnings\\b",
+        "\\bprocessing fee\\b",
+        "\\bclaim (my|your|the) (prize|winnings)\\b"
+      ],
+      "sourceRefs": ["ftc-prize"]
+    },
+    {
+      "id": "online-sweetheart",
+      "label": "sweetheart you have not met",
+      "explanation": "Never send money to someone you have not met in person.",
+      "cues": [
+        "\\b(boyfriend|girlfriend|sweetheart|fianc[eé]e?)\\b",
+        "\\bmet (him|her|them)? ?online\\b",
+        "\\bdating (site|app)\\b",
+        "\\boil rig\\b",
+        "\\bdeployed\\b",
+        "\\bnever met\\b",
+        "\\bhaven'?t met\\b"
+      ],
+      "sourceRefs": ["ftc-romance"]
+    },
+    {
+      "id": "stay-on-line",
+      "label": "request to stay on the phone",
+      "explanation": "Scammers keep you on the line so you cannot check with anyone else.",
+      "cues": [
+        "\\bstay on the (line|phone)\\b",
+        "\\b(don'?t|do not) hang up\\b",
+        "\\bkeep (me|you|her|him) on the (line|phone)\\b",
+        "\\bstill on the (line|phone|other phone)\\b"
+      ],
+      "sourceRefs": ["ftc-move-money"]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "family-emergency",
+      "name": "Family emergency scam",
+      "description": "A caller pretends to be a grandchild or other relative in trouble, or someone speaking for them, and asks for money right away.",
+      "signIds": [
+        "family-voice",
+        "arrest-story",
+        "urgency",
+        "secrecy",
+        "gift-cards",
+        "wire-transfer",
+        "cash-pickup",
+        "crypto",
+        "payment-app"
+      ],
+      "advice": [
+        "Hang up and call your family member on a number you know is theirs.",
+        "If you cannot reach them, check with another family member.",
+        "Ask for your family's secret word if you have one."
+      ],
+      "sourceRefs": ["ftc-family-emergency", "ftc-voice-cloning", "ic3-secret-word"]
+    },
+    {
+      "id": "government-impersonation",
+      "name": "Government impersonation scam",
+      "description": "A caller claims to be from Social Security, the IRS, Medicare, the police or a court and demands money or personal information.",
+      "signIds": [
+        "government-caller",
+        "threats",
+        "urgency",
+        "gift-cards",
+        "wire-transfer",
+        "crypto",
+        "payment-app",
+        "cash-pickup"
+      ],
+      "advice": [
+        "Hang up. Call the agency yourself using a number you look up.",
+        "Do not trust caller ID. It can be faked."
+      ],
+      "sourceRefs": ["ftc-government-impersonation"]
+    },
+    {
+      "id": "bank-impersonation",
+      "name": "Fake bank or fraud department call",
+      "description": "A caller says your account is at risk and tells you to move your money, withdraw cash or share a code to protect it.",
+      "signIds": ["move-money", "stay-on-line", "secrecy", "urgency", "crypto", "cash-pickup"],
+      "advice": [
+        "Hang up and call the number on the back of your card or on your statement.",
+        "Never share a verification code with a caller."
+      ],
+      "sourceRefs": ["ftc-move-money"]
+    },
+    {
+      "id": "tech-support",
+      "name": "Tech support scam",
+      "description": "A pop up or caller says your computer has a virus and asks for remote access or payment to fix it.",
+      "signIds": ["tech-support", "urgency", "gift-cards", "wire-transfer", "crypto", "move-money"],
+      "advice": [
+        "Do not call numbers from pop ups and do not let a caller into your computer.",
+        "If you are unsure, talk to someone you trust."
+      ],
+      "sourceRefs": ["ftc-tech-support"]
+    },
+    {
+      "id": "cash-courier",
+      "name": "Cash or gold courier scam",
+      "description": "After a fake tech support or government call, someone is sent to your home or a public place to collect cash or gold.",
+      "signIds": ["cash-pickup", "government-caller", "tech-support", "move-money", "secrecy"],
+      "advice": [
+        "Do not hand cash or gold to anyone who comes to collect it.",
+        "Do not give your home address to a caller you do not know."
+      ],
+      "sourceRefs": ["ic3-couriers", "ftc-door-grandparent"]
+    },
+    {
+      "id": "romance",
+      "name": "Romance scam",
+      "description": "Someone you met online builds trust, then asks for money for an emergency, travel or fees.",
+      "signIds": [
+        "online-sweetheart",
+        "urgency",
+        "gift-cards",
+        "wire-transfer",
+        "crypto",
+        "payment-app"
+      ],
+      "advice": [
+        "Never send money or gifts to someone you have not met in person.",
+        "Talk it over with family or a friend you trust."
+      ],
+      "sourceRefs": ["ftc-romance"]
+    },
+    {
+      "id": "prize",
+      "name": "Prize, sweepstakes or lottery scam",
+      "description": "A caller says you won a prize, then asks you to pay fees or taxes first, or for your bank details.",
+      "signIds": ["prize-fee", "urgency", "gift-cards", "wire-transfer", "crypto", "payment-app"],
+      "advice": [
+        "Real prizes are free. Never pay to collect one.",
+        "Never give bank or card details to claim a prize."
+      ],
+      "sourceRefs": ["ftc-prize"]
+    },
+    {
+      "id": "crypto-payment",
+      "name": "Cryptocurrency payment demand",
+      "description": "A caller tells you to buy cryptocurrency or use a coin ATM to pay or to protect your money.",
+      "signIds": ["crypto", "move-money", "urgency", "government-caller"],
+      "advice": [
+        "Anyone who demands payment in cryptocurrency is a scammer.",
+        "Do not use a coin ATM because a caller told you to."
+      ],
+      "sourceRefs": ["ftc-crypto"]
+    }
+  ],
+  "ifPaid": {
+    "gift_card": {
+      "steps": [
+        "Call the company that sold the gift card right away.",
+        "Tell them it was a scam and ask for your money back.",
+        "Keep the card and the receipt."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "wire": {
+      "steps": [
+        "Call the wire transfer company right away, for example Western Union or MoneyGram.",
+        "Tell them it was a scam and ask them to reverse the transfer."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "money_transfer_app": {
+      "steps": [
+        "Report the payment in the app right away.",
+        "Ask the app company to reverse the payment."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "crypto": {
+      "steps": [
+        "Contact the exchange or the coin ATM company right away and ask them to reverse it.",
+        "Then report it at ReportFraud.ftc.gov."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "cash_mail": {
+      "steps": [
+        "Call the U.S. Postal Inspection Service right away at 877 876 2455 and ask them to stop the package.",
+        "If you used FedEx or UPS, call them right away."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "cash_courier": {
+      "steps": ["Do not hand over any more cash or gold.", "Report it to the FBI at ic3.gov."],
+      "sourceRefs": ["ic3-couriers", "ic3-elder-fraud"]
+    },
+    "bank_transfer": {
+      "steps": [
+        "Call your bank or credit union right away.",
+        "Tell them it was a scam and ask them to reverse the transfer."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    },
+    "other": {
+      "steps": [
+        "If you paid by card, call the number on the back of the card right away and ask for a refund.",
+        "Otherwise, call the company you used to pay right away and tell them it was a scam."
+      ],
+      "sourceRefs": ["ftc-if-scammed"]
+    }
+  },
+  "resources": [
+    {
+      "id": "report-fraud-ftc",
+      "name": "ReportFraud.ftc.gov",
+      "whenToUse": "Report any scam to the Federal Trade Commission, whether or not you paid.",
+      "url": "https://reportfraud.ftc.gov",
+      "sourceRefs": ["ftc-government-impersonation", "ftc-family-emergency"]
+    },
+    {
+      "id": "ic3",
+      "name": "ic3.gov",
+      "whenToUse": "File a complaint with the FBI. The FBI asks people 60 and over who were targeted by fraud to report here.",
+      "url": "https://www.ic3.gov",
+      "sourceRefs": ["ic3-elder-fraud"]
+    },
+    {
+      "id": "elder-fraud-hotline",
+      "name": "National Elder Fraud Hotline",
+      "whenToUse": "Free help from a case manager for people 60 and over, including help filing a report.",
+      "url": "https://ovc.ojp.gov/program/elder-fraud-abuse/national-elder-fraud-hotline",
+      "phone": "833 372 8311",
+      "hours": "Monday to Friday, 10 a.m. to 6 p.m. Eastern",
+      "sourceRefs": ["doj-elder-hotline", "ic3-elder-fraud"]
+    }
+  ]
+}

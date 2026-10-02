@@ -1,0 +1,25 @@
+name: Official sources
+
+# Every scam pattern cites an FTC, FBI or IC3 page; this checks weekly that each link still
+# answers, so a moved page is caught before a judge or a family member clicks it.
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Check source links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @asg/scam-patterns check-sources:online

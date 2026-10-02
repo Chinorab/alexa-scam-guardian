@@ -1,0 +1,128 @@
+/*
+ * Design tokens: US road sign vernacular (docs/design/direction.md).
+ * Yellow diamond = warning sign, green = next step, blue = help, red = 911 only.
+ * Contrast checked: every text pair is at least 6.2:1, control borders at least 4.7:1.
+ */
+
+@import "@fontsource-variable/overpass/wght.css";
+@import "@fontsource/atkinson-hyperlegible-next/400.css";
+@import "@fontsource/atkinson-hyperlegible-next/700.css";
+
+:root {
+  /* Sign colors (shared by every theme) */
+  --sign-warning: #ffcd1c;
+  --sign-warning-ink: #111417;
+  --sign-guide: #00703c;
+  --sign-services: #1f4fa3;
+  --sign-stop: #b3261e;
+  --sign-legend: #ffffff;
+
+  /* Daylight theme: family page default */
+  --ground: #ffffff;
+  --ground-raised: #f1f3f4;
+  --ink: #15191c;
+  --ink-muted: #4a5257;
+  --rule: #c7cdd1;
+  --control-border: #6b747a;
+  --action: var(--sign-guide);
+  --action-ink: var(--sign-legend);
+  --link: var(--sign-services);
+  --focus: var(--sign-services);
+  --selection: var(--sign-warning);
+  --selection-ink: var(--sign-warning-ink);
+
+  /* Type */
+  --font-sign: "Overpass Variable", "Overpass", system-ui, sans-serif;
+  --font-text: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --text-base: 1.25rem; /* 20px floor for body copy */
+  --text-sm: 1.125rem; /* 18px, only for secondary lines */
+  --text-lg: 1.5625rem;
+  --text-xl: 1.953rem;
+  --text-2xl: 2.441rem;
+  --text-3xl: 3.052rem;
+  --leading-text: 1.55;
+  --leading-tight: 1.15;
+  --measure: 66ch;
+
+  /* Space (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Shape: sign corners with an inset border, rectangular controls */
+  --radius-sign: 10px;
+  --radius-control: 8px;
+  --sign-border-inset: 3px;
+  --control-height: 3.5rem; /* 56px touch target */
+  --focus-ring: 0 0 0 3px var(--ground), 0 0 0 6px var(--focus);
+
+  /* Depth */
+  --shadow-sign: 0 6px 18px rgb(0 0 0 / 0.28);
+  --shadow-raised: 0 2px 8px rgb(21 25 28 / 0.12);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-sign: 420ms;
+
+  color-scheme: light;
+}
+
+/* Asphalt theme: the Echo Show always, the family page when the system asks for dark. */
+.theme-asphalt,
+:root[data-theme="dark"] {
+  --ground: #1f2326;
+  --ground-raised: #2a2f33;
+  --ink: #f4f5f2;
+  --ink-muted: #c3c9cd;
+  --rule: #3c4349;
+  --control-border: #8b949a;
+  --link: #7fb0ff;
+  --focus: #7fb0ff;
+  --ring-listening: #3fc1e8;
+  --ring-thinking: #3fc1e8;
+  --ring-notification: var(--sign-warning);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #1f2326;
+    --ground-raised: #2a2f33;
+    --ink: #f4f5f2;
+    --ink-muted: #c3c9cd;
+    --rule: #3c4349;
+    --control-border: #8b949a;
+    --link: #7fb0ff;
+    --focus: #7fb0ff;
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-sign: 0ms;
+  }
+}
+
+/* Browser surfaces carry the design too */
+::selection {
+  background: var(--selection);
+  color: var(--selection-ink);
+}
+
+html {
+  scrollbar-color: var(--control-border) var(--ground);
+  accent-color: var(--action);
+  caret-color: var(--action);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

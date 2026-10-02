@@ -1,0 +1,263 @@
+/* Echo Show card styles, road sign vernacular (docs/design/direction.md). Self contained. */
+:root {
+  --asphalt: #1f2326;
+  --ink: #f4f5f2;
+  --ink-muted: #c3c9cd;
+  --guide: #00703c;
+  --stop: #b3261e;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--asphalt);
+  color: var(--ink);
+  font-family: "Overpass", system-ui, sans-serif;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+#view {
+  padding: 20px 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 14px;
+}
+
+.signs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.sign {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 16px;
+  align-items: start;
+  animation: raise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sign:nth-child(2) {
+  animation-delay: 120ms;
+}
+.sign:nth-child(3) {
+  animation-delay: 240ms;
+}
+.sign:nth-child(4) {
+  animation-delay: 360ms;
+}
+
+.diamond {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.35));
+}
+
+.sign h2 {
+  font-size: 34px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin: 4px 0 6px;
+}
+
+.sign p {
+  margin: 0;
+  color: var(--ink);
+}
+
+.sign .source {
+  margin-top: 6px;
+  font-size: 18px;
+  color: var(--ink-muted);
+}
+
+.sign-panel {
+  border-radius: 10px;
+  padding: 22px 26px;
+  box-shadow:
+    inset 0 0 0 4px currentColor,
+    inset 0 0 0 7px transparent,
+    0 6px 18px rgb(0 0 0 / 0.3);
+  color: #ffffff;
+}
+
+.sign-panel.guide {
+  background: var(--guide);
+}
+
+.sign-panel.stop {
+  background: var(--stop);
+}
+
+.sign-panel h1 {
+  font-size: 36px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.sign-panel p {
+  margin: 0;
+  font-size: 24px;
+}
+
+@keyframes raise {
+  from {
+    transform: translateY(18px) rotateX(35deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign,
+  .status-row {
+    animation: none;
+  }
+}
+
+.status {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.status-row {
+  border-radius: 10px;
+  padding: 16px 20px;
+  animation: raise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.status-row h2 {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 6px;
+}
+
+.status-row p {
+  margin: 0;
+}
+
+.status-row.guide {
+  background: var(--guide);
+  color: #ffffff;
+}
+
+.status-row.warning {
+  background: #ffcd1c;
+  color: #111417;
+}
+
+.status-row.neutral {
+  background: #2a2f33;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px #3c4349;
+}
+
+@media (max-width: 30rem) {
+  #view {
+    padding: 14px 12px;
+  }
+  .sign {
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+  }
+  .diamond {
+    width: 52px;
+    height: 52px;
+  }
+  .sign h2 {
+    font-size: 26px;
+  }
+  .status-row h2 {
+    font-size: 24px;
+  }
+}
+
+.facts {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 22px;
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) 1fr;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3c4349;
+}
+
+.facts dt {
+  color: var(--ink-muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.places {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.place {
+  background: #1f4fa3;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow:
+    inset 0 0 0 3px #1f4fa3,
+    inset 0 0 0 5px #ffffff;
+}
+
+.place h3 {
+  margin: 0 0 4px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.place p {
+  margin: 0;
+}
+
+.place-phone {
+  margin-top: 6px !important;
+  font-weight: 700;
+}
+
+.note {
+  margin: 18px 0 0;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 30rem) {
+  .facts div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .place h3 {
+    font-size: 22px;
+  }
+}

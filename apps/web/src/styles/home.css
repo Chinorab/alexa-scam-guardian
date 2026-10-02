@@ -1,0 +1,481 @@
+/* Home page (T101): a sign assembly, the kitchen dialogue on asphalt, regulatory sign rules. */
+
+.main-bare {
+  padding-block: 0;
+}
+
+.section {
+  padding-block: var(--space-8) 0;
+}
+
+.section > h2:first-child {
+  margin-top: 0;
+}
+
+/* Hero */
+.hero {
+  padding-block: var(--space-7);
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  gap: var(--space-7);
+  align-items: center;
+}
+
+@media (min-width: 52rem) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
+  letter-spacing: -0.02em;
+  max-width: 14ch;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-sign);
+  font-weight: 750;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block: var(--space-6) var(--space-4);
+}
+
+.button-large {
+  min-height: 4rem;
+  padding-inline: var(--space-6);
+  font-size: var(--text-lg);
+}
+
+.button .icon {
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+}
+
+.hero-note {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* The sign assembly. Sizes are in em so one font size scales the whole post. */
+.signpost {
+  --pole: #8a9298;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1.1em;
+  font-size: clamp(0.8rem, 0.45rem + 1.25vw, 1.4rem);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.05;
+  text-align: center;
+  padding-bottom: 3em;
+}
+
+.signpost-pole {
+  position: absolute;
+  z-index: 0;
+  top: 6em;
+  bottom: 0;
+  left: 50%;
+  width: 1em;
+  translate: -50% 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #6f777c, var(--pole) 40%, #b9c0c4 55%, var(--pole) 70%);
+}
+
+.signpost > :not(.signpost-pole) {
+  position: relative;
+  z-index: 1;
+  animation: sign-raise var(--duration-sign) var(--ease-out) both;
+}
+
+.signpost > :nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.signpost > :nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signpost > * {
+    animation: none;
+  }
+}
+
+@keyframes sign-raise {
+  from {
+    opacity: 0;
+    translate: 0 0.75em;
+  }
+}
+
+.signpost-diamond {
+  display: grid;
+  place-items: center;
+  width: 14em;
+  aspect-ratio: 1;
+  color: var(--sign-warning-ink);
+  font-size: 1em;
+}
+
+.signpost-diamond::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 70.7%;
+  aspect-ratio: 1;
+  rotate: 45deg;
+  border-radius: 0.7em;
+  background: var(--sign-warning);
+  box-shadow:
+    inset 0 0 0 0.35em var(--sign-warning),
+    inset 0 0 0 0.6em var(--sign-warning-ink),
+    var(--shadow-sign);
+}
+
+.signpost-diamond span {
+  /* The rotated square paints like a positioned box; the legend must sit above it. */
+  position: relative;
+  grid-area: 1 / 1;
+  font-size: 1.55em;
+  letter-spacing: 0.02em;
+}
+
+.signpost-guide,
+.signpost-services,
+.services-sign,
+.guide-link {
+  display: grid;
+  justify-items: center;
+  gap: 0.3em;
+  border-radius: var(--radius-sign);
+  color: var(--sign-legend);
+  text-decoration: none;
+  box-shadow:
+    inset 0 0 0 0.3em var(--sign-bg),
+    inset 0 0 0 0.5em var(--sign-legend),
+    var(--shadow-sign);
+}
+
+.signpost-guide {
+  --sign-bg: var(--sign-guide);
+  background: var(--sign-guide);
+  padding: 1em 1.6em 1.1em;
+  min-width: 15em;
+}
+
+.signpost-services {
+  --sign-bg: var(--sign-services);
+  background: var(--sign-services);
+  padding: 0.8em 1.4em 0.9em;
+  font-size: 1.1em;
+}
+
+.signpost-small {
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.signpost-pair {
+  display: flex;
+  gap: 0.9em;
+}
+
+.signpost-big {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 2.1em;
+  letter-spacing: 0.01em;
+}
+
+.signpost-arrow {
+  width: 0.9em;
+  height: 0.9em;
+  fill: currentColor;
+  flex: none;
+}
+
+/* The dialogue band, always asphalt like the Echo screen */
+.band {
+  margin-top: var(--space-8);
+  padding-block: var(--space-8);
+}
+
+.band h2 {
+  margin-top: 0;
+  color: var(--ink);
+}
+
+.dialogue {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-6) 0 0;
+  max-width: 48rem;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.dialogue li + li {
+  margin-top: 0;
+}
+
+.line {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-sign);
+}
+
+.line p {
+  margin: 0;
+}
+
+.line-who {
+  font-family: var(--font-sign);
+  font-weight: 750;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.line-ruth {
+  justify-self: start;
+  max-width: 36rem;
+  background: var(--ground-raised);
+}
+
+.line-alexa {
+  justify-self: end;
+  max-width: 40rem;
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  border-left: 0.4rem solid var(--ring-listening);
+  background: #263038;
+}
+
+.line-michael {
+  justify-self: center;
+  border: 2px dashed var(--rule);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* Rules as white regulatory signs */
+.promises {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-6) 0 0;
+  max-width: none;
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
+.promises li + li {
+  margin-top: 0;
+}
+
+.promise {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.regulatory {
+  display: grid;
+  margin: 0;
+  padding: var(--space-4) var(--space-4);
+  border-radius: var(--radius-sign);
+  background: #ffffff;
+  color: #111417;
+  box-shadow:
+    inset 0 0 0 4px #ffffff,
+    inset 0 0 0 7px #111417,
+    var(--shadow-raised);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.regulatory span:first-child {
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+}
+
+.regulatory span:last-child {
+  font-size: var(--text-lg);
+}
+
+.promise-detail {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.stop-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  font-weight: 700;
+}
+
+.stop-mark {
+  width: 2.25rem;
+  aspect-ratio: 1;
+  flex: none;
+  background: var(--sign-stop);
+  clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
+}
+
+/* Family setup steps, numbered like route markers */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-6) 0 var(--space-6);
+  display: grid;
+  gap: var(--space-5);
+  max-width: none;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  align-items: start;
+  margin-top: 0;
+}
+
+.steps h3 {
+  margin-top: 0.2rem;
+}
+
+.steps p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.step-mark {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-control);
+  background: var(--sign-guide);
+  color: var(--sign-legend);
+  box-shadow:
+    inset 0 0 0 3px var(--sign-guide),
+    inset 0 0 0 5px var(--sign-legend);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: var(--text-lg);
+}
+
+/* Sources */
+.patterns {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-6) 0 0;
+  max-width: none;
+  border-top: 1px solid var(--rule);
+}
+
+.patterns li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-3);
+  align-items: center;
+  margin: 0;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.pattern-name {
+  font-weight: 700;
+}
+
+.pattern-sources {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 48rem) {
+  .patterns li {
+    grid-template-columns: auto minmax(14rem, 1fr) minmax(0, 1.4fr);
+  }
+  .pattern-sources {
+    grid-column: 3;
+    justify-content: end;
+    text-align: end;
+  }
+}
+
+.report-signs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.services-sign {
+  --sign-bg: var(--sign-services);
+  background: var(--sign-services);
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: var(--text-lg);
+}
+
+.services-sign:hover,
+.guide-link:hover {
+  filter: brightness(1.1);
+}
+
+/* Closing: the whole call to action is a guide sign */
+.closing {
+  display: grid;
+  justify-items: center;
+  padding-bottom: var(--space-9);
+}
+
+.guide-link {
+  --sign-bg: var(--sign-guide);
+  background: var(--sign-guide);
+  padding: var(--space-5) var(--space-7) var(--space-6);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.guide-link-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
+}
