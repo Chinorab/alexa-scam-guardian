@@ -27,7 +27,8 @@
     "export:dataset": "tsx scripts/export-dataset.ts",
     "start": "pnpm --filter @asg/web start",
     "dev:mcp": "pnpm --filter @asg/mcp-server dev",
-    "token:cloud": "pnpm --filter @asg/web token:cloud"
+    "token:cloud": "pnpm --filter @asg/web token:cloud",
+    "smoke": "tsx scripts/smoke.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

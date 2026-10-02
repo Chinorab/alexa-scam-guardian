@@ -58,8 +58,12 @@ Other settings, all optional, passed the same way with `-c`:
 ## Check it
 
 ```bash
+pnpm smoke https://YOUR-WEB-URL.lambda-url.us-east-1.on.aws https://YOUR-MCP-URL.lambda-url.us-east-1.on.aws/mcp
 pnpm measure https://YOUR-WEB-URL.lambda-url.us-east-1.on.aws 20
 ```
+
+`pnpm smoke` checks every page and its security headers, the static files, the main Echo
+scenario, and that the MCP server refuses calls without a token.
 
 The MCP server answers 401 without a household token and publishes its protected resource
 metadata at `/.well-known/oauth-protected-resource`. To call it from MCP Inspector, mint a demo
