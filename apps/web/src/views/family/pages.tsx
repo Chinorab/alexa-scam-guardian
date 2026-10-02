@@ -567,7 +567,10 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
       </p>
       <h1>Recent checks</h1>
       <DemoNotice household={props.household} />
-      <p class="lead">Kept for 30 days. Long numbers were removed before anything was saved.</p>
+      <p class="lead">
+        Kept for 30 days. Card, bank and Social Security numbers were removed before anything was
+        saved.
+      </p>
       {props.items.length === 0 ? (
         <p>No checks yet.</p>
       ) : (
