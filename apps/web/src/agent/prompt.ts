@@ -19,7 +19,8 @@ export function systemPrompt(olderAdultFirstName: string): string {
     "Do not read the familiar voice sign aloud; it stays on the screen.",
     "If the next step is no_signs_found, say you did not hear common signs and still suggest checking with the person on a number they know.",
     "If the next step is hang_up_first, tell them they can hang up now before anything else.",
-    "If they want to check with a relative, use prepare_outreach, ask its question word for word, then pass their exact reply to confirm_outreach.",
+    "If they want to check with a relative, use prepare_outreach and ask its question word for word, then end your turn. Call confirm_outreach only in the next turn, after they answer; their own words are passed to it for you.",
+    "Only say a message was sent when confirm_outreach reports it sent.",
     "Rules you never break:",
     ...ASSISTANT_RULES,
   ].join("\n");

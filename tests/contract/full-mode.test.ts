@@ -11,6 +11,7 @@ import type {
 import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
 import type { ConverseFn } from "../../apps/web/src/agent/bedrock-agent";
+import { claimsUnsentMessage } from "../../apps/web/src/agent/turn";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import { makeDeps, SESSION } from "./helpers";
 
@@ -185,5 +186,34 @@ describe("full mode with tool use", () => {
     await s.say(OPENING);
     await s.say("No, don't text him.");
     expect(await s.sent()).toEqual([]);
+  });
+});
+
+describe("what the model says about messages", () => {
+  it("never says a message went out when no tool sent one", async () => {
+    const { converse } = scripted([
+      () => tools(["assess_call", { description: OPENING }]),
+      () => text("Done. I texted Michael and he will call you."),
+    ]);
+    const s = setUp(converse);
+    await s.start();
+    const reply = await s.say(OPENING);
+    expect(reply.say).toBe("Let's not send any money for now.");
+    expect(await s.sent()).toEqual([]);
+  });
+
+  it("recognizes claims of sending, and only those", () => {
+    const sent = [
+      {
+        name: "confirm_outreach",
+        outcome: { isError: false, text: "", structured: { sent: ["m"] } },
+      },
+    ];
+    expect(claimsUnsentMessage("Done. I'll tell you when Michael answers.", [])).toBe(true);
+    expect(claimsUnsentMessage("I've let Sarah know.", [])).toBe(true);
+    expect(claimsUnsentMessage("I sent Michael a text.", [])).toBe(true);
+    expect(claimsUnsentMessage("Done. I'll tell you when Michael answers.", sent)).toBe(false);
+    expect(claimsUnsentMessage("Should I text Michael to check?", [])).toBe(false);
+    expect(claimsUnsentMessage("As I said, please don't send money.", [])).toBe(false);
   });
 });

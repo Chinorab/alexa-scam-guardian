@@ -103,6 +103,24 @@ function recordingSession(
   } satisfies McpSession;
 }
 
+/** A spoken claim that a message went out, for example "Done." or "I texted Michael." */
+const CLAIMS_SENT =
+  /^done\b|\bI(?:'ve| have)? (?:just )?(?:sent|texted|emailed|messaged|let \w+ know)\b/i;
+
+/** True when the model says it sent something that no tool sent during this turn. */
+export function claimsUnsentMessage(
+  say: string,
+  calls: { name: string; outcome: ToolCallOutcome }[],
+): boolean {
+  if (!CLAIMS_SENT.test(say.trim())) return false;
+  return !calls.some(
+    (call) =>
+      call.name === "confirm_outreach" &&
+      Array.isArray(call.outcome.structured?.sent) &&
+      call.outcome.structured.sent.length > 0,
+  );
+}
+
 /**
  * What the model may do with the outreach tools (constitution Principle IV). The model never
  * speaks for the person: confirm_outreach always receives the person's own words from this
@@ -200,7 +218,12 @@ export async function runTurn(
           converse: deps.converse,
           signal: controller.signal,
         });
-        if (agent.say) {
+        if (agent.say && claimsUnsentMessage(agent.say, calls)) {
+          // Never tell someone a family member was contacted when nobody was.
+          say = phrases.waitBeforePaying();
+          mode = "full";
+          fellBack = true;
+        } else if (agent.say) {
           say = agent.say;
           mode = "full";
           expectReply = /\?\s*$/.test(agent.say);
