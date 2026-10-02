@@ -1,7 +1,8 @@
 /**
  * check_family_password (FR-011): compares a phrase the caller said with the family password.
  * Answers only matches, does_not_match, not_set or locked. Never returns or hints at the
- * stored phrase. Three wrong attempts lock it for that check.
+ * stored phrase. Three wrong attempts lock it for that check, and at most ten checks of the
+ * password run per household per hour, so new checks cannot be opened to keep guessing.
  */
 import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
@@ -10,6 +11,7 @@ import type { Caller, Deps } from "../deps";
 import { toolError, toolResult } from "../server";
 
 export const MAX_PASSWORD_ATTEMPTS = 3;
+export const PASSWORD_CHECKS_PER_HOUR = 10;
 
 export function registerFamilyPassword(server: McpServer, deps: Deps, caller: Caller) {
   server.registerTool(
@@ -32,6 +34,10 @@ export function registerFamilyPassword(server: McpServer, deps: Deps, caller: Ca
       }
       const stored = await deps.store.getPassword(caller.householdId);
       if (!stored) return toolResult({ result: "not_set" }, "No family password is set.");
+      const hourly = await deps.store.incrementRate(`password#${caller.householdId}`, 3600);
+      if (hourly > PASSWORD_CHECKS_PER_HOUR) {
+        return toolResult({ result: "locked" }, "Password checks are locked for now.");
+      }
 
       if (await matchesFamilyPassword(phraseHeard, stored)) {
         return toolResult(

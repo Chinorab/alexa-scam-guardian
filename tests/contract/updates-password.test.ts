@@ -136,4 +136,24 @@ describe("check_family_password", () => {
     await check("three");
     expect((await check("blue river")).result).toBe("locked");
   });
+
+  it("cannot be guessed by opening new checks: ten checks per household per hour", async () => {
+    await withPassword("blue river");
+    const results: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const assessed = await opened!.session.call("assess_call", {
+        description: "My grandson called",
+      });
+      const checkId = (assessed.structured as Json).checkId as string;
+      for (let j = 0; j < 3; j++) {
+        const outcome = await opened!.session.call("check_family_password", {
+          checkId,
+          phraseHeard: `guess ${i} ${j}`,
+        });
+        results.push((outcome.structured as Json).result as string);
+      }
+    }
+    expect(results.filter((r) => r === "does_not_match")).toHaveLength(10);
+    expect(results.slice(10)).toEqual(["locked", "locked"]);
+  });
 });
