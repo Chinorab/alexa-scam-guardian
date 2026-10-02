@@ -24,7 +24,7 @@ export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller
     {
       title: "Get news from family",
       description:
-        "Returns replies from family members (it was me, it wasn't me), no answers after the wait time, failed messages, and who to try next. Call it when the older adult asks what's new or whether someone answered. A no answer is never a confirmation.",
+        "Returns replies from family members (it was me, it wasn't me; with aboutThemselves false, someone asked about another person says whether the story is true), no answers after the wait time, failed messages, and who to try next. Call it when the older adult asks what's new or whether someone answered. A no answer is never a confirmation.",
       inputSchema: z.object({ checkId: z.string().max(64).optional() }),
       annotations: { readOnlyHint: false, openWorldHint: false },
       _meta: { ui: { resourceUri: CHECK_STATUS_URI } },
