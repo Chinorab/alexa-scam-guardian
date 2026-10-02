@@ -25,8 +25,21 @@ export interface AssessCallResult {
   familyMatches: Member[];
   headsUpCandidate?: Member;
   alreadyPaid?: { method: PaymentMethod };
+  /** Who the caller said they were, for example "nephew" or "grandchild". */
+  claimedIdentity?: string;
   interrupt: boolean;
 }
+
+/** Claimed identities that are family: when none is saved, Alexa says it can't reach them. */
+const FAMILY_WORDS = new Set([
+  "grandson",
+  "granddaughter",
+  "grandchild",
+  "son",
+  "daughter",
+  "nephew",
+  "niece",
+]);
 
 export interface PrepareResult {
   pendingId: string;
@@ -291,7 +304,12 @@ async function describe(
     return { ...offered, cardsFrom: ["assess_call"] };
   }
   if (helper && result.nextStep === "offer_heads_up") {
-    const offered = await offer(base, tools, lead, undefined, helper);
+    // US2.3: the caller claimed a relative nobody saved; say why Alexa can't check with them.
+    const unsaved =
+      result.claimedIdentity && FAMILY_WORDS.has(result.claimedIdentity)
+        ? `${phrases.signs(labels)} ${phrases.onlySavedPeople(result.claimedIdentity)}`
+        : lead;
+    const offered = await offer(base, tools, unsaved, undefined, helper);
     return { ...offered, cardsFrom: ["assess_call"] };
   }
   return reply(`${lead} ${phrases.waitBeforePaying()}`);

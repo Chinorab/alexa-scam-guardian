@@ -224,6 +224,24 @@ export function EchoShow(props: { pollMs: number }) {
             <p class="echo-caption" data-testid="caption" aria-live="polite">
               {caption}
             </p>
+            {light === "notification" && (
+              // FR-009: a quiet card; what the family said is only spoken when asked.
+              <div class="echo-news" data-testid="news-card">
+                <p>
+                  <strong>News from your family.</strong> Say "What's new?" to hear it.
+                </p>
+                <button
+                  type="button"
+                  class="button echo-news-button"
+                  onClick={() => {
+                    lastInputWasVoice.current = false;
+                    void send(NEWS_PROMPT);
+                  }}
+                >
+                  Hear it
+                </button>
+              </div>
+            )}
             {device && cards.length > 0 && (
               <div class="echo-cards">
                 {cards.map((card) => (

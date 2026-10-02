@@ -33,6 +33,10 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
 export const phrases = {
   thanks: () => "I'm glad you asked me first.",
 
+  /** The caller claimed a relative the family has not saved (US2.3). */
+  onlySavedPeople: (relationship: string) =>
+    `I can only reach people your family saved, and no ${relationship} is saved.`,
+
   /** labels are dataset sign labels, for example "rush", "gift cards". */
   signs(labels: string[]): string {
     const named = labels.slice(0, 3).map((label) => `the ${label}`);

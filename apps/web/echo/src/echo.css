@@ -294,3 +294,29 @@
   font-weight: 700;
   color: #00703c;
 }
+
+/* Quiet news card (FR-009): a blue services sign, no content until asked */
+.echo-news {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-sign);
+  background: var(--sign-services);
+  color: var(--sign-legend);
+  box-shadow:
+    inset 0 0 0 4px var(--sign-services),
+    inset 0 0 0 6px var(--sign-legend);
+  font-size: var(--text-lg);
+}
+
+.echo-news p {
+  margin: 0;
+}
+
+.echo-news-button {
+  background: var(--sign-legend);
+  color: var(--sign-services);
+}

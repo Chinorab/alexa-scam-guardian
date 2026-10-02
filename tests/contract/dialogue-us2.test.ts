@@ -147,6 +147,19 @@ describe("user story 2: check with the real relative", () => {
     expect(await d.phone()).toEqual([]);
   });
 
+  it("US2.3: says it can only reach saved people when the caller claims an unsaved relative", async () => {
+    const d = demo();
+    await d.start();
+    const offer = await d.say(
+      "My nephew Tom called, he is in jail and needs bail money in gift cards.",
+    );
+    expect(offer.say).toBe(
+      "The emergency story and the gift cards are common signs of a scam. I can only reach people your family saved, and no nephew is saved. Should I tell Sarah you got this call, so she can help?",
+    );
+    await d.say("Yes");
+    expect((await d.phone()).map((m) => m.to)).toEqual(["Sarah"]);
+  });
+
   it("V10: refuses to call the caller back and offers Michael instead", async () => {
     const d = demo();
     await d.start();
