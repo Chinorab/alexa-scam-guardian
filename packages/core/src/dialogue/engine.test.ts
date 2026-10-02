@@ -200,3 +200,27 @@ describe("simplifiedTurn", () => {
     );
   });
 });
+
+describe("asking to hear it again", () => {
+  it.each([
+    "What?",
+    "Huh?",
+    "Can you say that again?",
+    "Could you repeat that",
+    "I didn't hear you",
+    "I didn't catch that",
+    "Sorry, what was that?",
+    "Say it slower please",
+    "Slower please",
+    "One more time",
+  ])("'%s' is a repeat", (text) => {
+    expect(classify(text)).toBe("repeat");
+  });
+
+  it.each(["What should I do?", "I didn't hear from Michael yet", "Sorry, my grandson called"])(
+    "'%s' is not a repeat",
+    (text) => {
+      expect(classify(text)).not.toBe("repeat");
+    },
+  );
+});

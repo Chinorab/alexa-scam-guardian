@@ -147,7 +147,8 @@ export type Intent =
 const INTENTS: [Intent, RegExp][] = [
   [
     "repeat",
-    /^(please )?(repeat|say (that|it) again|what did you say|pardon|come again|sorry what)\b/i,
+    // Short forms only as the whole reply ("What?"), so "What should I do?" is not a repeat.
+    /^(?:(?:what|huh|pardon(?: me)?|sorry|sorry what|come again|again|one more time|slower|louder|say it slower)(?: please)?[?.!]*$|(?:please |sorry,? |excuse me,? )?(?:repeat|say (?:that|it) (?:again|slower)|what did you say|what was that|(?:can|could|would) you (?:please )?(?:repeat|say (?:that|it) again|speak (?:up|slower|louder|more slowly))|i (?:didn'?t|did not|can'?t|couldn'?t) (?:hear|catch|understand)(?: (?:you|that|it|what you said))?[?.!]*$))/i,
   ],
   [
     "whats_new",
