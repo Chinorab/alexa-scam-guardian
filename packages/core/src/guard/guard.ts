@@ -66,8 +66,16 @@ const NEGATION_BEFORE =
 const CONTACT_CALLER =
   /\b(i'?ll|i will|let me|i can|i'?m going to)\s+(call|text|email|contact|ring|message)\s+(back\s+)?(the caller|that number|the number that called|this number|them back|him back|her back|whoever called)\b/i;
 
+/** Talking more with the caller is never advice: "ask them to call back", "ask him for proof". */
+const ENGAGE_CALLER =
+  /\b(ask|tell|have)\s+(them|him|her|the caller|the person)\s+(to\s+)?(call|text|email|send|give|prove|verify|confirm|put|for)\b/i;
+
 const ASKS_SENSITIVE =
   /\b(what('?s| is)|tell me|read me|give me|say|share|spell)\b[^.?!]{0,30}\b(card|account|routing|social security|ssn|pin|password for your bank|bank password)\b/i;
+
+/** Alexa never asks for a phone number or an address: the family saved the ones it uses. */
+const ASKS_CONTACT =
+  /\b(do you have|what('?s| is)|tell me|give me|share|can you (give|tell|read)( me)?)\b[^.?!]{0,40}\b(phone number|number|cell|email address|e-?mail|address)\b[^.!?]*\?/i;
 
 function hasApproval(line: string): boolean {
   if (APPROVAL_PATTERNS.some((pattern) => pattern.test(line))) return true;
@@ -126,8 +134,8 @@ export function findViolations(line: string, context: Omit<GuardContext, "fallba
   ) {
     violations.push("password");
   }
-  if (CONTACT_CALLER.test(line)) violations.push("contact-caller");
-  if (ASKS_SENSITIVE.test(line)) violations.push("asks-sensitive");
+  if (CONTACT_CALLER.test(line) || ENGAGE_CALLER.test(line)) violations.push("contact-caller");
+  if (ASKS_SENSITIVE.test(line) || ASKS_CONTACT.test(line)) violations.push("asks-sensitive");
   if (checkCopy(line).length > 0) violations.push("copy");
   if (sentences(line).length > 3) violations.push("length");
   if ((line.match(/\?/g) ?? []).length > 1) violations.push("questions");

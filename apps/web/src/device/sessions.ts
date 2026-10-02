@@ -12,6 +12,8 @@ export interface DeviceSession {
   /** Redacted conversation for the full mode, last 20 messages. */
   history: Message[];
   engine: EngineState;
+  /** The last line was the model's question: a bare yes or no answers the model. */
+  modelAsked?: boolean;
   expiresAt: number;
 }
 

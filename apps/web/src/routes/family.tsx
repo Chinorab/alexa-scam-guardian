@@ -6,7 +6,8 @@ import { Hono, type Context } from "hono";
 import { hashFamilyPassword } from "@asg/core/auth/family-password";
 import { stopToken } from "@asg/core/auth/link-tokens";
 import { newId } from "@asg/core/ids";
-import type { FamilyMember, Household } from "@asg/core/ports/index";
+import { claimedToBe } from "@asg/core/copy/identity";
+import type { FamilyMember, Household, Reply } from "@asg/core/ports/index";
 import { seedDemoHousehold } from "@asg/core/demo/seed";
 import { dataset } from "@asg/scam-patterns";
 import { deliver, PRODUCT_NAME, type Deps } from "@asg/mcp-server";
@@ -70,11 +71,17 @@ const NOTICES: Record<string, string> = {
   "test-failed": "That test message did not go through. Check the number or email.",
 };
 
-const REPLY_TEXT = {
-  none: "no answer yet",
-  it_was_me: "said it was them",
-  it_wasnt_me: "said it was not them",
-} as const;
+/** A relative asked about someone else answers whether the story is true. */
+const replyText = (reply: Reply, aboutThemselves: boolean) =>
+  reply === "none"
+    ? "no answer yet"
+    : aboutThemselves
+      ? reply === "it_was_me"
+        ? "said it was them"
+        : "said it was not them"
+      : reply === "it_was_me"
+        ? "said it is true"
+        : "said it is not true";
 
 export function familyRoutes(options: FamilyOptions) {
   const { deps } = options;
@@ -349,6 +356,10 @@ export function familyRoutes(options: FamilyOptions) {
     const nameOf = (id: string) => members.find((m) => m.memberId === id)?.name ?? "Someone";
     const items: ActivityItem[] = [];
     for (const check of checks.slice(0, 20)) {
+      const aboutThemselves = (memberId: string) => {
+        const member = members.find((m) => m.memberId === memberId);
+        return member ? claimedToBe(check.claimedIdentity, member.relationship) : false;
+      };
       const [requests, headsUps, report] = await Promise.all([
         deps.store.listVerifications(household.householdId, check.checkId),
         deps.store.listHeadsUps(household.householdId, check.checkId),
@@ -365,7 +376,10 @@ export function familyRoutes(options: FamilyOptions) {
           ...requests.map((r) => ({
             name: nameOf(r.memberId),
             kind: "Asked",
-            detail: r.delivery === "failed" ? "message did not go through" : REPLY_TEXT[r.reply],
+            detail:
+              r.delivery === "failed"
+                ? "message did not go through"
+                : replyText(r.reply, aboutThemselves(r.memberId)),
           })),
           ...headsUps.map((h) => ({
             name: nameOf(h.memberId),

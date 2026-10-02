@@ -34,6 +34,8 @@ export interface AgentTurnInput {
   converse: ConverseFn;
   signal: AbortSignal;
   maxToolRounds?: number;
+  /** Answer from the conversation only, with no tools (an open question belongs to the rules). */
+  talkOnly?: boolean;
 }
 
 export interface AgentTurnResult {
@@ -59,9 +61,27 @@ const textOf = (content: ContentBlock[] | undefined) =>
     .join(" ")
     .trim();
 
+/**
+ * The conversation as plain text, for a turn without tools: Bedrock refuses tool blocks when no
+ * tool is configured. Same speaker messages are joined; it starts with the user.
+ */
+export function textOnly(messages: Message[]): Message[] {
+  const out: Message[] = [];
+  for (const message of messages) {
+    const text = textOf(message.content);
+    if (!text || !message.role) continue;
+    const last = out.at(-1);
+    if (last?.role === message.role) last.content = [{ text: `${textOf(last.content)} ${text}` }];
+    else out.push({ role: message.role, content: [{ text }] });
+  }
+  while (out.length > 0 && out[0]?.role !== "user") out.shift();
+  return out;
+}
+
 export async function runAgentTurn(input: AgentTurnInput): Promise<AgentTurnResult> {
   const maxRounds = input.maxToolRounds ?? 3;
-  const tools = toolSpecs(input.session);
+  const tools = input.talkOnly ? [] : toolSpecs(input.session);
+  const history = input.talkOnly ? textOnly(input.history) : input.history;
   const newMessages: Message[] = [{ role: "user", content: [{ text: input.userText }] }];
   const toolCalls: AgentTurnResult["toolCalls"] = [];
 
@@ -69,7 +89,7 @@ export async function runAgentTurn(input: AgentTurnInput): Promise<AgentTurnResu
     const request: ConverseCommandInput = {
       modelId: input.modelId,
       system: [{ text: input.system }],
-      messages: [...input.history, ...newMessages],
+      messages: [...history, ...newMessages],
       inferenceConfig: { maxTokens: 300, temperature: 0.2 },
     };
     if (tools.length > 0) request.toolConfig = { tools };

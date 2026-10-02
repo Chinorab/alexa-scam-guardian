@@ -70,6 +70,8 @@ function allLines(): string[] {
       phrases.noAnswer(person, sarah),
       phrases.noAnswer(person),
       phrases.stillWaiting(person),
+      phrases.replyNotTrue(person),
+      phrases.replyTrue(person),
     );
   }
   for (const sign of dataset.warningSigns) {

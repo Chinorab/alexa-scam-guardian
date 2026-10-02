@@ -63,8 +63,10 @@ Latest news for a check, or unread news for the household ("What's new?").
 
 - **Input**: `checkId?`
 - **Output**: `updates[]` (`checkId`, `memberName`, `kind` = it_was_me, it_wasnt_me,
-  no_answer, delivery_failed, `at`), `waitingOn[]` (`memberName`, `minutesWaiting`),
-  `nextMemberToTry?`
+  no_answer, delivery_failed, `aboutThemselves` (false when they were asked about someone
+  else: the reply says whether the story is true), `at`), `waitingOn[]` (`memberName`,
+  `minutesWaiting`), `nextMemberToTry?` (a trusted contact who only got a heads up can still
+  be asked to check)
 - **Side effect**: marks returned device events as read
 - **UI**: `_meta.ui.resourceUri = ui://guardian/check-status`
 

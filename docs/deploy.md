@@ -36,8 +36,10 @@ E2E_BASE_URL=http://localhost:8892 pnpm test:e2e
    key in the environment of the terminal you deploy from (never in a committed file):
    `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_REGION=us-east-1`. With the AWS CLI
    installed, `aws configure sso` works too.
-2. In the Bedrock console (us-east-1), open Model access and enable Anthropic Claude Haiku 4.5.
-   The first Anthropic model needs the short use case form.
+2. Bedrock models are enabled on first use (AWS retired the Model access page). Anthropic
+   models may first need use case details, once per account: in the Bedrock console
+   (us-east-1), open Model catalog, then Claude Haiku 4.5, and follow the prompt if one shows.
+   `pnpm aws:check` sends one tiny request and says whether access works.
 3. Optional, for real email: verify a sender in Amazon SES (us-east-1). A domain identity is
    best. New accounts start in the SES sandbox, where only verified recipients receive email;
    request production access early, it usually takes one to two business days. Without a
@@ -59,16 +61,16 @@ pnpm --filter @asg/infra exec cdk bootstrap
 ## Deploy
 
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 With a verified SES sender:
 
 ```bash
-pnpm deploy -- -c "sesFrom=Scam Guardian <alerts@example.org>"
+pnpm run deploy -- -c "sesFrom=Scam Guardian <alerts@example.org>"
 ```
 
-`pnpm deploy` bundles both functions with esbuild (`infra/scripts/bundle.ts`), builds the Echo
+`pnpm run deploy` bundles both functions with esbuild (`infra/scripts/bundle.ts`), builds the Echo
 client, then runs `cdk deploy`. The outputs print `WebUrl` and `McpUrl`.
 
 Other settings, all optional, passed the same way with `-c`:

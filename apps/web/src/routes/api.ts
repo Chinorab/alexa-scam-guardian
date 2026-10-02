@@ -6,7 +6,7 @@ import { initialState } from "@asg/core/dialogue/engine";
 import { phrases } from "@asg/core/dialogue/phrases";
 import { startsSensitiveNumber } from "@asg/core/redact/redact";
 import { seedDemoHousehold } from "@asg/core/demo/seed";
-import { unreadCount, type Deps } from "@asg/mcp-server";
+import { describeReplyLink, unreadCount, type Deps } from "@asg/mcp-server";
 import type { DeviceSession, DeviceSessions } from "../device/sessions";
 import { openMcpSession } from "../agent/mcp-client";
 import { runTurn, type TurnDeps } from "../agent/turn";
@@ -183,18 +183,24 @@ export function apiRoutes(ctx: ApiContext) {
     const device = await ctx.sessions.get(c.req.param("deviceId"));
     if (!device) return c.json({ error: "unknown_device" }, 404);
     const members = await ctx.deps.store.listMembers(device.householdId);
-    const messages = (await ctx.deps.demoOutbox.list(device.householdId)).map((m) => {
-      const replyPath = m.body.match(/\/r\/[A-Za-z0-9_-]+/)?.[0];
-      return {
-        id: m.messageId,
-        kind: m.kind,
-        to: members.find((member) => member.memberId === m.memberId)?.name ?? "Family",
-        subject: m.subject,
-        body: m.body,
-        at: m.at,
-        ...(replyPath ? { replyPath } : {}),
-      };
-    });
+    const outbox = await ctx.deps.demoOutbox.list(device.householdId);
+    const messages = await Promise.all(
+      outbox.map(async (m) => {
+        const replyPath = m.body.match(/\/r\/[A-Za-z0-9_-]+/)?.[0];
+        // The answers follow the question: "Was it you?" or, about someone else, "Is it true?"
+        const link = replyPath ? await describeReplyLink(ctx.deps, replyPath.slice(3)) : undefined;
+        return {
+          id: m.messageId,
+          kind: m.kind,
+          to: members.find((member) => member.memberId === m.memberId)?.name ?? "Family",
+          subject: m.subject,
+          body: m.body,
+          at: m.at,
+          ...(replyPath ? { replyPath } : {}),
+          ...(link && "aboutThemselves" in link ? { aboutThemselves: link.aboutThemselves } : {}),
+        };
+      }),
+    );
     return c.json({ messages });
   });
 

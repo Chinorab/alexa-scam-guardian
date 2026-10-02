@@ -77,6 +77,10 @@ describe("POST /api/converse", () => {
   it("replaces an unsafe model answer with a safe line", async () => {
     const app = makeWeb({ mode: "full", converse: async () => textReply("It's safe to pay him.") });
     const deviceId = await start(app);
+    // The first description and the answer to its question go to the rules; new details
+    // after that go to the model.
+    await say(app, deviceId, "My grandson called, he needs gift cards for bail.");
+    await say(app, deviceId, "No");
     const reply = await say(app, deviceId, "He sounded just like my grandson");
     expect(reply.say).toBe("Let's not send any money for now.");
     expect(reply.mode).toBe("full");

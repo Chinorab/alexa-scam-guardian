@@ -74,7 +74,6 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       _meta: { ui: { resourceUri: WARNING_SIGNS_URI } },
     },
     async ({ description, checkId }) => {
-      const started = Date.now();
       const now = deps.clock.now();
       // Control and direction override characters never reach storage or the family page.
       const redacted = redact(description.replace(/[\p{Cc}\p{Cf}]+/gu, " "));
@@ -110,6 +109,9 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       result.callerOnLine = isCallerOnLine(redacted.text);
       const members = await deps.store.listMembers(caller.householdId);
       const relatives = matchRelatives(members, check.description, result.claimedRelationship);
+      // "Mike called": a saved name or nickname says who the caller claimed to be.
+      const named = !result.claimedIdentity && relatives.length === 1 ? relatives[0] : undefined;
+      if (named && named.relationship !== "other") result.claimedIdentity = named.relationship;
       const helper = headsUpCandidate(
         members,
         relatives.map((m) => m.memberId),
@@ -155,12 +157,6 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       if (helper) structured.headsUpCandidate = publicMember(helper);
       if (result.alreadyPaid) structured.alreadyPaid = result.alreadyPaid;
 
-      deps.logger.log({
-        event: "tool_call",
-        tool: "assess_call",
-        ok: true,
-        durationMs: Date.now() - started,
-      });
       const summary =
         result.signs.length === 0
           ? "No common warning signs found. Still recommend checking with the person directly before any payment."

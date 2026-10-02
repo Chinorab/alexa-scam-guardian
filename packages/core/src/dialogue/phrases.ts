@@ -23,6 +23,12 @@ export function pronouns(person: Person) {
 
 const verb = (channel: Channel) => (channel === "email" ? "email" : "text");
 
+/** "on the number your family saved", or the email address for someone reached by email. */
+const saved = (channel: Channel) =>
+  channel === "email"
+    ? "at the email address your family saved"
+    : "on the number your family saved";
+
 export function listWithAnd(items: string[]): string {
   if (items.length <= 1) return items.join("");
   return `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
@@ -57,7 +63,7 @@ export const phrases = {
     if (helpers.length > 0) {
       return `Should I ${verb(person.channel)} ${person.name} to check, and tell ${listWithAnd(helpers.map((h) => h.name))} you got this ${contact}?`;
     }
-    return `Should I ${verb(person.channel)} ${person.name} on the number your family saved?`;
+    return `Should I ${verb(person.channel)} ${person.name} ${saved(person.channel)}?`;
   },
 
   offerHeadsUp: (people: Person | Person[], contact: ContactWord = "call") => {
@@ -109,6 +115,15 @@ export const phrases = {
     return `${person.name} says it was ${p.object}. Before you send anything, please call ${p.object} on the number you know and talk with ${p.object}.`;
   },
 
+  /** Someone asked about another person ("Is it true?") says it is not. */
+  replyNotTrue: (person: Person) =>
+    `${person.name} says it's not true, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?`,
+
+  replyTrue(person: Person): string {
+    const p = pronouns(person);
+    return `${person.name} says it's true. Before you send anything, please call ${p.object} on the number you know and talk it over.`;
+  },
+
   noAnswer: (person: Person, next?: Person) =>
     next
       ? `${person.name} hasn't answered yet, and that doesn't mean something is wrong. Let's not send any money for now. Should I try ${next.name}?`
@@ -153,12 +168,12 @@ export const phrases = {
 
   callBackRefusal: (person?: Person) =>
     person
-      ? `I won't call that number, because scammers control it. I can ${verb(person.channel)} ${person.name} on the number your family saved. Should I?`
+      ? `I won't call that number, because scammers control it. I can ${verb(person.channel)} ${person.name} ${saved(person.channel)}. Should I?`
       : "I won't call that number, because scammers control it. Please call your family on a number you know.",
 
   canIPay: (person?: Person) =>
     person
-      ? `Let's not send any money yet. First, let's reach ${person.name} on a number your family saved.`
+      ? `Let's not send any money yet. First, let's reach ${person.name} ${saved(person.channel)}.`
       : "Let's not send any money yet. First, call your family on a number you know.",
 
   passwordMatches: (person?: Person) =>

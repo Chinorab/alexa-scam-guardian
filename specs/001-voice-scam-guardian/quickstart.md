@@ -70,7 +70,7 @@ listed, 3 `ui://` resources, `assess_call` returns warning signs with sources.
 ## Cloud deploy
 
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 Expected outputs: web URL, MCP URL. Rerun V1 to V4 on the web URL.

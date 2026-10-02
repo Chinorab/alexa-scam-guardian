@@ -105,3 +105,64 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium for a judge or contributor on Windows (the documented first command did nothing visible).
 - **Workaround:** pnpm's parallel regex scripts and Node's built in watch mode with the tsx loader.
 - **Suggestion:** pnpm could warn when a script uses `&` and the shell is cmd; tsx could document `node --watch --import tsx` as the portable form.
+
+---
+
+## #7 — Bedrock "Model access" page gone; the access key flow leaves the user with no permissions
+
+- **Date:** 2026-10-02
+- **Task attempted:** First AWS setup by the owner, following `docs/deploy.md` (T080 prerequisites).
+- **Steps:**
+  1. `docs/deploy.md` (written from the Bedrock docs we had) said to open Model access and enable Claude Haiku 4.5. The owner could not find the page: AWS retired it, models are now enabled on first use, and Anthropic models show a "Submit use case details" banner in the Model catalog instead.
+  2. The owner created an IAM user and an access key. The console flow let the user be created with no policy attached, and nothing on the access key screens said so.
+  3. `pnpm aws:check` then failed Bedrock, Polly and SES with AccessDeniedException. Our own message for Bedrock pointed at the use case form, which was the wrong cause.
+- **Expected:** Setup docs that match the console, and a clear sign that a new IAM user has no permissions before its key is used.
+- **Actual:** About 20 minutes of the owner searching the console, then a misleading first error from our script.
+- **Severity:** Medium (blocks the first deploy; easy once understood).
+- **Workaround:** `docs/deploy.md` now describes the use case banner; `pnpm aws:check` recognizes "not authorized to perform" and says to attach a policy to the IAM user.
+- **Suggestion:** The IAM create user flow could warn when no permission is attached; the Bedrock getting started page could say first in bold that the Model access page no longer exists.
+
+---
+
+## #8 — `pnpm deploy` runs pnpm's own deploy command, not the project script
+
+- **Date:** 2026-10-02
+- **Task attempted:** First real deploy (T080) with the command from `docs/deploy.md`.
+- **Steps:**
+  1. Before running it, checked `pnpm deploy --help`: it prints pnpm's experimental workspace deploy command ("Deploy a package from a workspace"), which takes a target directory.
+  2. The root script was `"deploy": "pnpm --filter @asg/infra deploy"`, which hits the same built in command one level down.
+- **Expected:** `pnpm <script>` runs a script when one exists, as it does for `test` or `check`.
+- **Actual:** Built in commands win over scripts with the same name. The documented command would have failed or done something else, and the rehearsal never caught it because it deploys through its own path.
+- **Severity:** Medium (the one documented deploy command was wrong).
+- **Workaround:** `pnpm run deploy` everywhere (README, docs, quickstart, preflight hint) and `pnpm --filter @asg/infra run deploy` in the root script.
+- **Suggestion:** pnpm could warn when a package.json script shadows a built in command name.
+
+---
+
+## #9 — Lambda Function URLs rename `WWW-Authenticate`
+
+- **Date:** 2026-10-02
+- **Task attempted:** `pnpm smoke` against the first real deploy (T080).
+- **Steps:**
+  1. The MCP server answers 401 with `WWW-Authenticate: Bearer resource_metadata="..."`, as MCP authorization asks, and the local server and the rehearsal both showed it.
+  2. Through the Function URL, the 401 arrived with `x-amzn-Remapped-www-authenticate` instead, so the smoke check failed.
+- **Expected:** Headers set by the function reach the client as set, or the documentation of Function URLs says which ones are renamed.
+- **Actual:** An MCP client that looks only at `WWW-Authenticate` cannot find the protected resource metadata from the 401. Our emulator could not have caught it.
+- **Severity:** Low for this project (MCP clients also try `/.well-known/oauth-protected-resource`, which works), higher for any service that relies on the header.
+- **Workaround:** The smoke check accepts the renamed header and checks the well known address separately.
+- **Suggestion:** Document the renamed headers on the Function URL page, or let `WWW-Authenticate` through on 401 responses.
+
+---
+
+## #10 — The Echo dropped words while Alexa spoke (only visible with real Polly audio)
+
+- **Date:** 2026-10-02
+- **Task attempted:** The Playwright suite against the deployed site (T102).
+- **Steps:**
+  1. Locally, speech ends at once in a headless browser; in the cloud the Echo plays Polly audio, about 10 s per line.
+  2. Several scenarios failed remotely: a "Yes" typed while Alexa was still speaking, or while her answer was on its way, was ignored without a word.
+- **Expected:** Talking over Alexa stops her and is heard, as on a real Echo.
+- **Actual:** A real product bug that only real audio and real network time could show. The person would have had to repeat themselves, or think the device was broken.
+- **Severity:** High for the people this is for: answering before the end of a question is common.
+- **Workaround:** New words now stop the speech and go through; words sent while an answer is on its way are sent right after it. A Playwright scenario keeps Alexa talking forever and checks that a typed "Yes" is answered; remote runs now stub audio the same way locally and in the cloud.
+- **Suggestion:** For our own process: run the suite against the deployed stack early, not only the emulator.

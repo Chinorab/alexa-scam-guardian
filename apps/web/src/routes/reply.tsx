@@ -4,6 +4,7 @@
  */
 import { Hono } from "hono";
 import { readStopToken } from "@asg/core/auth/link-tokens";
+import { replyLabels } from "@asg/core/copy/identity";
 import { describeReplyLink, recordReply, type Deps } from "@asg/mcp-server";
 import { Layout } from "../views/layout";
 
@@ -37,26 +38,35 @@ export function replyRoutes(deps: Deps) {
         </Notice>,
       );
     }
+    const labels = replyLabels(state.aboutThemselves);
     return c.html(
       <Layout title={`Help ${older} check a call`} description="Answer in one tap.">
-        <h1>
-          Hi {state.memberName}, did you just call {older}?
-        </h1>
+        {state.aboutThemselves ? (
+          <h1>
+            Hi {state.memberName}, did you just call {older}?
+          </h1>
+        ) : (
+          <h1>
+            Hi {state.memberName}, can you help {older} check a call?
+          </h1>
+        )}
         <p class="lead">
-          Someone called {older} asking for money and said they were family. Your answer goes
-          straight to {older}.
+          Someone called {older} asking for money and said they were{" "}
+          {state.aboutThemselves ? "you" : (state.claimedWords ?? "family")}.{" "}
+          {state.aboutThemselves ? "" : "Do you know if this is true? "}Your answer goes straight to{" "}
+          {older}.
         </p>
         <div class="reply-actions">
           <form method="post" action={`/r/${c.req.param("token")}`}>
             <input type="hidden" name="answer" value="it_was_me" />
             <button class="button" type="submit">
-              It was me
+              {labels.it_was_me}
             </button>
           </form>
           <form method="post" action={`/r/${c.req.param("token")}`}>
             <input type="hidden" name="answer" value="it_wasnt_me" />
             <button class="button button-warning" type="submit">
-              It wasn't me
+              {labels.it_wasnt_me}
             </button>
           </form>
         </div>
@@ -94,8 +104,10 @@ export function replyRoutes(deps: Deps) {
       <Notice title="Thank you">
         <p class="lead">
           {answer === "it_wasnt_me"
-            ? `We will tell ${older} it was not you, so ${older} knows not to send money.`
-            : `We will tell ${older} you confirmed it. ${older} will still talk with you before sending anything.`}
+            ? `We will tell ${older} ${result.aboutThemselves ? "it was not you" : "it is not true"}, so ${older} knows not to send money.`
+            : result.aboutThemselves
+              ? `We will tell ${older} you confirmed it. ${older} will still talk with you before sending anything.`
+              : `We will tell ${older} you said it is true. ${older} will still talk with family before sending anything.`}
         </p>
         <p>Please call {older} on the number you know as soon as you can.</p>
       </Notice>,

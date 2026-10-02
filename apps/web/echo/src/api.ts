@@ -27,6 +27,8 @@ export interface PhoneMessage {
   body: string;
   at: string;
   replyPath?: string;
+  /** False when the relative is asked about someone else: the answers are "It's true" or not. */
+  aboutThemselves?: boolean;
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
