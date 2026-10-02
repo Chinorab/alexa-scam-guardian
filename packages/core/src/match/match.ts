@@ -43,6 +43,7 @@ const SIGN_PRIORITY = [
   "stay-on-line",
   "government-caller",
   "tech-support",
+  "company-caller",
   "prize-fee",
   "online-sweetheart",
   "family-voice",

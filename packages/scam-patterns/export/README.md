@@ -24,7 +24,8 @@ The dataset has five parts:
 - `warningSigns`: one sign each (for example `gift-cards`, `arrest-story`, `secrecy`), a short
   label to say out loud, a plain explanation, regular expression cues for matching a spoken
   description, and its sources.
-- `patterns`: scam types (family emergency, government impersonation, fake bank call, tech
+- `patterns`: scam types (family emergency, government impersonation, fake bank call, fake company call
+  about an order, tech
   support, cash or gold courier, romance, prize, cryptocurrency payment), the warning signs
   each one uses, official advice, and sources.
 - `ifPaid`: the official first steps for each payment method (gift card, wire, money

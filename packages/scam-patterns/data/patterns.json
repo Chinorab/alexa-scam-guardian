@@ -113,6 +113,13 @@
       "label": "US Department of Justice, Office for Victims of Crime",
       "url": "https://ovc.ojp.gov/program/elder-fraud-abuse/national-elder-fraud-hotline",
       "retrievedOn": "2026-10-01"
+    },
+    "ftc-amazon-impersonation": {
+      "publisher": "FTC",
+      "title": "Did you get a call or text about a suspicious purchase on Amazon? It’s a scam",
+      "label": "FTC consumer alert, March 2024",
+      "url": "https://consumer.ftc.gov/consumer-alerts/2024/03/did-you-get-call-or-text-about-suspicious-purchase-amazon-its-scam",
+      "retrievedOn": "2026-10-02"
     }
   },
   "warningSigns": [
@@ -317,6 +324,17 @@
       "sourceRefs": ["ftc-tech-support"]
     },
     {
+      "id": "company-caller",
+      "label": "caller claiming to be from a company you know",
+      "explanation": "Scammers pretend to be from companies like Amazon and fake the caller ID. Check your account on the company's own website or app.",
+      "cues": [
+        "\\b(amazon|walmart|costco|best buy|paypal|ebay|target)( customer service| support| fraud)? (called|calls|calling|texted|emailed|said|says)\\b",
+        "\\b(suspicious|unauthorized|big|large|strange) (order|purchase|charge)\\b",
+        "\\b(order|purchase|charge) (on|to) (my|your) (account|card)\\b"
+      ],
+      "sourceRefs": ["ftc-amazon-impersonation"]
+    },
+    {
       "id": "prize-fee",
       "label": "fee to collect a prize",
       "explanation": "Real prizes are free. Paying a fee or taxes to collect one is a scam.",
@@ -413,6 +431,18 @@
         "Never share a verification code with a caller."
       ],
       "sourceRefs": ["ftc-move-money"]
+    },
+    {
+      "id": "business-impersonation",
+      "name": "Fake company call about an order",
+      "description": "A call or text claims to be from a company like Amazon about a suspicious purchase, then says your identity or money is at risk.",
+      "signIds": ["company-caller", "move-money", "urgency", "threats", "gift-cards", "crypto"],
+      "advice": [
+        "Do not trust the number on your caller ID or what the caller tells you.",
+        "Check your account on the company's own website or app, not with a number they give you.",
+        "Talk about it with someone you trust."
+      ],
+      "sourceRefs": ["ftc-amazon-impersonation"]
     },
     {
       "id": "tech-support",

@@ -103,7 +103,7 @@ flowchart LR
   the tools within a 3 second deadline; the rule based mode answers when the model is slow,
   unavailable, or over budget, with the same tools. Every sentence goes through the same
   output guard either way.
-- **Scam patterns** ([packages/scam-patterns](packages/scam-patterns)): 8 patterns and 16
+- **Scam patterns** ([packages/scam-patterns](packages/scam-patterns)): 9 patterns and 17
   warning signs written only from FTC and FBI alerts; every pattern and sign cites its source,
   the schema is checked on every push and a weekly CI job checks that every link still works.
   Published on its own under MIT as
