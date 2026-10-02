@@ -33,6 +33,9 @@ is absent.
   (`call_911`, `hang_up_first`, `pick_member`, `offer_verify`, `offer_heads_up`,
   `paid_guidance`, `no_signs_found`, `advise_wait`), `familySaved` (false when nobody is saved
   yet), `sensitiveDataRemoved`, `interrupt`
+- **Notes**: `hang_up_first` looks only at the newest details, so the check goes on once they
+  hang up. A saved relative asking for money gets `offer_verify` (or `pick_member`) even with
+  no warning sign.
 - **UI**: `_meta.ui.resourceUri = ui://guardian/warning-signs`
 
 ### `prepare_outreach`

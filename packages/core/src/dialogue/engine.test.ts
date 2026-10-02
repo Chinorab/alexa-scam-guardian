@@ -152,7 +152,9 @@ describe("simplifiedTurn", () => {
       initialState(),
       fakeTools([michael]),
     );
-    expect(reply.say).toBe("You can hang up now. A real family member will understand.");
+    expect(reply.say).toBe(
+      "You can hang up now. A real family member will understand. Then tell me what happened.",
+    );
   });
 
   it("never calls a call safe when no signs are found", async () => {

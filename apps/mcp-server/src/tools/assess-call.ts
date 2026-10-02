@@ -8,7 +8,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { epochSeconds, type Check } from "@asg/core/ports/index";
 import { newId } from "@asg/core/ids";
-import { assess } from "@asg/core/match/match";
+import { assess, isCallerOnLine } from "@asg/core/match/match";
 import { redact } from "@asg/core/redact/redact";
 import type { Caller, Deps } from "../deps";
 import { toolError, toolResult } from "../server";
@@ -52,7 +52,10 @@ function nextStepFor(
   if (result.danger) return "call_911";
   if (result.callerOnLine) return "hang_up_first";
   if (result.alreadyPaid) return "paid_guidance";
-  if (result.signs.length === 0) return "no_signs_found";
+  // A saved relative asking for money is worth checking, warning signs or not.
+  if (result.signs.length === 0 && !(relatives > 0 && result.asksForMoney)) {
+    return "no_signs_found";
+  }
   if (relatives > 1) return "pick_member";
   if (relatives === 1) return "offer_verify";
   return hasHelper ? "offer_heads_up" : "advise_wait";
@@ -103,6 +106,8 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       if (redacted.callerNumber && !check.callerNumber) check.callerNumber = redacted.callerNumber;
 
       const result = assess(check.description);
+      // "Still on the line" is about now: once they hang up, the check goes on.
+      result.callerOnLine = isCallerOnLine(redacted.text);
       const members = await deps.store.listMembers(caller.householdId);
       const relatives = matchRelatives(members, check.description, result.claimedRelationship);
       const helper = headsUpCandidate(

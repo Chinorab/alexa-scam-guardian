@@ -29,6 +29,13 @@ function allLines(): string[] {
     phrases.deliveryFailed(michael),
     phrases.noNews(),
     phrases.hangUpFirst(),
+    phrases.hangUpFirst(michael),
+    `${phrases.noSignsCheck()} ${phrases.offerVerify(michael)}`,
+    phrases.noNewSigns(),
+    `${phrases.checkedWithFamily()} ${phrases.offerReport()}`,
+    `${phrases.whatToDo()} ${phrases.offerVerify(michael, sarah)}`,
+    phrases.whatToDo(michael),
+    phrases.intro(),
     phrases.dangerAtDoor(),
     phrases.danger(),
     phrases.sensitiveStop(),
@@ -69,7 +76,7 @@ function allLines(): string[] {
     if (!sign.explanation.includes(". ")) lines.push(phrases.whileWaiting(sign.explanation));
   }
   for (const paid of Object.values(dataset.ifPaid)) {
-    lines.push(phrases.thankForTelling(paid.steps[0] ?? ""));
+    lines.push(`${paid.steps[0] ?? ""} ${phrases.hotline()} ${phrases.offerReport()}`);
     for (const step of paid.steps) lines.push(step);
   }
   return lines;

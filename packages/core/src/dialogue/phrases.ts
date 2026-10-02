@@ -119,7 +119,29 @@ export const phrases = {
 
   noNews: () => "No news yet. I'll let you know when someone answers.",
 
-  hangUpFirst: () => "You can hang up now. A real family member will understand.",
+  hangUpFirst: (person?: Person) =>
+    `You can hang up now. A real family member will understand. Then ${person ? `we'll check with ${person.name} together` : "tell me what happened"}.`,
+
+  /** A relative they could ask, and no warning sign heard. */
+  noSignsCheck: () =>
+    "I didn't hear the common signs of a scam, but let's check before you send any money.",
+
+  /** More details, nothing new: no second offer after a no. */
+  noNewSigns: () =>
+    "I understand. Please don't send any money until you talk it over with your family.",
+
+  /** They already reached the real relative, who is fine. */
+  checkedWithFamily: () =>
+    "I'm glad you checked with your family. Please don't send any money, and hang up if they call back.",
+
+  whatToDo: (person?: Person) =>
+    person
+      ? `Please don't send any money, and hang up if they call back. Let's wait to hear from ${person.name}.`
+      : "Please don't send any money, and hang up if they call back. Then check with your family on a number you know.",
+
+  /** "Hello" or "What can you do?" before anything was said. */
+  intro: () =>
+    "I can help you check a call, text or email that worried you. Tell me what happened.",
 
   dangerAtDoor: () =>
     "Don't open the door and don't hand over money. If you feel unsafe, call 911 now.",
@@ -157,9 +179,6 @@ export const phrases = {
   thanksPaid: () => "Thank you for telling me.",
 
   reportNeedsCall: () => "Tell me about the call first, and I'll put a summary on the screen.",
-
-  thankForTelling: (firstStep: string) =>
-    `Thank you for telling me. Acting fast can help. ${firstStep}`,
 
   hotline: () => "The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays.",
 
