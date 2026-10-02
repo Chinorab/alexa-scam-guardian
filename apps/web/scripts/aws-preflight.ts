@@ -1,7 +1,7 @@
 /**
  * Checks an AWS account before the first deploy and says what is missing, in order:
  * credentials, Bedrock model access, Polly, SES, CDK bootstrap, and an existing stack.
- * Usage: pnpm aws:check   (credentials in the environment, region us-east-1)
+ * Usage: pnpm aws:check   (credentials in the environment or ~/.aws, region us-east-1)
  * The Bedrock check sends one tiny request (a few tokens).
  */
 import { BedrockRuntimeClient, ConverseCommand } from "@aws-sdk/client-bedrock-runtime";
@@ -24,6 +24,14 @@ const note = (status: Status, name: string, detail: string) => {
 };
 const reason = (error: unknown) =>
   error instanceof Error ? `${error.name}: ${error.message}`.slice(0, 200) : String(error);
+/** A missing IAM permission reads like a missing feature; say which one it is. */
+const NO_PERMISSION =
+  "The IAM user has no permission for this: in IAM, Users, add the AdministratorAccess policy to it (remove the user after the project).";
+const missingPermission = (error: unknown) =>
+  error instanceof Error &&
+  /not authorized to perform|no identity-based policy/i.test(error.message);
+const advice = (error: unknown, otherwise: string) =>
+  `${reason(error)}. ${missingPermission(error) ? NO_PERMISSION : otherwise}`;
 
 // 1. Credentials
 try {
@@ -33,7 +41,7 @@ try {
   note(
     "todo",
     "Credentials",
-    `none found (${reason(error)}). Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_REGION=us-east-1 in this terminal.`,
+    `none found (${reason(error)}). Put an access key in ~/.aws/credentials (region us-east-1 in ~/.aws/config), or set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_REGION in this terminal.`,
   );
   console.warn("\nStopping here: every other check needs credentials.");
   process.exit(1);
@@ -53,7 +61,10 @@ try {
   note(
     "todo",
     "Bedrock",
-    `${reason(error)}. In the Bedrock console (us-east-1), Model catalog, open Claude Haiku 4.5 and submit the use case details if asked.`,
+    advice(
+      error,
+      "In the Bedrock console (us-east-1), Model catalog, open Claude Haiku 4.5 and submit the use case details if asked.",
+    ),
   );
 }
 
@@ -69,7 +80,7 @@ try {
     found ? `neural voice ${voice}` : `voice ${voice} not offered`,
   );
 } catch (error) {
-  note("todo", "Polly", reason(error));
+  note("todo", "Polly", advice(error, "Polly is needed for the Echo's voice."));
 }
 
 // 4. SES
@@ -95,7 +106,7 @@ try {
       : "sandbox: only verified recipients get email. Request production access (one to two business days).",
   );
 } catch (error) {
-  note("todo", "SES", reason(error));
+  note("todo", "SES", advice(error, "SES is only needed for real email."));
 }
 
 // 5. CDK bootstrap and the stack

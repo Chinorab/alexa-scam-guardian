@@ -105,3 +105,19 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium for a judge or contributor on Windows (the documented first command did nothing visible).
 - **Workaround:** pnpm's parallel regex scripts and Node's built in watch mode with the tsx loader.
 - **Suggestion:** pnpm could warn when a script uses `&` and the shell is cmd; tsx could document `node --watch --import tsx` as the portable form.
+
+---
+
+## #7 — Bedrock "Model access" page gone; the access key flow leaves the user with no permissions
+
+- **Date:** 2026-10-02
+- **Task attempted:** First AWS setup by the owner, following `docs/deploy.md` (T080 prerequisites).
+- **Steps:**
+  1. `docs/deploy.md` (written from the Bedrock docs we had) said to open Model access and enable Claude Haiku 4.5. The owner could not find the page: AWS retired it, models are now enabled on first use, and Anthropic models show a "Submit use case details" banner in the Model catalog instead.
+  2. The owner created an IAM user and an access key. The console flow let the user be created with no policy attached, and nothing on the access key screens said so.
+  3. `pnpm aws:check` then failed Bedrock, Polly and SES with AccessDeniedException. Our own message for Bedrock pointed at the use case form, which was the wrong cause.
+- **Expected:** Setup docs that match the console, and a clear sign that a new IAM user has no permissions before its key is used.
+- **Actual:** About 20 minutes of the owner searching the console, then a misleading first error from our script.
+- **Severity:** Medium (blocks the first deploy; easy once understood).
+- **Workaround:** `docs/deploy.md` now describes the use case banner; `pnpm aws:check` recognizes "not authorized to perform" and says to attach a policy to the IAM user.
+- **Suggestion:** The IAM create user flow could warn when no permission is attached; the Bedrock getting started page could say first in bold that the Model access page no longer exists.
