@@ -104,6 +104,12 @@ body {
   background: var(--stop);
 }
 
+.sign-panel.warning {
+  background: #ffcd1c;
+  color: #111417;
+  margin-bottom: 20px;
+}
+
 .sign-panel h1 {
   font-size: 36px;
   font-weight: 800;

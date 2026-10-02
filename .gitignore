@@ -23,3 +23,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# demo video build output (pnpm video:build)
+video-out/

@@ -15,3 +15,20 @@ and colors. Timings follow [../demo-script.md](../demo-script.md).
 
 Regenerate the cards after a design change: `pnpm video:cards` (needs the Playwright browser).
 Record the Echo beats hands free with `pnpm demo:play`.
+
+## The whole video, built from the deployed site
+
+```bash
+pnpm video:voices                                   # Ruth and narrator lines, Polly neural
+E2E_BASE_URL=https://<web url> pnpm video:record     # the Echo beats and the family page, with a timeline
+pnpm video:compose                                  # cut, voices, held frames, captions, loudness
+```
+
+Output: `video-out/scam-guardian-demo.mp4` (1920 x 1080, 30 fps, AAC, loudness -16 LUFS,
+captions burned in) and `video-out/captions.srt`; `video-out/` is not committed. Alexa speaks
+with the product's own Polly voice (Joanna), Ruth with the Polly voice Ruth, the narrator with
+Matthew. Every Alexa line and every screen is the deployed product at recording time; each
+Alexa line is placed where its caption appeared, and only whole sentences are dropped to fit
+("While we wait" after "I'll tell you when Michael answers"). The first build on 2026-10-02
+ran 2 min 54 s; it leaves out the "call back the number" beat to stay under 3 minutes (the
+narration still says it never contacts the caller).
