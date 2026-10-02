@@ -95,7 +95,7 @@ describe("user story 2: check with the real relative", () => {
 
     const news = await d.say("What's new?");
     expect(news.say).toBe(
-      "Michael says he did not call you, so you did the right thing by checking. Please don't send any money. Would you like help reporting this call?",
+      "Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?",
     );
     expect((await d.events()).unread).toBe(0);
   });
@@ -145,6 +145,19 @@ describe("user story 2: check with the real relative", () => {
       "Sorry, I didn't catch that. Should I text Michael to check, and tell Sarah you got this call? You can say yes or no.",
     );
     expect(await d.phone()).toEqual([]);
+  });
+
+  it("US2.3: says it can only reach saved people when the caller claims an unsaved relative", async () => {
+    const d = demo();
+    await d.start();
+    const offer = await d.say(
+      "My nephew Tom called, he is in jail and needs bail money in gift cards.",
+    );
+    expect(offer.say).toBe(
+      "The emergency story and the gift cards are common signs of a scam. I can only reach people your family saved, and no nephew is saved. Should I tell Sarah you got this call, so she can help?",
+    );
+    await d.say("Yes");
+    expect((await d.phone()).map((m) => m.to)).toEqual(["Sarah"]);
   });
 
   it("V10: refuses to call the caller back and offers Michael instead", async () => {
@@ -243,7 +256,7 @@ describe("user story 5: already paid and reporting", () => {
     );
     const second = await d.say("Yes");
     expect(second.say).toBe(
-      "Done. I let Sarah know. You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+      "Done, I let Sarah know. The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays. Would you like help reporting this call?",
     );
   });
 
@@ -264,8 +277,21 @@ describe("user story 5: already paid and reporting", () => {
     );
     const no = await d.say("No");
     expect(no.say).toBe(
-      "You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+      "Okay, I didn't send anything. The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays. Would you like help reporting this call?",
     );
+    const report = await d.say("Yes");
+    expect(report.say).toBe(
+      "I put a summary on the screen with where to report it. Nothing was sent to any agency.",
+    );
+  });
+
+  it("answers a request for secrecy by saying that telling family is right", async () => {
+    const d = demo();
+    await d.start();
+    const reply = await d.say(
+      "My grandson called from jail, he said don't tell your parents and send gift cards.",
+    );
+    expect(reply.say).toMatch(/^Telling your family is the right thing to do\. /);
   });
 
   it("prepares the report after a denial, with the report card", async () => {

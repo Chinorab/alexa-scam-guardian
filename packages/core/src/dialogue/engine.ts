@@ -25,8 +25,23 @@ export interface AssessCallResult {
   familyMatches: Member[];
   headsUpCandidate?: Member;
   alreadyPaid?: { method: PaymentMethod };
+  /** Who the caller said they were, for example "nephew" or "grandchild". */
+  claimedIdentity?: string;
+  /** False when the family saved nobody yet. */
+  familySaved?: boolean;
   interrupt: boolean;
 }
+
+/** Claimed identities that are family: when none is saved, Alexa says it can't reach them. */
+const FAMILY_WORDS = new Set([
+  "grandson",
+  "granddaughter",
+  "grandchild",
+  "son",
+  "daughter",
+  "nephew",
+  "niece",
+]);
 
 export interface PrepareResult {
   pendingId: string;
@@ -270,7 +285,11 @@ async function describe(
   }
   const waitingFact = spoken.find((sign) => !sign.explanation.includes(". "))?.explanation;
   if (waitingFact) base.waitingFact = waitingFact;
-  const lead = `${phrases.thanks()} ${phrases.signs(labels)}`;
+  // A caller who asked for secrecy gets a plain answer: telling family is right.
+  const opener = spoken.some((sign) => sign.id === "secrecy")
+    ? phrases.secrecyReassure()
+    : phrases.thanks();
+  const lead = `${opener} ${phrases.signs(labels)}`;
 
   if (result.nextStep === "pick_member" && result.familyMatches.length > 1) {
     const first = result.familyMatches[0];
@@ -291,9 +310,15 @@ async function describe(
     return { ...offered, cardsFrom: ["assess_call"] };
   }
   if (helper && result.nextStep === "offer_heads_up") {
-    const offered = await offer(base, tools, lead, undefined, helper);
+    // US2.3: the caller claimed a relative nobody saved; say why Alexa can't check with them.
+    const unsaved =
+      result.claimedIdentity && FAMILY_WORDS.has(result.claimedIdentity)
+        ? `${phrases.signs(labels)} ${phrases.onlySavedPeople(result.claimedIdentity)}`
+        : lead;
+    const offered = await offer(base, tools, unsaved, undefined, helper);
     return { ...offered, cardsFrom: ["assess_call"] };
   }
+  if (result.familySaved === false) return reply(`${lead} ${phrases.noFamilySaved()}`);
   return reply(`${lead} ${phrases.waitBeforePaying()}`);
 }
 
@@ -311,7 +336,13 @@ async function confirm(text: string, state: EngineState, tools: EngineTools): Pr
     if (result.reason === "unclear" && state.question) {
       return reply(phrases.unclearConfirm(state.question), { expectReply: true });
     }
-    if (state.paid) return done(phrases.hotline(), { state: { ...cleared, paid: false } });
+    if (state.paid) {
+      // Money already left: say nothing was sent, then the hotline and the report (FR-013, FR-021).
+      return done(`${phrases.nothingSent()} ${phrases.hotline()} ${phrases.offerReport()}`, {
+        expectReply: true,
+        state: { stage: "report_offered", paid: false },
+      });
+    }
     return done(phrases.nothingSent(), { state: cleared });
   }
   const delivered = result.sent.filter((s) => s.delivery === "sent");
@@ -330,9 +361,11 @@ async function confirm(text: string, state: EngineState, tools: EngineTools): Pr
   const headsUpNames = delivered.filter((s) => s.kind === "heads_up").map((s) => s.name);
   const sentLine = phrases.sent(verified?.name, verified ? [] : headsUpNames);
   if (state.paid && !verified) {
-    return done(`${sentLine} ${phrases.hotline()}`, {
+    const told = headsUpNames.length > 0 ? phrases.toldShort(headsUpNames) : sentLine;
+    return done(`${told} ${phrases.hotline()} ${phrases.offerReport()}`, {
       cards: ["confirm_outreach"],
-      state: { stage: "assessed", contacted, paid: false },
+      expectReply: true,
+      state: { stage: "report_offered", contacted, paid: false },
     });
   }
   const fact = verified && state.waitingFact ? ` ${phrases.whileWaiting(state.waitingFact)}` : "";

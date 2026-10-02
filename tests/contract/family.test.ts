@@ -309,3 +309,26 @@ describe("public demo family (FR-026)", () => {
     expect(unknown.deviceId).not.toBe(first.deviceId);
   });
 });
+
+describe("a household with nobody saved yet", () => {
+  it("still names the signs, and suggests setting up the family page", async () => {
+    const f = family();
+    await signIn(f);
+    await f.form("/family/settings", { firstName: "Ada", waitMinutes: "10" });
+    const started = await f.request("/api/device/start", {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: ORIGIN },
+      body: "{}",
+    });
+    const { deviceId } = (await started.json()) as { deviceId: string };
+    const reply = await f.request("/api/converse", {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: ORIGIN },
+      body: JSON.stringify({ deviceId, text: "My grandson is in jail and needs gift cards." }),
+    });
+    const { say } = (await reply.json()) as { say: string };
+    expect(say).toBe(
+      "I'm glad you asked me first. The emergency story and the gift cards are common signs of a scam. Please don't send any money, and ask someone in your family to set up the family page so I can check with them.",
+    );
+  });
+});

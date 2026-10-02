@@ -31,7 +31,8 @@ is absent.
   title, url}`), `danger` (bool), `claimedIdentity?`, `familyMatches[]` (`memberId`, `name`,
   `relationship`) when a family role was claimed, `alreadyPaid?` (`method`), `nextStep`
   (`call_911`, `hang_up_first`, `pick_member`, `offer_verify`, `offer_heads_up`,
-  `paid_guidance`, `no_signs_found`), `sensitiveDataRemoved`, `interrupt`
+  `paid_guidance`, `no_signs_found`, `advise_wait`), `familySaved` (false when nobody is saved
+  yet), `sensitiveDataRemoved`, `interrupt`
 - **UI**: `_meta.ui.resourceUri = ui://guardian/warning-signs`
 
 ### `prepare_outreach`

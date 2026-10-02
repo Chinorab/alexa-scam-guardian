@@ -33,6 +33,10 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
 export const phrases = {
   thanks: () => "I'm glad you asked me first.",
 
+  /** The caller claimed a relative the family has not saved (US2.3). */
+  onlySavedPeople: (relationship: string) =>
+    `I can only reach people your family saved, and no ${relationship} is saved.`,
+
   /** labels are dataset sign labels, for example "rush", "gift cards". */
   signs(labels: string[]): string {
     const named = labels.slice(0, 3).map((label) => `the ${label}`);
@@ -94,7 +98,7 @@ export const phrases = {
 
   replyDenied(person: Person): string {
     const p = pronouns(person);
-    return `${person.name} says ${p.subject} did not call you, so you did the right thing by checking. Please don't send any money. Would you like help reporting this call?`;
+    return `${person.name} says ${p.subject} did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?`;
   },
 
   replyConfirmed(person: Person): string {
@@ -154,8 +158,17 @@ export const phrases = {
   thankForTelling: (firstStep: string) =>
     `Thank you for telling me. Acting fast can help. ${firstStep}`,
 
-  hotline: () =>
-    "You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+  hotline: () => "The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays.",
+
+  /** After money already left: who was told, in one sentence, before the hotline. */
+  toldShort: (names: string[]) => `Done, I let ${listWithAnd(names)} know.`,
+
+  /** No one is saved yet (edge case "no family setup"). */
+  noFamilySaved: () =>
+    "Please don't send any money, and ask someone in your family to set up the family page so I can check with them.",
+
+  /** The caller asked for secrecy: say plainly that telling family is right. */
+  secrecyReassure: () => "Telling your family is the right thing to do.",
 
   offerReport: () => "Would you like help reporting this call?",
 

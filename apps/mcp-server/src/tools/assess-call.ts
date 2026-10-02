@@ -136,6 +136,8 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
         nextStep,
         familyMatches: relatives.map(publicMember),
         contactKind: result.contactKind,
+        // Nobody saved yet: the assistant suggests setting up the family page.
+        familySaved: members.some((m) => !m.optedOut),
         sensitiveDataRemoved: redacted.removed,
         interrupt: redacted.removed,
       };

@@ -38,7 +38,7 @@ test("V3: a confirmation still comes with talk before you pay", async ({ page })
   await expect(caption(page)).toContainText("call him on the number you know");
 });
 
-test("V4: a late reply only lights the bar until the user asks", async ({ page }) => {
+test("V4: a late reply shows a quiet card and light until the user asks", async ({ page }) => {
   await openEcho(page);
   await say(page, OPENING);
   await say(page, "Yes");
@@ -50,9 +50,14 @@ test("V4: a late reply only lights the bar until the user asks", async ({ page }
     timeout: 10_000,
   });
   await expect(caption(page)).toContainText("I'm here if you need me again");
-  await say(page, "What's new?");
+  // A quiet card says there is news, never what it is.
+  const news = page.getByTestId("news-card");
+  await expect(news).toContainText("News from your family");
+  await expect(news).not.toContainText("Michael");
+  await news.getByRole("button", { name: "Hear it" }).click();
   await expect(caption(page)).toContainText("Michael says he did not call you");
   await expect(page.getByTestId("light-bar")).not.toHaveAttribute("data-state", "notification");
+  await expect(news).toHaveCount(0);
 });
 
 test("repeat replays the last line", async ({ page }) => {

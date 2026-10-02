@@ -24,7 +24,7 @@ Captions burned in for every spoken line.
 | 0:10 | Caption fills the screen; two yellow diamonds rise: EMERGENCY STORY, GIFT CARDS, each with "Source: FTC consumer advice". | Alexa: "I'm glad you asked me first. The emergency story and the gift cards are common signs of a scam. Should I text Michael to check, and tell Sarah you got this call?" |
 | 0:19 | Ruth taps Talk. | Ruth: "Yes." Alexa: "Done. I'll tell you when Michael answers." |
 | 0:23 | Demo phone: Michael's text arrives. Cursor taps "It wasn't me". | Text message sound. |
-| 0:26 | Chime, light ring, check status card turns yellow: "Michael says it was not them". | Alexa: "Michael says he did not call you, so you did the right thing by checking. Please don't send any money. Would you like help reporting this call?" |
+| 0:26 | Chime, light ring, check status card turns yellow: "Michael says it was not them". | Alexa: "Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?" |
 
 ## 0:30 to 0:45 Why it matters
 
