@@ -2,6 +2,7 @@
  * Message templates (FR-008, FR-015). Plain words, no dashes, no sensitive numbers, never the
  * older adult's own words: only the claimed identity and the warning sign labels.
  */
+import { claimedIdentityWords } from "@asg/core/copy/identity";
 import { listWithAnd } from "@asg/core/dialogue/phrases";
 import type { Check, FamilyMember, Household } from "@asg/core/ports/index";
 
@@ -20,7 +21,9 @@ function whoCallerClaimed(check: Check, member: FamilyMember, household: Househo
   if (claimed && (claimed === member.relationship || (claimed === "grandchild" && isGrandchild))) {
     return "you";
   }
-  if (check.claimedIdentity) return `${household.olderAdultFirstName}'s ${check.claimedIdentity}`;
+  if (check.claimedIdentity) {
+    return claimedIdentityWords(check.claimedIdentity, household.olderAdultFirstName);
+  }
   return "a family member";
 }
 
@@ -47,7 +50,12 @@ export function checkMessage(args: {
   const older = args.household.olderAdultFirstName;
   const claimed = whoCallerClaimed(args.check, args.member, args.household);
   const isThem = claimed === "you";
-  const subject = isThem ? `Did you just call ${older}?` : `Can you help ${older} check a call?`;
+  const verb = { call: "call", voicemail: "call", text: "text", email: "email" }[
+    args.check.contactKind
+  ];
+  const subject = isThem
+    ? `Did you just ${verb} ${older}?`
+    : `Can you help ${older} check ${aContact(args.check)}?`;
   const text = [
     `Hi ${args.member.name}, this is ${PRODUCT_NAME} for ${older}.`,
     `${older} just got ${aContact(args.check)} from someone saying they were ${claimed}, asking for money.`,
@@ -72,7 +80,7 @@ export function headsUpMessage(args: {
 }): Rendered {
   const older = args.household.olderAdultFirstName;
   const claimed = args.check.claimedIdentity
-    ? `someone saying they were ${older}'s ${args.check.claimedIdentity}`
+    ? `someone saying they were ${claimedIdentityWords(args.check.claimedIdentity, older)}`
     : "someone they did not know";
   const signs =
     args.signLabels.length > 0

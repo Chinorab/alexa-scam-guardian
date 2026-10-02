@@ -9,6 +9,16 @@ interface Link {
   hours?: string;
 }
 
+const RELATIVES = new Set([
+  "grandson",
+  "granddaughter",
+  "grandchild",
+  "son",
+  "daughter",
+  "nephew",
+  "niece",
+]);
+
 const KINDS: Record<string, string> = {
   call: "Phone call",
   voicemail: "Voicemail",
@@ -40,7 +50,11 @@ function render(data: Structured): string {
   const rows: [string, string][] = [];
   rows.push(["When", time(facts.toldAt)]);
   rows.push(["How", KINDS[String(facts.contactKind)] ?? "Phone call"]);
-  if (facts.claimedIdentity) rows.push(["Caller said they were", String(facts.claimedIdentity)]);
+  if (facts.claimedIdentity) {
+    // Read on the older adult's own screen: "your grandson", "the IRS".
+    const who = String(facts.claimedIdentity);
+    rows.push(["Caller said they were", RELATIVES.has(who) ? `your ${who}` : who]);
+  }
   if (facts.whatWasAsked) rows.push(["They asked for", String(facts.whatWasAsked)]);
   if (facts.amountText) rows.push(["Amount", String(facts.amountText)]);
   if (typeof facts.callerNumber === "string")

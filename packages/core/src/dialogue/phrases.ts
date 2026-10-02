@@ -30,6 +30,9 @@ export function listWithAnd(items: string[]): string {
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
+/** The kind of contact as people say it: "this call", "this text". */
+export type ContactWord = "call" | "text" | "email" | "voicemail";
+
 export const phrases = {
   thanks: () => "I'm glad you asked me first.",
 
@@ -49,21 +52,21 @@ export const phrases = {
 
   waitBeforePaying: () => "Let's not send any money for now.",
 
-  offerVerify(person: Person, headsUp?: Person | Person[]): string {
+  offerVerify(person: Person, headsUp?: Person | Person[], contact: ContactWord = "call"): string {
     const helpers = headsUp === undefined ? [] : Array.isArray(headsUp) ? headsUp : [headsUp];
     if (helpers.length > 0) {
-      return `Should I ${verb(person.channel)} ${person.name} to check, and tell ${listWithAnd(helpers.map((h) => h.name))} you got this call?`;
+      return `Should I ${verb(person.channel)} ${person.name} to check, and tell ${listWithAnd(helpers.map((h) => h.name))} you got this ${contact}?`;
     }
     return `Should I ${verb(person.channel)} ${person.name} on the number your family saved?`;
   },
 
-  offerHeadsUp: (people: Person | Person[]) => {
+  offerHeadsUp: (people: Person | Person[], contact: ContactWord = "call") => {
     const list = Array.isArray(people) ? people : [people];
     const first = list[0];
     if (list.length === 1 && first) {
-      return `Should I tell ${first.name} you got this call, so ${pronouns(first).subject} can help?`;
+      return `Should I tell ${first.name} you got this ${contact}, so ${pronouns(first).subject} can help?`;
     }
-    return `Should I tell ${listWithAnd(list.map((p) => p.name))} you got this call, so they can help?`;
+    return `Should I tell ${listWithAnd(list.map((p) => p.name))} you got this ${contact}, so they can help?`;
   },
 
   pickMember: (relationshipWord: string, names: string[]) =>

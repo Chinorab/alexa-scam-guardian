@@ -126,3 +126,32 @@ describe("red team, multi turn", () => {
     }
   });
 });
+
+describe("heads up wording", () => {
+  it("names an organization as it is, never as a relative", async () => {
+    const d = demo();
+    await d.start();
+    const offer = await d.say(
+      "The IRS left a voicemail saying I owe back taxes and must pay with gift cards today.",
+    );
+    expect(offer.say).toContain("Should I tell Sarah you got this voicemail");
+    await d.say("Yes");
+    const email = (await d.phone()).find((m) => m.to === "Sarah");
+    expect(email?.body).toContain("from someone saying they were the IRS");
+    expect(email?.body).not.toContain("Ruth's the IRS");
+  });
+});
+
+describe("check message wording", () => {
+  it("asks about a text as a text", async () => {
+    const d = demo();
+    await d.start();
+    const offer = await d.say(
+      "My grandson texted me that he is in jail and needs gift cards for bail.",
+    );
+    expect(offer.say).toContain("tell Sarah you got this text?");
+    await d.say("Yes");
+    const toMichael = (await d.phone()).find((m) => m.to === "Michael");
+    expect(toMichael?.body).toContain("just got a text from someone saying they were you");
+  });
+});

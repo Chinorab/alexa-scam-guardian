@@ -45,13 +45,14 @@ export async function speak(
         const url = URL.createObjectURL(await response.blob());
         const audio = new Audio(url);
         current = audio;
-        await new Promise<void>((resolve) => {
-          audio.onended = () => resolve();
-          audio.onerror = () => resolve();
-          audio.play().catch(() => resolve());
+        const played = await new Promise<boolean>((resolve) => {
+          audio.onended = () => resolve(true);
+          audio.onerror = () => resolve(false);
+          // Autoplay rules can refuse audio started without a recent tap: try the browser voice.
+          audio.play().catch(() => resolve(false));
         });
         URL.revokeObjectURL(url);
-        return;
+        if (played || current !== audio) return;
       }
     } catch {
       // fall through to the browser voice

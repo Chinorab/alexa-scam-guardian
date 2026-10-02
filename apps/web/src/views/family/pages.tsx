@@ -3,6 +3,7 @@ import type { Check, FamilyMember, Household, ReportSummary } from "@asg/core/po
 import type { Errors, MemberValues } from "../../family/forms";
 import { WAIT_CHOICES } from "../../family/forms";
 import { reportFacts } from "../../family/report-text";
+import { claimedIdentityWords } from "@asg/core/copy/identity";
 import { Layout } from "../layout";
 
 function ErrorSummary(props: { errors: Errors }) {
@@ -542,6 +543,14 @@ const OUTCOMES: Record<Check["outcome"], string> = {
   no_red_flags: "No warning signs found",
 };
 
+/** "No answer yet" only when someone was asked; otherwise say what really happened. */
+function outcomeOf(item: ActivityItem): string {
+  if (item.check.outcome !== "unknown") return OUTCOMES[item.check.outcome];
+  if (item.messages.some((m) => m.kind === "Asked")) return OUTCOMES.unknown;
+  if (item.messages.some((m) => m.kind === "Told")) return "A trusted contact was told";
+  return "No one was contacted";
+}
+
 export interface ActivityItem {
   check: Check;
   signs: string[];
@@ -581,9 +590,12 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
               <p>
                 A {item.check.contactKind}
                 {item.check.claimedIdentity
-                  ? ` from someone saying they were ${item.check.claimedIdentity}`
+                  ? ` from someone saying they were ${claimedIdentityWords(
+                      item.check.claimedIdentity,
+                      props.household.olderAdultFirstName,
+                    )}`
                   : ""}
-                . <strong>{OUTCOMES[item.check.outcome]}.</strong>
+                . <strong>{outcomeOf(item)}.</strong>
               </p>
               {item.signs.length > 0 && <p>Warning signs: {item.signs.join(", ")}.</p>}
               {item.messages.length > 0 && (
@@ -599,12 +611,14 @@ export function ActivityPage(props: { household: Household; items: ActivityItem[
                 <div class="callout">
                   <h3>Report summary</h3>
                   <dl class="facts">
-                    {reportFacts(item.report).map(([label, value]) => (
-                      <div>
-                        <dt>{label}</dt>
-                        <dd>{value}</dd>
-                      </div>
-                    ))}
+                    {reportFacts(item.report, props.household.olderAdultFirstName).map(
+                      ([label, value]) => (
+                        <div>
+                          <dt>{label}</dt>
+                          <dd>{value}</dd>
+                        </div>
+                      ),
+                    )}
                   </dl>
                   <p>
                     <a href={`/family/activity/${item.check.checkId}/report.txt`}>
