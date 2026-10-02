@@ -10,7 +10,8 @@
     "synth": "pnpm bundle && cdk synth --quiet",
     "deploy": "pnpm bundle && cdk deploy --require-approval broadening",
     "destroy": "cdk destroy",
-    "bundle:container": "tsx scripts/bundle.ts --container"
+    "bundle:container": "tsx scripts/bundle.ts --container",
+    "rehearse": "tsx scripts/rehearse.ts"
   },
   "dependencies": {
     "aws-cdk-lib": "2.272.0",

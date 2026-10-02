@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 import { createWebApp } from "@asg/web";
 import { MemoryDeviceSessions } from "../../apps/web/src/device/sessions";
 import type { SpeechSynth } from "../../apps/web/src/routes/tts";
-import { FULL_TURNS_PER_HOUR, STARTS_PER_HOUR } from "../../apps/web/src/routes/api";
+import {
+  FULL_TURNS_PER_HOUR,
+  SITE_TURNS_PER_HOUR,
+  STARTS_PER_HOUR,
+} from "../../apps/web/src/routes/api";
 import { makeDeps, SESSION } from "./helpers";
 
 function web(speech?: SpeechSynth) {
@@ -124,9 +128,9 @@ describe("public demo limits", () => {
     for (let i = 0; i < STARTS_PER_HOUR; i++) expect((await start("203.0.113.9")).status).toBe(200);
     expect((await start("203.0.113.9")).status).toBe(429);
     expect((await start("198.51.100.4")).status).toBe(200);
-  });
+  }, 60_000);
 
-  it("answers in the rule based mode once the hourly model budget is spent", async () => {
+  it("answers in the rule based mode once the household or site model budget is spent", async () => {
     const calls: number[] = [];
     const { deps } = makeDeps();
     const sessions = new MemoryDeviceSessions();
@@ -163,6 +167,15 @@ describe("public demo limits", () => {
     const response = await post("/api/converse", { deviceId, text: "So can I pay him?" });
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ mode: "simplified" });
+    expect(calls).toEqual([]);
+
+    // A fresh household is still under its own budget, but not under the site's.
+    const other = ((await (await post("/api/device/start", {})).json()) as { deviceId: string })
+      .deviceId;
+    for (let i = 0; i < SITE_TURNS_PER_HOUR; i++)
+      await deps.store.incrementRate("turns#site", 3600);
+    const capped = await post("/api/converse", { deviceId: other, text: "So can I pay him?" });
+    expect(await capped.json()).toMatchObject({ mode: "simplified" });
     expect(calls).toEqual([]);
   });
 });

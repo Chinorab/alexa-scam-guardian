@@ -13,6 +13,22 @@ The cloud version runs in `us-east-1` as one CDK stack named `ScamGuardian`:
 
 Deleting the stack deletes the table: no family data outlives the service.
 
+## Rehearse without an account
+
+```bash
+pnpm rehearse
+```
+
+Builds the real Lambda bundles and runs them behind two local Function URL emulators, with
+stand ins for Secrets Manager, SSM and DynamoDB that speak the same JSON protocols as AWS.
+Then it runs `pnpm smoke` against them and lists every AWS call the bundles made. With
+`--keep` the servers stay up on ports 8892 (web) and 8891 (MCP), so the Playwright suite can
+run against the Lambda code too:
+
+```bash
+E2E_BASE_URL=http://localhost:8892 pnpm test:e2e
+```
+
 ## Before the first deploy
 
 1. Give this machine AWS credentials. The AWS CLI is not required: CDK and the scripts read
@@ -27,7 +43,14 @@ Deleting the stack deletes the table: no family data outlives the service.
    request production access early, it usually takes one to two business days. Without a
    sender, email goes to the on screen demo phone and the family page cannot send sign in
    links.
-4. Bootstrap CDK once per account and region:
+4. Check the account in one command; it lists what is still missing, in order (credentials,
+   Bedrock model access with one tiny request, Polly, SES sender and sandbox, CDK bootstrap):
+
+```bash
+pnpm aws:check
+```
+
+5. Bootstrap CDK once per account and region:
 
 ```bash
 pnpm --filter @asg/infra exec cdk bootstrap
@@ -100,8 +123,10 @@ pnpm --filter @asg/infra destroy
 ## Cost guards
 
 - On demand DynamoDB, Lambda and Function URLs cost nothing while idle.
-- A public visitor can start at most 20 demo families per hour from one address.
-- Each household gets at most 120 model backed turns per hour; past that the rule based mode
+- One address can start at most 200 demo families per hour: enough for a judging team
+  behind one office address, not enough to flood the table.
+- The whole site makes at most 3,000 model backed turns per hour, and each household at most
+  120; past either limit the rule based mode
   answers, so a person is never refused mid call.
 - Outreach messages are limited to 10 per household per hour, sign in links to 5 per email
   per hour, test messages to 3 per person per hour.

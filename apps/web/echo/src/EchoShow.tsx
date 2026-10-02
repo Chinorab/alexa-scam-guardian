@@ -283,10 +283,10 @@ export function EchoShow(props: { pollMs: number }) {
               autocomplete="off"
               value={draft}
               onInput={(event) => setDraft((event.target as HTMLInputElement).value)}
-              disabled={!device}
               placeholder="My grandson called and needs bail money"
             />
-            <button class="button" type="submit" disabled={!device || busy}>
+            {/* Typing works from the first moment; sending waits for the demo device. */}
+            <button class="button" type="submit" disabled={busy}>
               <Icon svg={sendIcon} />
               Send
             </button>

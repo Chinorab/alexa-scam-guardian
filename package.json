@@ -30,7 +30,9 @@
     "token:cloud": "pnpm --filter @asg/web token:cloud",
     "smoke": "tsx scripts/smoke.ts",
     "demo:play": "pnpm --filter @asg/tests demo:play",
-    "video:cards": "pnpm --filter @asg/tests video:cards"
+    "video:cards": "pnpm --filter @asg/tests video:cards",
+    "aws:check": "pnpm --filter @asg/web aws:check",
+    "rehearse": "pnpm --filter @asg/infra rehearse"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
