@@ -89,8 +89,8 @@ export function registerOutreach(server: McpServer, deps: Deps, caller: Caller) 
       }
 
       const question = verify
-        ? phrases.offerVerify(verify, helpers)
-        : phrases.offerHeadsUp(helpers);
+        ? phrases.offerVerify(verify, helpers, check.contactKind)
+        : phrases.offerHeadsUp(helpers, check.contactKind);
       const now = deps.clock.now();
       const pendingId = newId("pending");
       await deps.store.putPending({
