@@ -88,3 +88,20 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium (blocks T080 and the cloud measurements; does not block code).
 - **Workaround:** Put the table behind a narrow interface, ran all 175 contract tests on the DynamoDB store through an in memory table with DynamoDB ordering rules, validated the stack with `cdk synth` and CDK assertions, and wrote `docs/deploy.md` for a one command deploy.
 - **Suggestion:** Hackathon resources could list the AWS credit or sandbox path for the AWS Builder challenge on the main Devpost page.
+
+---
+
+## #6 — `pnpm dev` never started the web server on Windows
+
+- **Date:** 2026-10-02
+- **Task attempted:** Run the quickstart from a clean clone (T109).
+- **Steps:**
+  1. `pnpm dev` ran the web app's script `vite build --watch & tsx watch src/local.ts`.
+  2. On Windows, pnpm runs scripts with cmd, where `&` runs the two commands one after the other; `vite build --watch` never exits, so the server never started.
+  3. Splitting the script into `dev:assets` and `dev:server` run by `pnpm run --parallel "/^dev:/"` started both, but `tsx watch` started from a non interactive shell still did not open the port.
+  4. `node --watch --import tsx src/local.ts` worked everywhere.
+- **Expected:** One dev script that behaves the same on Windows, macOS and Linux.
+- **Actual:** About 30 minutes to find two separate Windows only causes; the clean clone run was the only thing that caught it, since the tests start the server another way.
+- **Severity:** Medium for a judge or contributor on Windows (the documented first command did nothing visible).
+- **Workaround:** pnpm's parallel regex scripts and Node's built in watch mode with the tsx loader.
+- **Suggestion:** pnpm could warn when a script uses `&` and the shell is cmd; tsx could document `node --watch --import tsx` as the portable form.
