@@ -54,6 +54,8 @@ export function EchoShow(props: { pollMs: number }) {
   const lastInputWasVoice = useRef(false);
   const deviceRef = useRef<StartResponse>();
   deviceRef.current = device;
+  /** Resolves once the demo device exists, so words sent in the first second are not lost. */
+  const started = useRef<Promise<StartResponse | undefined>>();
 
   const refreshPhone = useCallback(async () => {
     const current = deviceRef.current;
@@ -66,15 +68,23 @@ export function EchoShow(props: { pollMs: number }) {
   }, []);
 
   useEffect(() => {
-    startDevice()
-      .then(setDevice)
-      .catch(() => setProblem("The demo could not start. Please reload the page."));
+    started.current = startDevice()
+      .then((started) => {
+        deviceRef.current = started;
+        setDevice(started);
+        return started;
+      })
+      .catch(() => {
+        setProblem("The demo could not start. Please reload the page.");
+        return undefined;
+      });
   }, []);
 
   const send = useCallback(
     async (text: string, options: { quiet?: boolean } = {}) => {
-      const current = deviceRef.current;
-      if (!current || busyRef.current || !text.trim()) return;
+      if (busyRef.current || !text.trim()) return;
+      const current = deviceRef.current ?? (await started.current);
+      if (!current || busyRef.current) return;
       busyRef.current = true;
       setBusy(true);
       setProblem(undefined);
@@ -192,7 +202,9 @@ export function EchoShow(props: { pollMs: number }) {
   function submit(event: Event) {
     event.preventDefault();
     lastInputWasVoice.current = false;
-    const text = draft;
+    // Read the field itself: a fast Enter can come before the draft state has caught up.
+    const field = (event.currentTarget as HTMLFormElement).elements.namedItem("text");
+    const text = field instanceof HTMLInputElement ? field.value : draft;
     setDraft("");
     void send(text);
   }
@@ -265,6 +277,7 @@ export function EchoShow(props: { pollMs: number }) {
           <div class="echo-type-row">
             <input
               id="echo-input"
+              name="text"
               type="text"
               autocomplete="off"
               value={draft}
@@ -272,7 +285,7 @@ export function EchoShow(props: { pollMs: number }) {
               disabled={!device}
               placeholder="My grandson called and needs bail money"
             />
-            <button class="button" type="submit" disabled={!device || busy || !draft.trim()}>
+            <button class="button" type="submit" disabled={!device || busy}>
               <Icon svg={sendIcon} />
               Send
             </button>
