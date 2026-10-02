@@ -39,18 +39,21 @@ function rows(data: Structured): Row[] {
   const updates = (Array.isArray(data.updates) ? data.updates : []) as {
     memberName: string;
     kind: string;
+    aboutThemselves?: boolean;
   }[];
   for (const u of updates) {
+    // Asked about someone else: the answer is whether the story is true.
+    const other = u.aboutThemselves === false;
     if (u.kind === "it_wasnt_me") {
       out.push({
         tone: "warning",
-        title: `${u.memberName} says it was not them`,
+        title: `${u.memberName} says ${other ? "it is not true" : "it was not them"}`,
         detail: "Do not send any money.",
       });
     } else if (u.kind === "it_was_me") {
       out.push({
         tone: "guide",
-        title: `${u.memberName} says it was them`,
+        title: `${u.memberName} says ${other ? "it is true" : "it was them"}`,
         detail: "Call them on the number you know before sending anything.",
       });
     } else if (u.kind === "no_answer") {

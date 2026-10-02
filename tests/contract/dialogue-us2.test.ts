@@ -62,7 +62,7 @@ describe("user story 2: check with the real relative", () => {
     expect((await d.events()).light).toBe("notification");
     const news = await d.say("What's new?");
     expect(news.say).toBe(
-      "Michael hasn't answered yet, and that doesn't mean something is wrong. Let's not send any money for now. Should I email Sarah on the number your family saved?",
+      "Michael hasn't answered yet, and that doesn't mean something is wrong. Let's not send any money for now. Should I email Sarah at the email address your family saved?",
     );
     const second = await d.say("yes");
     expect(second.say).toMatch(/^Done\. I'll tell you when Sarah answers\./);

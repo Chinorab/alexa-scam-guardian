@@ -110,6 +110,9 @@ export function registerAssessCall(server: McpServer, deps: Deps, caller: Caller
       result.callerOnLine = isCallerOnLine(redacted.text);
       const members = await deps.store.listMembers(caller.householdId);
       const relatives = matchRelatives(members, check.description, result.claimedRelationship);
+      // "Mike called": a saved name or nickname says who the caller claimed to be.
+      const named = !result.claimedIdentity && relatives.length === 1 ? relatives[0] : undefined;
+      if (named && named.relationship !== "other") result.claimedIdentity = named.relationship;
       const helper = headsUpCandidate(
         members,
         relatives.map((m) => m.memberId),

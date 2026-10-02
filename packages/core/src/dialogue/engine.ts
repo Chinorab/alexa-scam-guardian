@@ -65,6 +65,8 @@ export interface UpdatesResult {
     checkId: string;
     memberName: string;
     kind: "it_was_me" | "it_wasnt_me" | "no_answer" | "delivery_failed";
+    /** False when they were asked about someone else: the answer is "true" or "not true". */
+    aboutThemselves?: boolean;
   }[];
   waitingOn: { memberName: string; minutesWaiting: number }[];
   nextMemberToTry?: Member & { role: "verify" | "heads_up" };
@@ -181,7 +183,7 @@ const INTENTS: [Intent, RegExp][] = [
   ],
   [
     "pay_question",
-    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy))\b/i,
+    /\b((can|should|may|do) i (just |now |still )?(pay|send|wire|buy|give|mail|use)|is it (safe|ok|okay|fine) to (pay|send|wire|buy|give)|so i can (pay|send|wire|buy|give|mail)|go ahead and (pay|send|wire|buy)|i (still |really )?(want|need|have|will|am going|'m going) to (pay|send|wire|buy|give|mail)|i'?m (just )?gonna (pay|send|wire|buy|give|mail))\b/i,
   ],
   [
     "what_to_do",
@@ -470,13 +472,23 @@ async function news(state: EngineState, tools: EngineTools): Promise<EngineReply
     const opts = { cards: ["get_updates"] };
     switch (update.kind) {
       case "it_wasnt_me":
-        return reply(phrases.replyDenied(person), {
-          ...opts,
-          expectReply: true,
-          state: { stage: "report_offered" },
-        });
+        return reply(
+          update.aboutThemselves === false
+            ? phrases.replyNotTrue(person)
+            : phrases.replyDenied(person),
+          {
+            ...opts,
+            expectReply: true,
+            state: { stage: "report_offered" },
+          },
+        );
       case "it_was_me":
-        return reply(phrases.replyConfirmed(person), { ...opts, state: { stage: "assessed" } });
+        return reply(
+          update.aboutThemselves === false
+            ? phrases.replyTrue(person)
+            : phrases.replyConfirmed(person),
+          { ...opts, state: { stage: "assessed" } },
+        );
       case "no_answer":
       case "delivery_failed": {
         const next = result.nextMemberToTry;

@@ -175,7 +175,7 @@ describe("simplifiedTurn", () => {
     );
     const pay = await simplifiedTurn("So can I pay him?", first.state, fakeTools([michael]));
     expect(pay.say).toBe(
-      "Let's not send any money yet. First, let's reach Michael on a number your family saved.",
+      "Let's not send any money yet. First, let's reach Michael on the number your family saved.",
     );
     const back = await simplifiedTurn(
       "Call back the number that called me",

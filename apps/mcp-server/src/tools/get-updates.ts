@@ -2,12 +2,20 @@
 import { registerAppTool } from "@modelcontextprotocol/ext-apps/server";
 import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
-import type { FamilyMember } from "@asg/core/ports/index";
+import { claimedToBe } from "@asg/core/copy/identity";
 import type { Caller, Deps } from "../deps";
 import { toolResult } from "../server";
 import { CHECK_STATUS_URI } from "../ui/register";
 import { publicMember } from "./members";
 import { sweepNoAnswer } from "./replies";
+
+/** A reply from someone asked about another person says whether the story is true. */
+function aboutSomeoneElse(u: { kind: string; aboutThemselves: boolean }) {
+  if (u.aboutThemselves) return undefined;
+  if (u.kind === "it_wasnt_me") return "says the story is not true (asked about someone else)";
+  if (u.kind === "it_was_me") return "says the story is true (asked about someone else)";
+  return undefined;
+}
 
 export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller) {
   registerAppTool(
@@ -34,12 +42,23 @@ export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller
         caller.householdId,
         events.map((e) => e.eventId),
       );
-      const updates = events.map((e) => ({
-        checkId: e.checkId,
-        memberName: nameOf(e.memberId),
-        kind: e.kind === "reply_received" ? (e.reply ?? "it_was_me") : e.kind,
-        at: e.at,
-      }));
+      const claimed = new Map<string, string | undefined>();
+      for (const id of new Set(events.map((e) => e.checkId))) {
+        claimed.set(id, (await deps.store.getCheck(caller.householdId, id))?.claimedIdentity);
+      }
+      const updates = events.map((e) => {
+        const member = members.find((m) => m.memberId === e.memberId);
+        return {
+          checkId: e.checkId,
+          memberName: nameOf(e.memberId),
+          kind: e.kind === "reply_received" ? (e.reply ?? "it_was_me") : e.kind,
+          // False when they were asked about someone else: "it_wasnt_me" means "not true".
+          aboutThemselves: member
+            ? claimedToBe(claimed.get(e.checkId), member.relationship)
+            : false,
+          at: e.at,
+        };
+      });
 
       const checkIds = checkId
         ? [checkId]
@@ -48,10 +67,13 @@ export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller
             .map((c) => c.checkId);
       const waitingOn: { memberName: string; minutesWaiting: number }[] = [];
       const contacted = new Set<string>();
+      // Told by a heads up is not asked: a trusted contact can still be asked to check.
+      const asked = new Set<string>();
       let anyNoAnswer = false;
       for (const id of checkIds) {
         for (const request of await deps.store.listVerifications(caller.householdId, id)) {
           contacted.add(request.memberId);
+          asked.add(request.memberId);
           if (request.noAnswerAt) anyNoAnswer = true;
           if (request.reply === "none" && request.delivery === "sent" && !request.noAnswerAt) {
             waitingOn.push({
@@ -68,15 +90,16 @@ export function registerGetUpdates(server: McpServer, deps: Deps, caller: Caller
       const structured: Record<string, unknown> = { updates, waitingOn };
       const failed = updates.some((u) => u.kind === "delivery_failed");
       if (anyNoAnswer || failed) {
-        const available = (m: FamilyMember) => !m.optedOut && !contacted.has(m.memberId);
-        const verifier = members.find((m) => available(m) && m.canVerify);
-        const helper = members.find((m) => available(m) && m.getsHeadsUp);
+        const verifier = members.find((m) => !m.optedOut && !asked.has(m.memberId) && m.canVerify);
+        const helper = members.find(
+          (m) => !m.optedOut && !contacted.has(m.memberId) && m.getsHeadsUp,
+        );
         if (verifier) structured.nextMemberToTry = { ...publicMember(verifier), role: "verify" };
         else if (helper) structured.nextMemberToTry = { ...publicMember(helper), role: "heads_up" };
       }
       const summary =
         updates.length > 0
-          ? updates.map((u) => `${u.memberName}: ${u.kind}`).join("; ")
+          ? updates.map((u) => `${u.memberName}: ${aboutSomeoneElse(u) ?? u.kind}`).join("; ")
           : waitingOn.length > 0
             ? `Still waiting on ${waitingOn.map((w) => w.memberName).join(", ")}. No answer is not a confirmation.`
             : "No news.";

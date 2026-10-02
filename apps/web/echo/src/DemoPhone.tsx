@@ -3,6 +3,7 @@
  * answers a relative would use. Links are shown as buttons; nothing leaves this page.
  */
 import { useEffect, useRef, useState } from "preact/hooks";
+import { replyLabels } from "@asg/core/copy/identity";
 import { answerOnPhone, type PhoneMessage } from "./api";
 
 function bodyWithoutLinks(body: string): string[] {
@@ -28,7 +29,7 @@ const timeOf = (iso: string) =>
   });
 
 export function DemoPhone(props: { messages: PhoneMessage[]; onAnswered(): void }) {
-  const [answered, setAnswered] = useState<Record<string, string>>({});
+  const [answered, setAnswered] = useState<Record<string, "it_was_me" | "it_wasnt_me">>({});
   const screen = useRef<HTMLDivElement>(null);
   const newest = props.messages[0]?.id;
 
@@ -67,7 +68,12 @@ export function DemoPhone(props: { messages: PhoneMessage[]; onAnswered(): void 
               {message.replyPath &&
                 (answered[message.id] ? (
                   <p class="phone-message-answered">
-                    Answered: {answered[message.id] === "it_was_me" ? "It was me" : "It wasn't me"}
+                    Answered:{" "}
+                    {
+                      replyLabels(message.aboutThemselves !== false)[
+                        answered[message.id] ?? "it_wasnt_me"
+                      ]
+                    }
                   </p>
                 ) : (
                   <div class="phone-message-actions">
@@ -76,14 +82,14 @@ export function DemoPhone(props: { messages: PhoneMessage[]; onAnswered(): void 
                       type="button"
                       onClick={() => void answer(message, "it_was_me")}
                     >
-                      It was me
+                      {replyLabels(message.aboutThemselves !== false).it_was_me}
                     </button>
                     <button
                       class="button button-warning"
                       type="button"
                       onClick={() => void answer(message, "it_wasnt_me")}
                     >
-                      It wasn't me
+                      {replyLabels(message.aboutThemselves !== false).it_wasnt_me}
                     </button>
                   </div>
                 ))}

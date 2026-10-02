@@ -537,8 +537,8 @@ export function MemberFormPage(props: {
 
 const OUTCOMES: Record<Check["outcome"], string> = {
   unknown: "No answer from family yet",
-  not_from_them: "Family said it was not them",
-  confirmed_by_them: "Family confirmed it was them",
+  not_from_them: "Family said the story was not true",
+  confirmed_by_them: "Family said the story was true",
   no_answer: "No answer in time",
   no_red_flags: "No warning signs found",
 };

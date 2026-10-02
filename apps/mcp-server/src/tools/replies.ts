@@ -3,12 +3,20 @@
  * reply page (/r/:token) and the Echo's event polling, so every path applies the same rules.
  */
 import { hashToken } from "@asg/core/auth/link-tokens";
+import { claimedIdentityWords, claimedToBe } from "@asg/core/copy/identity";
 import { newId } from "@asg/core/ids";
 import { epochSeconds, type Check, type Reply } from "@asg/core/ports/index";
 import type { Deps } from "../deps";
 
 export type RecordReplyResult =
-  | { ok: true; olderAdultFirstName: string; memberName: string; reply: Reply }
+  | {
+      ok: true;
+      olderAdultFirstName: string;
+      memberName: string;
+      reply: Reply;
+      /** False when they were asked about someone else ("Is it true?"). */
+      aboutThemselves: boolean;
+    }
   | { ok: false; reason: "unknown" | "expired" | "already_answered" };
 
 /** Records the relative's one tap answer. Only the first answer counts. */
@@ -55,6 +63,7 @@ export async function recordReply(
     olderAdultFirstName: household.olderAdultFirstName,
     memberName: member.name,
     reply,
+    aboutThemselves: claimedToBe(check?.claimedIdentity, member.relationship),
   };
 }
 
@@ -103,7 +112,15 @@ export async function unreadCount(deps: Deps, householdId: string): Promise<numb
 }
 
 export type ReplyLinkState =
-  | { status: "open" | "answered"; olderAdultFirstName: string; memberName: string; reply: Reply }
+  | {
+      status: "open" | "answered";
+      olderAdultFirstName: string;
+      memberName: string;
+      reply: Reply;
+      aboutThemselves: boolean;
+      /** Who the caller said they were, for example "Ruth's grandson". */
+      claimedWords?: string;
+    }
   | { status: "unknown" | "expired" };
 
 /** What the reply page shows. Reads only: link scanners open links, so GET never records. */
@@ -111,15 +128,21 @@ export async function describeReplyLink(deps: Deps, token: string): Promise<Repl
   const request = await deps.store.findVerificationByToken(hashToken(token));
   if (!request) return { status: "unknown" };
   if (request.replyExpiresAt < epochSeconds(deps.clock.now())) return { status: "expired" };
-  const [household, member] = await Promise.all([
+  const [household, member, check] = await Promise.all([
     deps.store.getHousehold(request.householdId),
     deps.store.getMember(request.householdId, request.memberId),
+    deps.store.getCheck(request.householdId, request.checkId),
   ]);
   if (!household || !member) return { status: "unknown" };
-  return {
+  const state: ReplyLinkState = {
     status: request.reply === "none" ? "open" : "answered",
     olderAdultFirstName: household.olderAdultFirstName,
     memberName: member.name,
     reply: request.reply,
+    aboutThemselves: claimedToBe(check?.claimedIdentity, member.relationship),
   };
+  if (check?.claimedIdentity) {
+    state.claimedWords = claimedIdentityWords(check.claimedIdentity, household.olderAdultFirstName);
+  }
+  return state;
 }

@@ -2,7 +2,7 @@
  * Message templates (FR-008, FR-015). Plain words, no dashes, no sensitive numbers, never the
  * older adult's own words: only the claimed identity and the warning sign labels.
  */
-import { claimedIdentityWords } from "@asg/core/copy/identity";
+import { claimedIdentityWords, claimedToBe } from "@asg/core/copy/identity";
 import { listWithAnd } from "@asg/core/dialogue/phrases";
 import type { Check, FamilyMember, Household } from "@asg/core/ports/index";
 
@@ -15,12 +15,7 @@ export interface Rendered {
 
 /** "you" when the relative is the one the caller claimed to be, otherwise a description. */
 function whoCallerClaimed(check: Check, member: FamilyMember, household: Household): string {
-  const claimed = check.claimedIdentity;
-  const isGrandchild =
-    member.relationship === "grandson" || member.relationship === "granddaughter";
-  if (claimed && (claimed === member.relationship || (claimed === "grandchild" && isGrandchild))) {
-    return "you";
-  }
+  if (claimedToBe(check.claimedIdentity, member.relationship)) return "you";
   if (check.claimedIdentity) {
     return claimedIdentityWords(check.claimedIdentity, household.olderAdultFirstName);
   }
