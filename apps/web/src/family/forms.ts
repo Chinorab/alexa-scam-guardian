@@ -22,6 +22,10 @@ export function usPhone(input: string): string | undefined {
   return undefined;
 }
 
+/** Names: letters in any language, spaces, apostrophes, hyphens and periods. No markup or line breaks. */
+const NAME = /^[\p{L}\p{M}][\p{L}\p{M}' .-]*$/u;
+export const validName = (name: string) => NAME.test(name);
+
 export const validEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
 
@@ -71,14 +75,24 @@ export function parseMember(body: FormBody): {
   const errors: Errors = {};
   if (!values.name) errors.name = "Enter a first name.";
   else if (values.name.length > 60) errors.name = "Use 60 letters or fewer.";
+  else if (!validName(values.name))
+    errors.name = "Use letters only, for example Michael or Mary Ann.";
   if (values.relationship === "other" && !values.relationshipOther) {
     errors.relationshipOther = "Say how they are related, for example family friend.";
+  } else if (
+    values.relationship === "other" &&
+    (values.relationshipOther.length > 40 || !validName(values.relationshipOther))
+  ) {
+    errors.relationshipOther = "Use a few words, for example family friend.";
   }
   const nicknames = values.nicknames
     .split(",")
     .map((n) => n.trim())
     .filter(Boolean)
     .slice(0, 5);
+  if (nicknames.some((n) => n.length > 30 || !validName(n))) {
+    errors.nicknames = "Use letters only, separated by commas, for example Mike, Mikey.";
+  }
   const phone = usPhone(values.phone);
   if (values.channel === "text" && !phone)
     errors.phone = "Enter a US mobile number with 10 digits.";
@@ -115,6 +129,7 @@ export function parseSettings(body: FormBody): {
   const errors: Errors = {};
   if (!firstName) errors.firstName = "Enter the first name Alexa should use.";
   else if (firstName.length > 40) errors.firstName = "Use 40 letters or fewer.";
+  else if (!validName(firstName)) errors.firstName = "Use letters only, for example Ruth.";
   if (!WAIT_CHOICES.includes(waitMinutes)) errors.waitMinutes = "Choose a wait time from the list.";
   return { firstName, waitMinutes, errors };
 }

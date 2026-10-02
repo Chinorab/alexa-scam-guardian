@@ -332,3 +332,27 @@ describe("a household with nobody saved yet", () => {
     );
   });
 });
+
+describe("names on the family page", () => {
+  it("accepts names in any language and refuses markup or line breaks", async () => {
+    const f = family();
+    await setUp(f);
+    const add = (name: string, nicknames = "") =>
+      f.form("/family/members", {
+        name,
+        relationship: "grandson",
+        nicknames,
+        channel: "text",
+        phone: "555 555 0142",
+        canVerify: "on",
+      });
+    expect((await add("José O'Brien-Nguyễn")).status).toBe(303);
+    const markup = await add("<img src=x onerror=alert(1)>");
+    expect(markup.status).toBe(400);
+    expect(await markup.text()).toContain("Use letters only");
+    expect((await add("Bob\nBcc: someone")).status).toBe(400);
+    expect((await add("Michael", "Mike, <b>Mikey</b>")).status).toBe(400);
+    const home = await (await f.request("/family")).text();
+    expect(home).toContain("José O&#39;Brien-Nguyễn");
+  });
+});
