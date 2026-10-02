@@ -127,6 +127,33 @@ test("MCP Apps cards on the Echo screen meet WCAG 2.2 AA", async ({ page }) => {
   }).toPass({ timeout: 15_000 });
 });
 
+test("the pages a relative opens on a phone meet WCAG 2.2 AA", async ({ page }) => {
+  await openEcho(page);
+  await say(page, OPENING);
+  await say(page, "Yes");
+  await expect(caption(page)).toContainText("I'll tell you when Michael answers");
+  const deviceId = await page.evaluate(() => sessionStorage.getItem("scam-guardian-device"));
+  const phone = (await (await page.request.get(`/api/device/${deviceId}/demo-phone`)).json()) as {
+    messages: { to: string; body: string; replyPath?: string }[];
+  };
+  const toMichael = phone.messages.find((m) => m.to === "Michael");
+  const stopPath = toMichael?.body.match(/\/stop\/\S+/)?.[0];
+  expect(toMichael?.replyPath).toBeTruthy();
+  expect(stopPath).toBeTruthy();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const scheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto(toMichael!.replyPath!);
+    await expectNoViolations(page, `reply page, ${scheme}`);
+    await page.goto(stopPath!);
+    await expectNoViolations(page, `stop page, ${scheme}`);
+  }
+  await page.goto(toMichael!.replyPath!);
+  await page.getByRole("button", { name: "It wasn't me" }).click();
+  await expectNoViolations(page, "reply page after answering");
+});
+
 test("the Echo works from the keyboard alone", async ({ page }) => {
   await openEcho(page);
   await page.keyboard.press("Tab");
