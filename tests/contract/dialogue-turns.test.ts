@@ -115,4 +115,13 @@ describe("conversations, turn by turn", () => {
     const reply = await d.say("My grandson called to wish me happy birthday.");
     expect(reply.say).not.toContain("Should I text Michael");
   });
+
+  it("feeling foolish gets reassurance, and the open question again", async () => {
+    const d = await started();
+    await d.say(OPENING);
+    const reply = await d.say("I feel so stupid for almost falling for it.");
+    expect(reply.say).toMatch(/^Please don't be hard on yourself./);
+    expect(reply.say).toContain("Should I text Michael");
+    expect(await d.phone()).toEqual([]);
+  });
 });

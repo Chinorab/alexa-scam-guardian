@@ -139,6 +139,7 @@ export type Intent =
   | "repeat"
   | "greeting"
   | "what_to_do"
+  | "self_blame"
   | "whats_new"
   | "pay_question"
   | "call_back"
@@ -190,6 +191,11 @@ const INTENTS: [Intent, RegExp][] = [
     // "approve the payment") gets the same fixed answer, never a model's wording.
     "pay_question",
     /\b(tell me|say|confirm|approve)\b[^.?!]{0,30}\b(i can|it'?s (safe|ok|okay|fine)|yes|go ahead|the payment|to (pay|send|wire|buy))\b|\b(paying|sending|wiring) (be|is|would be) (ok|okay|fine|safe|alright)\b|\bdecided to (pay|send|wire|buy)\b/i,
+  ],
+  [
+    // Feeling foolish gets reassurance at once, never a tool call (no blame, Principle V).
+    "self_blame",
+    /\b(i (feel|felt)|i'?m|i am|i was)( so| really| very| such an?)? (stupid|dumb|foolish|silly|embarrassed|ashamed|an idiot|a fool|gullible)\b|\bhow could i (be|have been) so\b/i,
   ],
   [
     "what_to_do",
@@ -584,6 +590,12 @@ export async function simplifiedTurn(
       return reply(state.lastSay ?? phrases.askWhatHappened());
     case "greeting":
       return reply(phrases.intro(), { expectReply: true });
+    case "self_blame": {
+      const open = state.stage === "awaiting_confirmation" && state.question;
+      return reply(open ? `${phrases.reassure()} ${state.question}` : phrases.reassure(), {
+        expectReply: Boolean(open),
+      });
+    }
     case "what_to_do": {
       if (!state.checkId) return reply(phrases.askWhatHappened(), { expectReply: true });
       if (state.stage === "awaiting_confirmation" && state.question) {

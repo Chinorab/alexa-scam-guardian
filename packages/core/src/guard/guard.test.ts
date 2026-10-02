@@ -68,6 +68,19 @@ describe("guardLine blocks other unsafe content", () => {
     expect(violations("Please read me the PIN.")).toContain("asks-sensitive");
   });
 
+  it("blocks unsourced figures and payment advice (seen from the live model)", () => {
+    expect(violations("You're not alone, this happens to thousands of people.")).toContain(
+      "figures",
+    );
+    expect(violations("Most seniors get a call like this.")).toContain("figures");
+    expect(violations("About 40 percent of calls are scams.")).toContain("figures");
+    expect(
+      violations("Real lawyers take payment by check or card directly to their office."),
+    ).toContain("payment-advice");
+    expect(violations("A real court would never ask for gift cards.")).toEqual([]);
+    expect(violations("Call 911 if you feel unsafe.")).toEqual([]);
+  });
+
   it("blocks asking for a phone number or an address (seen from the live model)", () => {
     expect(violations("Do you have Michael's phone number?")).toContain("asks-sensitive");
     expect(violations("What is the number that called you?")).toContain("asks-sensitive");
