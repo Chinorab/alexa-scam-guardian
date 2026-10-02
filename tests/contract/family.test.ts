@@ -232,6 +232,7 @@ describe("activity and delete all", () => {
     });
     const html = await (await f.request("/family/activity")).text();
     expect(html).toContain("Warning signs: emergency story, gift cards.");
+    expect(html).toContain("Kept for 30 days.");
   });
 
   it("deletes everything only after the first name is typed", async () => {
@@ -270,6 +271,9 @@ describe("public demo family (FR-026)", () => {
     expect(home).toContain("Michael");
     const activity = await (await f.request("/family/activity")).text();
     expect(activity).toContain("gift cards");
+    // The demo family is gone within 24 hours: the page never promises 30 days.
+    expect(activity).toContain("Deleted with the demo family.");
+    expect(activity).not.toContain("Kept for 30 days");
   });
 
   it("opens a fresh demo family without an Echo, with no email", async () => {
