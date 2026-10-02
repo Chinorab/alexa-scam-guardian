@@ -9,7 +9,8 @@
     "e2e": "node e2e/run.mjs",
     "redteam:live": "vitest run -c redteam/vitest.live.config.ts",
     "a11y": "node e2e/run.mjs a11y",
-    "demo:play": "node e2e/run.mjs demo-play --headed"
+    "demo:play": "node e2e/run.mjs demo-play --headed",
+    "video:cards": "node e2e/run.mjs video-cards"
   },
   "dependencies": {
     "@asg/core": "workspace:^",

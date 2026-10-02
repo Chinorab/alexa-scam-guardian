@@ -174,6 +174,14 @@ issues real tool calls.
 - Friction log: [FRICTION_LOG.md](FRICTION_LOG.md)
 - Privacy: served at `/privacy`
 
+## Credits
+
+- Fonts: [Overpass](https://github.com/RedHatOfficial/Overpass) and
+  [Atkinson Hyperlegible Next](https://www.brailleinstitute.org/freefont/) (Braille
+  Institute), both under the SIL Open Font License, served through Fontsource.
+- Icons: [Lucide](https://lucide.dev), ISC license.
+- Scam patterns: written from FTC and FBI publications, cited one by one in the dataset.
+
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). Design notes: [DESIGN.md](DESIGN.md).

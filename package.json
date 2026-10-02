@@ -29,7 +29,8 @@
     "dev:mcp": "pnpm --filter @asg/mcp-server dev",
     "token:cloud": "pnpm --filter @asg/web token:cloud",
     "smoke": "tsx scripts/smoke.ts",
-    "demo:play": "pnpm --filter @asg/tests demo:play"
+    "demo:play": "pnpm --filter @asg/tests demo:play",
+    "video:cards": "pnpm --filter @asg/tests video:cards"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -1,0 +1,131 @@
+1
+00:00:04,000 --> 00:00:09,500
+Ruth: Alexa, my grandson just called. He's in jail and needs two thousand dollars in gift cards for bail.
+
+2
+00:00:10,000 --> 00:00:14,000
+Alexa: I'm glad you asked me first. The emergency story and the gift cards are common signs of a scam.
+
+3
+00:00:14,000 --> 00:00:18,500
+Alexa: Should I text Michael to check, and tell Sarah you got this call?
+
+4
+00:00:19,000 --> 00:00:19,800
+Ruth: Yes.
+
+5
+00:00:20,000 --> 00:00:22,800
+Alexa: Done. I'll tell you when Michael answers.
+
+6
+00:00:26,000 --> 00:00:30,000
+Alexa: Michael says he did not call you, so you did the right thing by checking. Please don't send any money.
+
+7
+00:00:30,000 --> 00:00:31,500
+Alexa: Would you like help reporting this call?
+
+8
+00:00:31,500 --> 00:00:35,000
+Scam Guardian is an Alexa+ add on for the moment right after a scary call.
+
+9
+00:00:35,000 --> 00:00:40,000
+The FTC's advice is simple: hang up and check with your family on a number you know.
+
+10
+00:00:40,000 --> 00:00:44,500
+Scam Guardian turns that advice into a conversation.
+
+11
+00:00:45,000 --> 00:00:47,000
+Ruth: So can I pay him?
+
+12
+00:00:47,500 --> 00:00:54,500
+Alexa: Let's not send any money yet. First, call your family on a number you know.
+
+13
+00:00:55,000 --> 00:00:58,000
+Ruth: He's still on the other phone, he says I have to hurry.
+
+14
+00:00:58,500 --> 00:01:04,500
+Alexa: You can hang up now. A real family member will understand.
+
+15
+00:01:05,000 --> 00:01:07,000
+Ruth: My card number is four one two two
+
+16
+00:01:07,000 --> 00:01:14,500
+Alexa: Let me stop you there. Please don't share numbers like that with me or anyone on the phone. We don't need them.
+
+17
+00:01:15,000 --> 00:01:17,000
+Ruth: Call back the number that called me.
+
+18
+00:01:17,500 --> 00:01:21,500
+Alexa: I won't call that number, because scammers control it. Please call your family on a number you know.
+
+19
+00:01:22,000 --> 00:01:24,500
+Ruth: There's a man at my door, he says he's here for the money.
+
+20
+00:01:24,500 --> 00:01:27,000
+Alexa: Don't open the door and don't hand over money. If you feel unsafe, call 911 now.
+
+21
+00:01:27,000 --> 00:01:30,000
+It never says a payment is safe. It never contacts the caller. It never takes card numbers. And it never records the call.
+
+22
+00:01:30,000 --> 00:01:32,000
+Ruth: Help me report it.
+
+23
+00:01:32,000 --> 00:01:41,500
+Alexa: I put a summary on the screen with where to report it. Nothing was sent to any agency.
+
+24
+00:01:42,000 --> 00:01:45,000
+Ruth: I already bought the cards and read him the numbers.
+
+25
+00:01:45,000 --> 00:01:52,000
+Alexa: Thank you for telling me. Call the company that sold the gift card right away. Should I tell Sarah you got this call, so she can help?
+
+26
+00:01:55,000 --> 00:01:59,500
+No blame, one first step, and the family knows.
+
+27
+00:02:00,000 --> 00:02:07,500
+A grandchild sets it up from their phone in a few minutes.
+
+28
+00:02:08,000 --> 00:02:15,500
+Who Alexa can check with, and who gets a heads up.
+
+29
+00:02:16,000 --> 00:02:24,500
+An optional family password, and a history of every check. One button deletes it all.
+
+30
+00:02:25,000 --> 00:02:32,500
+Under the hood is a real MCP server with eight tools, running on AWS Lambda. The safety rules live inside the tools: there is no way to pass a destination number.
+
+31
+00:02:33,000 --> 00:02:40,500
+Claude Haiku on Amazon Bedrock picks the tools, a rule based mode takes over if it is slow, and every sentence passes the same guard.
+
+32
+00:02:41,000 --> 00:02:47,500
+Seventy two adversarial phrases run on every push. The scam patterns come only from FTC and FBI alerts, and they are open source.
+
+33
+00:02:48,000 --> 00:02:50,000
+Hang up. Ask Alexa. Check with family.

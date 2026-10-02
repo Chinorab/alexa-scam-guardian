@@ -1,6 +1,9 @@
 import type { Child } from "hono/jsx";
 
 export const PRODUCT_NAME = "Scam Guardian";
+/** Link preview image; absolute because chat apps and Devpost fetch it from elsewhere. */
+const SHARE_IMAGE =
+  "https://raw.githubusercontent.com/Chinorab/alexa-scam-guardian/main/docs/video/devpost-cover.png";
 
 type NavKey = "home" | "echo" | "family" | "privacy";
 
@@ -28,6 +31,16 @@ export function Layout(props: {
         <title>{`${props.title} | ${PRODUCT_NAME}`}</title>
         <meta name="description" content={props.description} />
         <meta name="color-scheme" content="light dark" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={PRODUCT_NAME} />
+        <meta property="og:title" content={`${props.title} | ${PRODUCT_NAME}`} />
+        <meta property="og:description" content={props.description} />
+        <meta property="og:image" content={SHARE_IMAGE} />
+        <meta
+          property="og:image:alt"
+          content="Road signs: gift cards for bail, check with Michael, report."
+        />
+        <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
