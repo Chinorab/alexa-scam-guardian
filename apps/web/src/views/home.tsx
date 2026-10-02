@@ -43,7 +43,7 @@ const DIALOGUE: { who: "ruth" | "alexa" | "michael"; text: string }[] = [
   { who: "michael", text: "Michael opens the link in the text and taps: It wasn't me." },
   {
     who: "alexa",
-    text: "Michael says he did not call you, so you did the right thing by checking. Please don't send any money. Would you like help reporting this call?",
+    text: "Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?",
   },
 ];
 

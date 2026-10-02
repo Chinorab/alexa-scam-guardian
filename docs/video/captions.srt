@@ -20,7 +20,7 @@ Alexa: Done. I'll tell you when Michael answers.
 
 6
 00:00:26,000 --> 00:00:30,000
-Alexa: Michael says he did not call you, so you did the right thing by checking. Please don't send any money.
+Alexa: Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back.
 
 7
 00:00:30,000 --> 00:00:31,500

@@ -95,7 +95,7 @@ describe("user story 2: check with the real relative", () => {
 
     const news = await d.say("What's new?");
     expect(news.say).toBe(
-      "Michael says he did not call you, so you did the right thing by checking. Please don't send any money. Would you like help reporting this call?",
+      "Michael says he did not call you, so you did the right thing by checking. Please don't send any money, and hang up if they call back. Would you like help reporting this call?",
     );
     expect((await d.events()).unread).toBe(0);
   });
@@ -256,7 +256,7 @@ describe("user story 5: already paid and reporting", () => {
     );
     const second = await d.say("Yes");
     expect(second.say).toBe(
-      "Done. I let Sarah know. You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+      "Done, I let Sarah know. The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays. Would you like help reporting this call?",
     );
   });
 
@@ -277,8 +277,21 @@ describe("user story 5: already paid and reporting", () => {
     );
     const no = await d.say("No");
     expect(no.say).toBe(
-      "You can also call the National Elder Fraud Hotline at 833 372 8311 on weekdays for free help.",
+      "Okay, I didn't send anything. The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays. Would you like help reporting this call?",
     );
+    const report = await d.say("Yes");
+    expect(report.say).toBe(
+      "I put a summary on the screen with where to report it. Nothing was sent to any agency.",
+    );
+  });
+
+  it("answers a request for secrecy by saying that telling family is right", async () => {
+    const d = demo();
+    await d.start();
+    const reply = await d.say(
+      "My grandson called from jail, he said don't tell your parents and send gift cards.",
+    );
+    expect(reply.say).toMatch(/^Telling your family is the right thing to do\. /);
   });
 
   it("prepares the report after a denial, with the report card", async () => {
