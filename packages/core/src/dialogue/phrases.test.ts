@@ -36,6 +36,8 @@ function allLines(): string[] {
     `${phrases.whatToDo()} ${phrases.offerVerify(michael, sarah)}`,
     phrases.whatToDo(michael),
     phrases.intro(),
+    phrases.reassure(),
+    `${phrases.reassure()} ${phrases.offerVerify(michael)}`,
     phrases.dangerAtDoor(),
     phrases.danger(),
     phrases.sensitiveStop(),

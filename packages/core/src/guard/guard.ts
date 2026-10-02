@@ -13,7 +13,9 @@ export type GuardViolation =
   | "asks-sensitive"
   | "copy"
   | "length"
-  | "questions";
+  | "questions"
+  | "figures"
+  | "payment-advice";
 
 export interface GuardContext {
   /** Pre approved line used when the candidate fails. Must itself pass the guard. */
@@ -77,6 +79,25 @@ const ASKS_SENSITIVE =
 const ASKS_CONTACT =
   /\b(do you have|what('?s| is)|tell me|give me|share|can you (give|tell|read)( me)?)\b[^.?!]{0,40}\b(phone number|number|cell|email address|e-?mail|address)\b[^.!?]*\?/i;
 
+/**
+ * No figure without a source (constitution Principle VI): spoken lines never estimate how many
+ * people or how much. Official statistics live on the screen and in the README, with links.
+ */
+const FIGURES =
+  /\b(hundreds|thousands|millions|billions|dozens) of\b|\b\d+(\.\d+)?\s?(percent|%)|\b((half|a third|a quarter|most) of|most) (people|seniors|older adults|victims|americans|grandparents)\b/i;
+
+/** How a real payment is made is never advice, even to compare ("real lawyers take a check"). */
+const PAYMENT_ADVICE =
+  /\b(real|legitimate|actual|genuine)\s+(lawyers?|attorneys?|courts?|jails?|police|officers?|banks?|companies|businesses|agencies|government|irs)\b[^.!?]{0,40}\b(take|takes|accept|accepts|use|uses|ask for|asks for|would take|would ask for|want|wants)\b[^.!?]{0,40}\b(checks?|cards?|credit|debit|cash|wire|transfers?|payments?|money orders?)\b/i;
+
+/** "A real court would never ask for gift cards" is a warning, not advice. */
+function hasPaymentAdvice(line: string): boolean {
+  const match = PAYMENT_ADVICE.exec(line);
+  return match !== null && !NEGATED.test(match[0]);
+}
+
+const NEGATED = /\b(never|not|no|won'?t|wouldn'?t|don'?t|doesn'?t|isn'?t|can'?t)\b/i;
+
 function hasApproval(line: string): boolean {
   if (APPROVAL_PATTERNS.some((pattern) => pattern.test(line))) return true;
   for (const match of line.matchAll(PAY_ACTION)) {
@@ -136,6 +157,8 @@ export function findViolations(line: string, context: Omit<GuardContext, "fallba
   }
   if (CONTACT_CALLER.test(line) || ENGAGE_CALLER.test(line)) violations.push("contact-caller");
   if (ASKS_SENSITIVE.test(line) || ASKS_CONTACT.test(line)) violations.push("asks-sensitive");
+  if (FIGURES.test(line)) violations.push("figures");
+  if (hasPaymentAdvice(line)) violations.push("payment-advice");
   if (checkCopy(line).length > 0) violations.push("copy");
   if (sentences(line).length > 3) violations.push("length");
   if ((line.match(/\?/g) ?? []).length > 1) violations.push("questions");

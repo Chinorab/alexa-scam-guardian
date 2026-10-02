@@ -154,6 +154,10 @@ export const phrases = {
       ? `Please don't send any money, and hang up if they call back. Let's wait to hear from ${person.name}.`
       : "Please don't send any money, and hang up if they call back. Then check with your family on a number you know.",
 
+  /** They feel foolish: no blame, ever (constitution Principle V). */
+  reassure: () =>
+    "Please don't be hard on yourself. These scams are built to fool careful people, and you did the right thing by asking.",
+
   /** "Hello" or "What can you do?" before anything was said. */
   intro: () =>
     "I can help you check a call, text or email that worried you. Tell me what happened.",
