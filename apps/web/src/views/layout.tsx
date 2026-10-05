@@ -23,6 +23,8 @@ export function Layout(props: {
   bare?: boolean;
   children: Child;
 }) {
+  // Header and footer line up with the page they frame.
+  const frame = props.bare ? "page page-home" : props.device ? "page page-wide" : "page";
   return (
     <html lang="en">
       <head>
@@ -51,7 +53,7 @@ export function Layout(props: {
           Skip to content
         </a>
         <header class="site-header">
-          <div class={props.device ? "page page-wide" : "page"}>
+          <div class={frame}>
             <a class="brand" href="/" aria-current={props.current === "home" ? "page" : undefined}>
               <img src="/favicon.svg" alt="" width="40" height="40" />
               {PRODUCT_NAME}
@@ -62,6 +64,7 @@ export function Layout(props: {
                   <li>
                     <a
                       href={item.href}
+                      class={item.key === "echo" ? "nav-cta" : undefined}
                       aria-current={props.current === item.key ? "page" : undefined}
                     >
                       {item.label}
@@ -80,7 +83,7 @@ export function Layout(props: {
           {props.children}
         </main>
         <footer class="site-footer">
-          <div class={props.device ? "page page-wide" : "page"}>
+          <div class={frame}>
             <ul>
               <li>
                 <a href="/privacy">Privacy</a>

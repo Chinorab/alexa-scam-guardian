@@ -45,6 +45,23 @@ borders at least 4.7:1. axe WCAG 2.2 AA runs on every page in both themes in CI.
   caption is the largest text on its screen.
 - Numbers use tabular figures.
 
+## Composition (redesign 2026-10-05)
+
+The home page is a **roadside**. The hero is the shoulder: the promise on the left, the sign
+assembly standing at the edge of the road on the right, its post meeting the dark band below.
+That band **is the road**: asphalt with a fine aggregate, a white edge line and a dashed yellow
+center line, and the kitchen dialogue on it (Ruth plain, Alexa on a small Echo screen with its
+light ring, Michael as a phone notification). The rules are five white regulatory signs in one
+row, the 911 line a red octagon. Setup steps are numbered with US route markers (white shield
+on black, never red or blue: those mean other things here), beside the real family page on a
+phone. The page ends on the next step hung over the road on a gantry.
+
+| Surface | Container |
+|---|---|
+| Home | `.page-home`, 76 rem; header and footer line up with it |
+| Echo | `.page-wide`, 80 rem: visible title, the device on a band of speaker fabric, a console under it (voice controls, then the keyboard), the demo phone and the family page link beside it; an empty screen offers the example line in one tap |
+| Family page | `.page`, 60 rem: people as raised plates with roles as small guide signs, then the tasks as plates two side by side (password, settings, activity, delete) |
+
 ## Shape, space, depth
 
 - Signs: 10 px corners with an inset border (`--radius-sign`, `--sign-border-inset`).
