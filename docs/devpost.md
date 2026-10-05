@@ -1,6 +1,6 @@
 # Devpost submission draft
 
-Paste section by section into the Devpost form. The live demo link is filled in; add the video link after recording.
+Paste section by section into the Devpost form. The live demo and video links are filled in.
 Statistics: only the ones listed in docs/number-audit.md. Measurements: only the ones in docs/measurements.md.
 
 ## Submission checklist (deadline 2026-10-23, 12:00 PDT)
@@ -179,4 +179,4 @@ amazon-ses, amazon-polly, aws-cdk, typescript, hono, preact, playwright
 - Dataset: https://github.com/Chinorab/us-scam-patterns
 - Live demo (simulated Echo Show, no sign in): https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo
 - MCP server (Streamable HTTP, household token required): https://r6jd3gasvhmgofaffa3ninxgpy0sewoc.lambda-url.us-east-1.on.aws/mcp
-- Video: (paste the public YouTube or Vimeo link after upload)
+- Video (2 min 50 s, public on YouTube): https://youtu.be/P9RzZagbMyM

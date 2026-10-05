@@ -10,6 +10,8 @@ Social Security numbers, and never records anything.
 
 Built for the Amazon Developer Hackathon "Build, Ship, Shape", Alexa+ track.
 
+**Demo video** (2 min 50 s): [youtu.be/P9RzZagbMyM](https://youtu.be/P9RzZagbMyM)
+
 ![The simulated Echo Show naming two warning signs, each with its official source](docs/images/echo-warning-signs.png)
 
 ## Why
