@@ -63,6 +63,13 @@ async function recorder(browser: Browser, name: string, size: { width: number; h
       });
     }, DESKTOP_ZOOM);
   }
+  // The burned in captions sit where the footer is: hide it, keeping its space so nothing moves.
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      const footer = document.querySelector<HTMLElement>(".site-footer");
+      if (footer) footer.style.visibility = "hidden";
+    });
+  });
   await page.addInitScript(() => {
     let last = "";
     const watch = () => {
