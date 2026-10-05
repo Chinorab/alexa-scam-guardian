@@ -30,12 +30,14 @@ Requirements checked against the official rules (amazonappdev2026.devpost.com/ru
 
 ## Images
 
-- Thumbnail and first gallery image: [video/devpost-cover.png](video/devpost-cover.png)
-- Gallery: [images/home.png](images/home.png),
-  [images/echo-warning-signs.png](images/echo-warning-signs.png),
-  [images/echo-relative-answered.png](images/echo-relative-answered.png),
-  [images/family-phone.png](images/family-phone.png),
-  [video/04-architecture.png](video/04-architecture.png)
+Devpost shows the gallery at 3:2; these are cut to that ratio, in upload order.
+
+- Thumbnail and first gallery image: [gallery/01-cover.png](gallery/01-cover.png)
+- Gallery: [gallery/02-home.png](gallery/02-home.png),
+  [gallery/03-echo-warning-signs.png](gallery/03-echo-warning-signs.png),
+  [gallery/04-echo-relative-answered.png](gallery/04-echo-relative-answered.png),
+  [gallery/05-family-phone.png](gallery/05-family-phone.png),
+  [gallery/06-architecture.png](gallery/06-architecture.png)
 
 ## Name
 
