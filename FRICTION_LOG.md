@@ -88,6 +88,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 - **Severity:** Medium (blocks T080 and the cloud measurements; does not block code).
 - **Workaround:** Put the table behind a narrow interface, ran all 175 contract tests on the DynamoDB store through an in memory table with DynamoDB ordering rules, validated the stack with `cdk synth` and CDK assertions, and wrote `docs/deploy.md` for a one command deploy.
 - **Suggestion:** Hackathon resources could list the AWS credit or sandbox path for the AWS Builder challenge on the main Devpost page.
+- **Outcome:** Resolved the same day: the owner created the account and the stack was deployed and measured that evening (entries #7 to #9 cover what the first deploy found).
 
 ---
 

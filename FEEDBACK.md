@@ -76,7 +76,7 @@ One section per tool, SDK or API used. Updated as the project goes.
 
 ## AWS SDK for JavaScript v3 (DynamoDB document client, SES v2, Secrets Manager, SSM, Polly, Bedrock Runtime)
 
-- **Used for:** The DynamoDB store and demo phone, real email through SES v2, the master secret at cold start, the web URL parameter, Polly neural speech, and Bedrock Converse with tool use. Written and unit tested; not yet run against a real account (FRICTION_LOG.md #5), this section will be updated after the first deploy.
+- **Used for:** The DynamoDB store and demo phone, real email through SES v2, the master secret at cold start, the web URL parameter, Polly neural speech, and Bedrock Converse with tool use. Unit tested first against an in memory table (FRICTION_LOG.md #5), then run in production on the deployed stack since 2026-10-02.
 - **What worked well:** Same command pattern in every client. `removeUndefinedValues` on the document client avoids a whole class of marshalling errors. `ReturnValues: "ALL_OLD"` on delete gives single use sign in links in one call.
 - **What needs work:** Each client pulls many small packages; bundles are fine with esbuild (about 2 MB per function) but installs are slow. Testing without an account needs DynamoDB Local (Java or Docker); a pure JavaScript local table for tests would help.
 - **Onboarding:** Smooth; the types document every input.
@@ -137,12 +137,12 @@ One section per tool, SDK or API used. Updated as the project goes.
 
 ## Feature requests
 
-Each one comes from a friction we hit while building; the log entry has the details.
+Each one comes from a friction we hit while building; the log entry has the details. Priority uses the hackathon's scale: Critical, Important, Nice-to-have.
 
 | # | Request | Why it matters | Priority |
 |---|---|---|---|
-| 1 | Self-serve Alexa+ add-on testing for independent developers: open the MCP Toolkit, or publish the web simulator or Local Inspector. | Without it, a builder can match the add-on contract (MCP 2025-11-25, Streamable HTTP, MCP Apps) but never confirm it on a real Alexa+ device. We had to simulate the Echo Show. FRICTION_LOG.md #1. | High |
-| 2 | Bedrock Converse: stream the first sentence of a turn that ends in a tool call, or allow one round trip for a tool turn. | A tool turn is two Converse calls, about 3 s, which is the whole budget of a voice turn. We moved the exact parts of the conversation to rules for that reason. | High |
-| 3 | Lambda Function URLs: let `WWW-Authenticate` through on 401 responses, or document the renamed headers. | MCP authorization discovery reads that header; clients that look only there cannot find the protected resource metadata. FRICTION_LOG.md #9. | Medium |
-| 4 | Bedrock console: a note where the Model access page used to be, pointing to the use case form in the Model catalog. | A first time user with an access key had no permissions and no visible next step. FRICTION_LOG.md #7. | Medium |
-| 5 | MCP TypeScript SDK v2 docs: state the release status and latest version on the docs home. | We spent time confirming that v2 was the version to build on. FRICTION_LOG.md #2. | Low |
+| 1 | Self-serve Alexa+ add-on testing for independent developers: open the MCP Toolkit, or publish the web simulator or Local Inspector. | Without it, a builder can match the add-on contract (MCP 2025-11-25, Streamable HTTP, MCP Apps) but never confirm it on a real Alexa+ device. We had to simulate the Echo Show. FRICTION_LOG.md #1. | Critical |
+| 2 | Bedrock Converse: stream the first sentence of a turn that ends in a tool call, or allow one round trip for a tool turn. | A tool turn is two Converse calls, about 3 s, which is the whole budget of a voice turn. We moved the exact parts of the conversation to rules for that reason. | Important |
+| 3 | Lambda Function URLs: let `WWW-Authenticate` through on 401 responses, or document the renamed headers. | MCP authorization discovery reads that header; clients that look only there cannot find the protected resource metadata. FRICTION_LOG.md #9. | Important |
+| 4 | Bedrock console: a note where the Model access page used to be, pointing to the use case form in the Model catalog. | A first time user with an access key had no permissions and no visible next step. FRICTION_LOG.md #7. | Nice-to-have |
+| 5 | MCP TypeScript SDK v2 docs: state the release status and latest version on the docs home. | We spent time confirming that v2 was the version to build on. FRICTION_LOG.md #2. | Nice-to-have |
