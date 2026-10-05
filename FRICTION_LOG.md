@@ -4,7 +4,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #1 — Unclear access status of the Alexa+ MCP Toolkit
+## #1: Unclear access status of the Alexa+ MCP Toolkit
 
 - **Date:** 2026-10-01
 - **Task attempted:** Find out whether a solo external developer can connect a self-hosted MCP server to a real Alexa+ device for the hackathon.
@@ -29,7 +29,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #2 — MCP TypeScript SDK v2 release status hard to confirm from the docs
+## #2: MCP TypeScript SDK v2 release status hard to confirm from the docs
 
 - **Date:** 2026-10-01
 - **Task attempted:** Choose between MCP TypeScript SDK v1 and v2 for a server that must speak protocol 2025-11-25 (Alexa+) and ideally 2026-07-28.
@@ -45,7 +45,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #3 — TypeScript `latest` (7.0) is not supported by typescript-eslint
+## #3: TypeScript `latest` (7.0) is not supported by typescript-eslint
 
 - **Date:** 2026-10-01
 - **Task attempted:** Install the TypeScript toolchain for the monorepo (task T001 to T003).
@@ -60,7 +60,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #4 — Hono's built in Lambda adapter is deprecated, but only the type file says so
+## #4: Hono's built in Lambda adapter is deprecated, but only the type file says so
 
 - **Date:** 2026-10-02
 - **Task attempted:** Run the MCP server and the web app on AWS Lambda behind Function URLs (task T078).
@@ -76,7 +76,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #5 — No AWS account in this environment yet; cloud work proceeds without deploying
+## #5: No AWS account in this environment yet; cloud work proceeds without deploying
 
 - **Date:** 2026-10-02
 - **Task attempted:** Phase 6 (T076 to T080): DynamoDB, SES, Lambda, CDK, deploy and measure.
@@ -91,7 +91,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #6 — `pnpm dev` never started the web server on Windows
+## #6: `pnpm dev` never started the web server on Windows
 
 - **Date:** 2026-10-02
 - **Task attempted:** Run the quickstart from a clean clone (T109).
@@ -108,7 +108,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #7 — Bedrock "Model access" page gone; the access key flow leaves the user with no permissions
+## #7: Bedrock "Model access" page gone; the access key flow leaves the user with no permissions
 
 - **Date:** 2026-10-02
 - **Task attempted:** First AWS setup by the owner, following `docs/deploy.md` (T080 prerequisites).
@@ -124,7 +124,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #8 — `pnpm deploy` runs pnpm's own deploy command, not the project script
+## #8: `pnpm deploy` runs pnpm's own deploy command, not the project script
 
 - **Date:** 2026-10-02
 - **Task attempted:** First real deploy (T080) with the command from `docs/deploy.md`.
@@ -139,7 +139,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #9 — Lambda Function URLs rename `WWW-Authenticate`
+## #9: Lambda Function URLs rename `WWW-Authenticate`
 
 - **Date:** 2026-10-02
 - **Task attempted:** `pnpm smoke` against the first real deploy (T080).
@@ -154,7 +154,7 @@ Each entry is written at the moment the friction happens, never reconstructed af
 
 ---
 
-## #10 — The Echo dropped words while Alexa spoke (only visible with real Polly audio)
+## #10: The Echo dropped words while Alexa spoke (only visible with real Polly audio)
 
 - **Date:** 2026-10-02
 - **Task attempted:** The Playwright suite against the deployed site (T102).
