@@ -45,10 +45,42 @@ borders at least 4.7:1. axe WCAG 2.2 AA runs on every page in both themes in CI.
   caption is the largest text on its screen.
 - Numbers use tabular figures.
 
+## Composition (redesign 2026-10-05)
+
+The home page is a **roadside**. The hero is the shoulder: the promise on the left, the sign
+assembly standing at the edge of the road on the right, its post meeting the dark band below.
+That band **is the road**: asphalt with a fine aggregate, a white edge line and a dashed yellow
+center line, and the kitchen dialogue on it (Ruth plain, Alexa on a small Echo screen with its
+light ring, Michael as a phone notification). The rules are five white regulatory signs in one
+row, the 911 line a red octagon. Setup steps are numbered with US route markers (white shield
+on black, never red or blue: those mean other things here), beside the real family page on a
+phone. The page ends on the next step hung over the road on a gantry.
+
+### Reference system: Wise (redesign 2, 2026-10-05)
+
+The owner asked for a second pass with the taste, web design guidelines, awesome design (DESIGN.md
+library), image to code and Playwright CLI skills. Image generation was unavailable, so the
+reference images were screenshots of wise.com taken with Playwright CLI and read before coding.
+Taken from Wise: display headings in the heaviest weight, uppercase, set tight (Overpass 900,
+`--display-*` tokens); a sage surface (`#e8ebe6`, `--ground-raised`) for the hero band and every
+card, with elevation by surface contrast and no border in daylight (`--card-edge`, a hairline
+only at night); 24 px card corners (`--radius-card`); centered heading over a row of cards;
+a split section with the visual in a sage panel and a hairline ruled list beside it. Kept from
+us: the road sign world, one green accent, 12 px control corners (never pills), sentence case
+in the source (uppercase is CSS only), Atkinson Hyperlegible for reading text. The hero headline
+holds to three lines on a laptop and its subtext to under 20 words.
+
+| Surface | Container |
+|---|---|
+| Home | `.page-home`, 76 rem; header and footer line up with it |
+| Echo | `.page-wide`, 80 rem: visible title, the device on a band of speaker fabric, a console under it (voice controls, then the keyboard), the demo phone and the family page link beside it; an empty screen offers the example line in one tap |
+| Family page | `.page`, 60 rem: people as raised plates with roles as small guide signs, then the tasks as plates two side by side (password, settings, activity, delete) |
+
 ## Shape, space, depth
 
 - Signs: 10 px corners with an inset border (`--radius-sign`, `--sign-border-inset`).
-- Controls: rectangles with 8 px corners, never pills; 56 px tall touch targets.
+- Controls: rectangles with 12 px corners, never pills; 56 px tall touch targets.
+- Cards: 24 px corners on the sage surface, no border in daylight.
 - 4 px spacing scale (`--space-1` to `--space-9`), reading measure 66 characters.
 - One shadow for signs (raised off the ground), one for raised panels.
 

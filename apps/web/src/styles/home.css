@@ -1,59 +1,109 @@
-/* Home page (T101): a sign assembly, the kitchen dialogue on asphalt, regulatory sign rules. */
+/*
+ * Home page (T101): a roadside. The hero is the shoulder where the sign assembly stands, the
+ * dark band is the road itself, and the page ends on a sign over the road on its gantry.
+ */
 
 .main-bare {
   padding-block: 0;
 }
 
+/* On the home page the header sits on the hero band, one surface from the top. */
+.home .site-header {
+  background: var(--ground-raised);
+  border-bottom-color: transparent;
+}
+
 .section {
-  padding-block: var(--space-8) 0;
+  padding-block: var(--space-9) 0;
 }
 
-.section > h2:first-child {
-  margin-top: 0;
+.section-head {
+  max-width: 46rem;
+  margin-bottom: var(--space-7);
 }
 
-/* Hero */
+.section-head h2,
+.road-intro h2,
+.setup h2 {
+  margin: 0 0 var(--space-5);
+  font-size: clamp(2.25rem, 1.4rem + 2.8vw, 3.75rem);
+  font-weight: var(--display-weight);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* A section that is a row of cards opens centered, like the cards below it. */
+.section-head-center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-head-center .lead {
+  margin-inline: auto;
+}
+
+.section-head .lead {
+  margin: 0;
+}
+
+/* Hero: the shoulder of the road, a sage band the signpost stands on. */
 .hero {
-  padding-block: var(--space-7);
+  padding-top: clamp(var(--space-7), 6vw, var(--space-9));
+  background: var(--ground-raised);
   overflow: hidden;
 }
 
 .hero-grid {
   display: grid;
-  gap: var(--space-7);
-  align-items: center;
+  gap: var(--space-6);
 }
 
-@media (min-width: 52rem) {
+@media (min-width: 56rem) {
   .hero-grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    align-items: end;
   }
 }
 
-.hero h1 {
-  font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
-  letter-spacing: -0.02em;
-  max-width: 14ch;
+.hero-text {
+  align-self: center;
+  padding-bottom: var(--space-8);
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-  font-family: var(--font-sign);
-  font-weight: 750;
-  font-size: var(--text-sm);
-  letter-spacing: 0.06em;
+.hero h1 {
+  margin: 0 0 var(--space-6);
+  /* Three lines on a laptop: CHECK THE CALL / BEFORE YOU / SEND MONEY. */
+  font-size: clamp(2.75rem, 1.2rem + 4.6vw, 5.25rem);
+  font-weight: var(--display-weight);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
   text-transform: uppercase;
-  color: var(--ink-muted);
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+.hero-lead {
+  max-width: 30rem;
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-block: var(--space-6) var(--space-4);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 30rem) {
+  .hero-actions > .button {
+    flex: 1 1 100%;
+  }
 }
 
 .button-large {
@@ -68,9 +118,38 @@
   fill: currentColor;
 }
 
-.hero-note {
-  font-size: var(--text-sm);
-  color: var(--ink-muted);
+/* The primary action carries its arrow in a cell of its own, like a guide sign's arrow. */
+.button-go {
+  gap: var(--space-4);
+  padding-right: var(--space-2);
+}
+
+.button-go-arrow {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.6);
+  transition: translate 200ms var(--ease-out);
+}
+
+.button-go:hover .button-go-arrow,
+.button-go:focus-visible .button-go-arrow {
+  translate: 3px 0;
+}
+
+/* The post stands on the road: no gap between the roadside and the band below. */
+.hero-roadside {
+  display: grid;
+  justify-items: center;
+  align-self: end;
+}
+
+.hero-roadside .signpost {
+  font-size: clamp(0.95rem, 0.45rem + 1.35vw, 1.65rem);
+  padding-bottom: 4em;
 }
 
 /* The sign assembly. Sizes are in em so one font size scales the whole post. */
@@ -294,22 +373,90 @@
   flex: none;
 }
 
-/* The dialogue band, always asphalt like the Echo screen */
-.band {
-  margin-top: var(--space-8);
-  padding-block: var(--space-8);
+/* Services and guide sign panels as links */
+.services-sign {
+  --sign-bg: var(--sign-services);
+  background: var(--sign-services);
+  padding: var(--space-4) var(--space-6) var(--space-5);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: var(--text-lg);
+  transition: filter 160ms var(--ease-out);
 }
 
-.band h2 {
-  margin-top: 0;
+.services-sign:hover,
+.guide-link:hover {
+  filter: brightness(1.1);
+}
+
+.guide-link {
+  --sign-bg: var(--sign-guide);
+  background: var(--sign-guide);
+  padding: var(--space-5) var(--space-7) var(--space-6);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.guide-link-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: clamp(1.6rem, 1.1rem + 1.8vw, 2.75rem);
+}
+
+/* The road: asphalt with a white edge line and a dashed yellow center line. */
+.road {
+  position: relative;
+  background-color: var(--ground);
+  /* Fine aggregate, barely there: asphalt is never a flat fill. */
+  background-image: radial-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1.4px);
+  background-size: 7px 7px;
+}
+
+.road-markings {
+  height: 3.25rem;
+  background:
+    linear-gradient(#e9ecee, #e9ecee) 0 0.85rem / 100% 5px no-repeat,
+    repeating-linear-gradient(90deg, #e8b500 0 4.5rem, transparent 4.5rem 8rem) 0 2.35rem / 100% 6px
+      no-repeat;
+}
+
+.road-grid {
+  display: grid;
+  gap: var(--space-7);
+  padding-block: var(--space-7) var(--space-9);
+}
+
+@media (min-width: 60rem) {
+  .road-grid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+  }
+
+  .road-intro {
+    position: sticky;
+    top: var(--space-6);
+  }
+}
+
+.road-intro h2 {
   color: var(--ink);
+  font-size: clamp(2.25rem, 1.6rem + 1.6vw, 3rem);
+}
+
+.road-note {
+  margin: var(--space-5) 0 var(--space-6);
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
 }
 
 .dialogue {
   list-style: none;
   padding: 0;
-  margin: var(--space-6) 0 0;
-  max-width: 48rem;
+  margin: 0;
+  max-width: none;
   display: grid;
   gap: var(--space-4);
 }
@@ -320,9 +467,10 @@
 
 .line {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-2);
+  margin: 0;
   padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-sign);
+  border-radius: 16px;
 }
 
 .line p {
@@ -340,35 +488,62 @@
 
 .line-ruth {
   justify-self: start;
-  max-width: 36rem;
+  max-width: 32rem;
+  border-radius: 16px 16px 16px 4px;
   background: var(--ground-raised);
 }
 
+/* Alexa speaks from a little Echo screen, its light ring along the bottom edge. */
 .line-alexa {
+  position: relative;
   justify-self: end;
-  max-width: 40rem;
+  max-width: 36rem;
+  padding-bottom: calc(var(--space-5) + 6px);
+  background: #12171a;
+  font-family: var(--font-sign);
   font-size: var(--text-lg);
-  line-height: 1.4;
-  border-left: 0.4rem solid var(--ring-listening);
-  background: #263038;
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 14px 30px rgb(4 8 10 / 0.45);
 }
 
+.line-alexa::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  bottom: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ring-listening);
+}
+
+/* Michael answers on his phone: a notification, in daylight. */
 .line-michael {
   justify-self: center;
-  border: 2px dashed var(--rule);
-  color: var(--ink-muted);
-  text-align: center;
+  max-width: 28rem;
+  padding: var(--space-3) var(--space-5);
+  border-radius: 18px;
+  background: #f4f5f2;
+  color: #15191c;
+  box-shadow: 0 12px 26px rgb(4 8 10 / 0.4);
 }
 
-/* Rules as white regulatory signs */
+.line-michael .line-who {
+  color: #4a5257;
+}
+
+/* Rules as white regulatory signs, one row on a wide screen */
 .promises {
   list-style: none;
   padding: 0;
-  margin: var(--space-6) 0 0;
+  margin: 0;
   max-width: none;
   display: grid;
-  gap: var(--space-5);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--space-4);
 }
 
 .promises li + li {
@@ -378,25 +553,33 @@
 .promise {
   display: grid;
   align-content: start;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+  text-align: center;
 }
 
 .regulatory {
   display: grid;
+  align-content: center;
+  gap: 0.15em;
+  min-height: 8.5rem;
   margin: 0;
-  padding: var(--space-4) var(--space-4);
+  padding: var(--space-4);
   border-radius: var(--radius-sign);
   background: #ffffff;
   color: #111417;
   box-shadow:
-    inset 0 0 0 4px #ffffff,
-    inset 0 0 0 7px #111417,
-    var(--shadow-raised);
+    inset 0 0 0 5px #ffffff,
+    inset 0 0 0 9px #111417,
+    0 10px 24px rgb(21 25 28 / 0.14),
+    0 2px 6px rgb(21 25 28 / 0.12);
   font-family: var(--font-sign);
   font-weight: 800;
   text-transform: uppercase;
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .regulatory span:first-child {
@@ -405,51 +588,104 @@
 }
 
 .regulatory span:last-child {
-  font-size: var(--text-lg);
+  font-size: 1.4rem;
+  text-wrap: balance;
 }
 
 .promise-detail {
   margin: 0;
   color: var(--ink-muted);
+  text-wrap: pretty;
 }
 
+/* 911: the one red sign on the page */
 .stop-line {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
+  gap: var(--space-5);
+  max-width: none;
+  margin-top: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+  font-size: var(--text-lg);
   font-weight: 700;
 }
 
-.stop-mark {
-  width: 2.25rem;
-  aspect-ratio: 1;
+.stop-sign {
+  position: relative;
   flex: none;
-  background: var(--sign-stop);
+  width: 5rem;
+  aspect-ratio: 1;
+  background: #ffffff;
   clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
 }
 
-/* Family setup steps, numbered like route markers */
+.stop-sign span {
+  position: absolute;
+  inset: 4px;
+  display: grid;
+  place-items: center;
+  background: var(--sign-stop);
+  color: #ffffff;
+  clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+/* Setup: route markers, and the real family page on a phone */
+.setup {
+  display: grid;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .setup {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-9);
+  }
+}
+
+/* The phone stands in a sage panel, the way a product photo sits in a card. */
+.setup-visual {
+  display: grid;
+  place-items: center;
+  padding: var(--space-8) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+}
+
+@media (max-width: 55.99rem) {
+  .setup-visual {
+    order: 2;
+  }
+}
+
 .steps {
   list-style: none;
   padding: 0;
-  margin: var(--space-6) 0 var(--space-6);
-  display: grid;
-  gap: var(--space-5);
+  margin: var(--space-6) 0 var(--space-7);
   max-width: none;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  display: grid;
 }
 
+/* A list ruled like a statement: hairlines between the steps, no boxes. */
 .steps li {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-4);
+  grid-template-columns: 3.5rem 1fr;
+  gap: var(--space-5);
   align-items: start;
-  margin-top: 0;
+  margin: 0;
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--rule);
 }
 
 .steps h3 {
-  margin-top: 0.2rem;
+  margin: 0.35rem 0 var(--space-2);
+  font-size: var(--text-lg);
 }
 
 .steps p {
@@ -457,39 +693,91 @@
   color: var(--ink-muted);
 }
 
-.step-mark {
-  display: grid;
-  place-items: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: var(--radius-control);
-  background: var(--sign-guide);
-  color: var(--sign-legend);
-  box-shadow:
-    inset 0 0 0 3px var(--sign-guide),
-    inset 0 0 0 5px var(--sign-legend);
-  font-family: var(--font-sign);
-  font-weight: 800;
-  font-size: var(--text-lg);
+.route-shield {
+  width: 3.5rem;
+  height: 3.5rem;
+  filter: drop-shadow(0 4px 8px rgb(21 25 28 / 0.18));
 }
 
-/* Sources */
+.route-shield-ground {
+  fill: #111417;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.route-shield-face {
+  fill: #ffffff;
+}
+
+.route-shield-number {
+  fill: #111417;
+  font-family: var(--font-sign);
+  font-weight: 800;
+  font-size: 19px;
+}
+
+/* The phone: a dark bezel around the real screenshot, concentric corners. */
+.phone-frame {
+  justify-self: center;
+  width: min(100%, 21rem);
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 2.6rem;
+  background: #15191c;
+  box-shadow:
+    inset 0 0 0 2px #2d3439,
+    0 32px 60px rgb(21 25 28 / 0.26),
+    0 8px 18px rgb(21 25 28 / 0.16);
+}
+
+.phone-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(2.6rem - 0.75rem);
+}
+
+/* What Alexa listens for: the patterns, and where to report beside them */
+.listens-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+}
+
+@media (min-width: 60rem) {
+  .listens-grid {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .report-aside {
+    position: sticky;
+    top: var(--space-6);
+  }
+}
+
 .patterns {
   list-style: none;
   padding: 0;
-  margin: var(--space-6) 0 0;
+  margin: 0;
   max-width: none;
-  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 0 var(--space-6);
 }
 
 .patterns li {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--space-1) var(--space-3);
-  align-items: center;
+  align-items: start;
   margin: 0;
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--rule);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+.patterns .sign-diamond {
+  margin-top: 0.3rem;
 }
 
 .pattern-name {
@@ -498,63 +786,96 @@
 
 .pattern-sources {
   grid-column: 2;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-4);
+  display: grid;
+  gap: var(--space-1);
   font-size: var(--text-sm);
 }
 
-@media (min-width: 48rem) {
-  .patterns li {
-    grid-template-columns: auto minmax(14rem, 1fr) minmax(0, 1.4fr);
-  }
-  .pattern-sources {
-    grid-column: 3;
-    justify-content: end;
-    text-align: end;
-  }
+.report-aside {
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--ground-raised);
+}
+
+.report-aside h3 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xl);
+}
+
+.report-aside p {
+  margin: 0;
+  color: var(--ink-muted);
 }
 
 .report-signs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: var(--space-4);
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 
-.services-sign {
-  --sign-bg: var(--sign-services);
-  background: var(--sign-services);
-  padding: var(--space-4) var(--space-6);
-  font-family: var(--font-sign);
-  font-weight: 800;
-  font-size: var(--text-lg);
-}
-
-.services-sign:hover,
-.guide-link:hover {
-  filter: brightness(1.1);
-}
-
-/* Closing: the whole call to action is a guide sign */
+/* Closing: the next step hung over the road on a gantry */
 .closing {
+  margin-top: var(--space-9);
+}
+
+.gantry {
+  position: relative;
   display: grid;
   justify-items: center;
-  padding-bottom: var(--space-9);
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  margin-inline: auto;
+  padding: 0 var(--space-7) 4.5rem;
+  /* The crossbar behind the sign */
+  background: linear-gradient(90deg, #6f777c, #8a9298 30%, #b9c0c4 50%, #8a9298 70%, #6f777c) 0
+    38% / 100% 0.75rem no-repeat;
 }
 
-.guide-link {
-  --sign-bg: var(--sign-guide);
-  background: var(--sign-guide);
-  padding: var(--space-5) var(--space-7) var(--space-6);
-  font-family: var(--font-sign);
-  font-weight: 800;
-  text-transform: uppercase;
+.gantry::before,
+.gantry::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  bottom: 0;
+  width: 0.9rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #6f777c, #8a9298 40%, #b9c0c4 55%, #8a9298 70%);
 }
 
-.guide-link-legend {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
+.gantry::before {
+  left: 0;
+}
+
+.gantry::after {
+  right: 0;
+}
+
+.road-end {
+  padding-bottom: var(--space-7);
+}
+
+@media (max-width: 40rem) {
+  .gantry {
+    padding-inline: var(--space-5);
+  }
+
+  .stop-line {
+    align-items: flex-start;
+    padding: var(--space-5);
+  }
+
+  .stop-sign {
+    width: 4rem;
+  }
+
+  .report-aside {
+    padding: var(--space-4);
+  }
+
+  /* A long web address may break rather than push the page sideways. */
+  .services-sign {
+    padding-inline: var(--space-4);
+    font-size: var(--text-base);
+    overflow-wrap: anywhere;
+  }
 }

@@ -43,9 +43,14 @@ function Icon(props: { svg: string }) {
   return <span class="icon" aria-hidden="true" dangerouslySetInnerHTML={{ __html: props.svg }} />;
 }
 
+/** What the Echo says before anything was asked. */
+const OPENING_LINE = "Tell me what happened on the call.";
+/** The example offered on the empty screen, as the intro above suggests. */
+const EXAMPLE = "My grandson just called. He's in jail and needs gift cards for bail.";
+
 export function EchoShow(props: { pollMs: number }) {
   const [device, setDevice] = useState<StartResponse>();
-  const [caption, setCaption] = useState("Tell me what happened on the call.");
+  const [caption, setCaption] = useState(OPENING_LINE);
   const [heard, setHeard] = useState<string>();
   const [cards, setCards] = useState<Card[]>([]);
   const [light, setLight] = useState<LightState>("idle");
@@ -238,7 +243,7 @@ export function EchoShow(props: { pollMs: number }) {
     await resetDemo(device.deviceId).catch(() => undefined);
     setCards([]);
     setHeard(undefined);
-    setCaption("Tell me what happened on the call.");
+    setCaption(OPENING_LINE);
     setPhone([]);
     setLight("idle");
     openUntil.current = 0;
@@ -273,6 +278,23 @@ export function EchoShow(props: { pollMs: number }) {
                 {caption}
               </span>
             </p>
+            {caption === OPENING_LINE && !heard && cards.length === 0 && (
+              // First visit: the example, one tap away, instead of an empty screen.
+              <div class="echo-try">
+                <p class="echo-try-label">Try saying</p>
+                <button
+                  type="button"
+                  class="echo-try-line"
+                  disabled={busy}
+                  onClick={() => {
+                    lastInputWasVoice.current = false;
+                    void send(EXAMPLE);
+                  }}
+                >
+                  {EXAMPLE}
+                </button>
+              </div>
+            )}
             {light === "notification" && (
               // FR-009: a quiet card; what the family said is only spoken when asked.
               <div class="echo-news" data-testid="news-card">
@@ -306,67 +328,61 @@ export function EchoShow(props: { pollMs: number }) {
           <LightBar state={light} />
         </figure>
 
-        <div class="echo-controls">
-          <button
-            type="button"
-            class="button echo-talk"
-            onClick={toggleTalk}
-            disabled={!device || !voiceInputSupported}
-            aria-pressed={listening}
-          >
-            <Icon svg={micIcon} />
-            {listening ? "Stop listening" : "Talk"}
-          </button>
-          <button
-            type="button"
-            class="button button-secondary"
-            onClick={() => void send("Repeat")}
-            disabled={!device || busy}
-          >
-            <Icon svg={repeatIcon} />
-            Repeat
-          </button>
-          <button
-            type="button"
-            class="button button-secondary"
-            onClick={() => void startOver()}
-            disabled={!device}
-          >
-            <Icon svg={resetIcon} />
-            Start over
-          </button>
-        </div>
-        {device?.householdKind === "demo" && (
-          <form method="post" action="/family/demo" class="echo-family">
-            <input type="hidden" name="deviceId" value={device.deviceId} />
-            <button type="submit" class="button button-secondary">
-              Open {device.olderAdultFirstName}'s family page
+        <div class="echo-console">
+          <div class="echo-controls">
+            <button
+              type="button"
+              class="button echo-talk"
+              onClick={toggleTalk}
+              disabled={!device || !voiceInputSupported}
+              aria-pressed={listening}
+            >
+              <Icon svg={micIcon} />
+              {listening ? "Stop listening" : "Talk"}
             </button>
-          </form>
-        )}
-        {!voiceInputSupported && (
-          <p class="echo-hint">Voice input works in Chrome and Edge. You can type instead.</p>
-        )}
-
-        <form class="echo-type" onSubmit={submit}>
-          <label for="echo-input">Type what you want to say</label>
-          <div class="echo-type-row">
-            <input
-              id="echo-input"
-              name="text"
-              type="text"
-              autocomplete="off"
-              value={draft}
-              onInput={(event) => setDraft((event.target as HTMLInputElement).value)}
-              placeholder="My grandson called and needs bail money"
-            />
-            {/* Typing works from the first moment; sending waits for the demo device. */}
-            <button class="button" type="submit" disabled={busy}>
-              <Icon svg={sendIcon} />
-              Send
+            <button
+              type="button"
+              class="button button-secondary"
+              onClick={() => void send("Repeat")}
+              disabled={!device || busy}
+            >
+              <Icon svg={repeatIcon} />
+              Repeat
+            </button>
+            <button
+              type="button"
+              class="button button-secondary"
+              onClick={() => void startOver()}
+              disabled={!device}
+            >
+              <Icon svg={resetIcon} />
+              Start over
             </button>
           </div>
-        </form>
+          {!voiceInputSupported && (
+            <p class="echo-hint">Voice input works in Chrome and Edge. You can type instead.</p>
+          )}
+
+          <form class="echo-type" onSubmit={submit}>
+            <label for="echo-input">Type what you want to say</label>
+            <div class="echo-type-row">
+              <input
+                id="echo-input"
+                name="text"
+                type="text"
+                autocomplete="off"
+                value={draft}
+                onInput={(event) => setDraft((event.target as HTMLInputElement).value)}
+                placeholder="My grandson called and needs bail money"
+              />
+              {/* Typing works from the first moment; sending waits for the demo device. */}
+              <button class="button" type="submit" disabled={busy}>
+                <Icon svg={sendIcon} />
+                Send
+              </button>
+            </div>
+          </form>
+        </div>
         {problem && (
           <p role="alert" class="echo-problem">
             {problem}
@@ -374,7 +390,18 @@ export function EchoShow(props: { pollMs: number }) {
         )}
       </div>
 
-      <DemoPhone messages={phone} onAnswered={() => void refreshPhone()} />
+      <div class="echo-side">
+        <DemoPhone messages={phone} onAnswered={() => void refreshPhone()} />
+        {device?.householdKind === "demo" && (
+          <form method="post" action="/family/demo" class="echo-family">
+            <input type="hidden" name="deviceId" value={device.deviceId} />
+            <p>Michael and Sarah are saved on this demo family's page.</p>
+            <button type="submit" class="button button-secondary">
+              Open {device.olderAdultFirstName}'s family page
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

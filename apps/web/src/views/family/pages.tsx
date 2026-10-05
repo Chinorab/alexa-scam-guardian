@@ -328,72 +328,86 @@ export function FamilyHome(props: {
         </a>
       </p>
 
-      <h2 id="family-password">Family password</h2>
-      <p>
-        A secret word or phrase a real relative can say to prove who they are.{" "}
-        <a href="https://www.ic3.gov/PSA/2024/PSA241203">The FBI suggests families agree on one.</a>{" "}
-        {props.hasPassword
-          ? "A family password is set. It is stored scrambled and can never be shown, only replaced or removed."
-          : "No family password is set."}
-      </p>
-      <form method="post" action="/family/password" class="form" novalidate>
-        <ErrorSummary errors={props.passwordErrors ?? {}} />
-        <Field
-          id="password"
-          label={props.hasPassword ? "New family password" : "Family password"}
-          error={props.passwordErrors?.password}
-        >
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autocomplete="new-password"
-            aria-describedby={describedBy("password", false, props.passwordErrors?.password)}
+      {/* The rest of the page as plates: each task on its own, two side by side when wide. */}
+      <div class="panels">
+        <section class="panel">
+          <h2 id="family-password">Family password</h2>
+          <p>
+            A secret word or phrase a real relative can say to prove who they are.{" "}
+            <a href="https://www.ic3.gov/PSA/2024/PSA241203">
+              The FBI suggests families agree on one.
+            </a>{" "}
+            {props.hasPassword
+              ? "A family password is set. It is stored scrambled and can never be shown, only replaced or removed."
+              : "No family password is set."}
+          </p>
+          <form method="post" action="/family/password" class="form" novalidate>
+            <ErrorSummary errors={props.passwordErrors ?? {}} />
+            <Field
+              id="password"
+              label={props.hasPassword ? "New family password" : "Family password"}
+              error={props.passwordErrors?.password}
+            >
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                aria-describedby={describedBy("password", false, props.passwordErrors?.password)}
+              />
+            </Field>
+            <Field id="confirm" label="Type it again" error={props.passwordErrors?.confirm}>
+              <input
+                id="confirm"
+                name="confirm"
+                type="password"
+                autocomplete="new-password"
+                aria-describedby={describedBy("confirm", false, props.passwordErrors?.confirm)}
+              />
+            </Field>
+            <button class="button" type="submit">
+              {props.hasPassword ? "Replace password" : "Save password"}
+            </button>
+          </form>
+          {props.hasPassword && (
+            <form method="post" action="/family/password/delete">
+              <button class="button button-secondary" type="submit">
+                Remove the family password
+              </button>
+            </form>
+          )}
+        </section>
+
+        <section class="panel">
+          <h2 id="settings">Settings</h2>
+          <SettingsForm
+            firstName={name}
+            waitMinutes={props.household.waitMinutes}
+            errors={props.settingsErrors}
           />
-        </Field>
-        <Field id="confirm" label="Type it again" error={props.passwordErrors?.confirm}>
-          <input
-            id="confirm"
-            name="confirm"
-            type="password"
-            autocomplete="new-password"
-            aria-describedby={describedBy("confirm", false, props.passwordErrors?.confirm)}
-          />
-        </Field>
-        <button class="button" type="submit">
-          {props.hasPassword ? "Replace password" : "Save password"}
-        </button>
-      </form>
-      {props.hasPassword && (
-        <form method="post" action="/family/password/delete">
-          <button class="button button-secondary" type="submit">
-            Remove the family password
-          </button>
-        </form>
-      )}
+        </section>
 
-      <h2 id="settings">Settings</h2>
-      <SettingsForm
-        firstName={name}
-        waitMinutes={props.household.waitMinutes}
-        errors={props.settingsErrors}
-      />
+        <section class="panel">
+          <h2 id="activity-title">Activity</h2>
+          <p>Every check Alexa made for {name}, with any report summary.</p>
+          <p class="panel-actions">
+            <a class="button button-secondary" href="/family/activity">
+              See recent checks and report summaries
+            </a>
+            <a href="/echo">Open {name}'s simulated Echo</a>
+          </p>
+        </section>
 
-      <h2>Activity</h2>
-      <p>
-        <a href="/family/activity">See recent checks and report summaries</a>
-      </p>
-      <p>
-        <a href="/echo">Open {name}'s simulated Echo</a>
-      </p>
-
-      <h2 id="delete">Delete everything</h2>
-      <p>Erase every person, the family password and every check, right away.</p>
-      <p>
-        <a class="button button-danger" href="/family/delete-all">
-          Delete all household data
-        </a>
-      </p>
+        <section class="panel">
+          <h2 id="delete">Delete everything</h2>
+          <p>Erase every person, the family password and every check, right away.</p>
+          <p>
+            <a class="button button-danger" href="/family/delete-all">
+              Delete all household data
+            </a>
+          </p>
+        </section>
+      </div>
 
       <form method="post" action="/family/sign-out" class="sign-out">
         <button class="button button-secondary" type="submit">

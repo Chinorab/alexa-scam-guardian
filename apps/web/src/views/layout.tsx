@@ -23,6 +23,8 @@ export function Layout(props: {
   bare?: boolean;
   children: Child;
 }) {
+  // Header and footer line up with the page they frame.
+  const frame = props.bare ? "page page-home" : props.device ? "page page-wide" : "page";
   return (
     <html lang="en">
       <head>
@@ -31,6 +33,8 @@ export function Layout(props: {
         <title>{`${props.title} | ${PRODUCT_NAME}`}</title>
         <meta name="description" content={props.description} />
         <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1f2326" media="(prefers-color-scheme: dark)" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={PRODUCT_NAME} />
         <meta property="og:title" content={`${props.title} | ${PRODUCT_NAME}`} />
@@ -46,12 +50,12 @@ export function Layout(props: {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="stylesheet" href="/assets/site.css" />
       </head>
-      <body class={props.device ? "theme-asphalt" : undefined}>
+      <body class={props.device ? "theme-asphalt" : props.bare ? "home" : undefined}>
         <a class="skip-link" href="#main">
           Skip to content
         </a>
         <header class="site-header">
-          <div class={props.device ? "page page-wide" : "page"}>
+          <div class={frame}>
             <a class="brand" href="/" aria-current={props.current === "home" ? "page" : undefined}>
               <img src="/favicon.svg" alt="" width="40" height="40" />
               {PRODUCT_NAME}
@@ -62,6 +66,7 @@ export function Layout(props: {
                   <li>
                     <a
                       href={item.href}
+                      class={item.key === "echo" ? "nav-cta" : undefined}
                       aria-current={props.current === item.key ? "page" : undefined}
                     >
                       {item.label}
@@ -80,7 +85,7 @@ export function Layout(props: {
           {props.children}
         </main>
         <footer class="site-footer">
-          <div class={props.device ? "page page-wide" : "page"}>
+          <div class={frame}>
             <ul>
               <li>
                 <a href="/privacy">Privacy</a>
