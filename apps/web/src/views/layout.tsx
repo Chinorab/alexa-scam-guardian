@@ -33,6 +33,8 @@ export function Layout(props: {
         <title>{`${props.title} | ${PRODUCT_NAME}`}</title>
         <meta name="description" content={props.description} />
         <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1f2326" media="(prefers-color-scheme: dark)" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={PRODUCT_NAME} />
         <meta property="og:title" content={`${props.title} | ${PRODUCT_NAME}`} />
@@ -48,7 +50,7 @@ export function Layout(props: {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="stylesheet" href="/assets/site.css" />
       </head>
-      <body class={props.device ? "theme-asphalt" : undefined}>
+      <body class={props.device ? "theme-asphalt" : props.bare ? "home" : undefined}>
         <a class="skip-link" href="#main">
           Skip to content
         </a>

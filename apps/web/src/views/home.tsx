@@ -141,9 +141,8 @@ export function HomePage() {
           <div class="hero-text">
             <h1 id="hero-title">Check the call before you send money.</h1>
             <p class="lead hero-lead">
-              For calls that sound just like family. Ruth hangs up and tells Alexa what happened.
-              Alexa names the warning signs and checks with her grandson on the number the family
-              saved.
+              Hang up and tell Alexa what happened. It names the warning signs and checks with your
+              real family first.
             </p>
             <div class="hero-actions">
               <a class="button button-large button-go" href="/echo">
@@ -192,7 +191,7 @@ export function HomePage() {
       </section>
 
       <section class="page page-home section rules" aria-labelledby="promises-title">
-        <div class="section-head">
+        <div class="section-head section-head-center">
           <h2 id="promises-title">Rules it keeps, every time</h2>
           <p class="lead">
             Built into the tools Alexa uses, and checked again on every sentence before it is
@@ -219,6 +218,17 @@ export function HomePage() {
       </section>
 
       <section class="page page-home section setup" aria-labelledby="family-title">
+        <div class="setup-visual">
+          <figure class="phone-frame">
+            <img
+              src="/images/family-phone.png"
+              width="390"
+              height="780"
+              loading="lazy"
+              alt="The family page on a phone: Ruth's family, with Michael saved as the grandson Alexa can check with."
+            />
+          </figure>
+        </div>
         <div class="setup-text">
           <h2 id="family-title">Set it up from your phone</h2>
           <ol class="steps">
@@ -236,15 +246,6 @@ export function HomePage() {
             Set up your family
           </a>
         </div>
-        <figure class="phone-frame">
-          <img
-            src="/images/family-phone.png"
-            width="390"
-            height="780"
-            loading="lazy"
-            alt="The family page on a phone: Ruth's family, with Michael saved as the grandson Alexa can check with."
-          />
-        </figure>
       </section>
 
       <section class="page page-home section listens" aria-labelledby="sources-title">

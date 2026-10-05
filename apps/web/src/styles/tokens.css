@@ -19,7 +19,9 @@
 
   /* Daylight theme: family page default */
   --ground: #ffffff;
-  --ground-raised: #f1f3f4;
+  /* Wise-style elevation: a sage surface against white, never a border. */
+  --ground-raised: #e8ebe6;
+  --card-edge: transparent;
   --ink: #15191c;
   --ink-muted: #4a5257;
   --rule: #c7cdd1;
@@ -40,6 +42,10 @@
   --text-xl: 1.953rem;
   --text-2xl: 2.441rem;
   --text-3xl: 3.052rem;
+  /* Display: Overpass at full weight, set tight like a sign legend. */
+  --display-weight: 900;
+  --display-leading: 0.94;
+  --display-tracking: -0.025em;
   --leading-text: 1.55;
   --leading-tight: 1.15;
   --measure: 66ch;
@@ -57,7 +63,8 @@
 
   /* Shape: sign corners with an inset border, rectangular controls */
   --radius-sign: 10px;
-  --radius-control: 8px;
+  --radius-control: 12px;
+  --radius-card: 24px;
   --sign-border-inset: 3px;
   --control-height: 3.5rem; /* 56px touch target */
   --focus-ring: 0 0 0 3px var(--ground), 0 0 0 6px var(--focus);
@@ -86,6 +93,8 @@
 :root[data-theme="dark"] {
   --ground: #1f2326;
   --ground-raised: #2a2f33;
+  /* At night the surface step is small: a hairline keeps each card's edge. */
+  --card-edge: #3c4349;
   --ink: #f4f5f2;
   --ink-muted: #c3c9cd;
   --rule: #3c4349;
@@ -102,6 +111,8 @@
   :root:not([data-theme="light"]) {
     --ground: #1f2326;
     --ground-raised: #2a2f33;
+    /* At night the surface step is small: a hairline keeps each card's edge. */
+    --card-edge: #3c4349;
     --ink: #f4f5f2;
     --ink-muted: #c3c9cd;
     --rule: #3c4349;

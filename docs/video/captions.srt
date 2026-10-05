@@ -1,163 +1,163 @@
 1
-00:00:03,439 --> 00:00:05,496
+00:00:03,450 --> 00:00:05,507
 Ruth: Alexa, my grandson just called.
 
 2
-00:00:05,496 --> 00:00:09,943
+00:00:05,507 --> 00:00:09,954
 Ruth: He's in jail and needs two thousand dollars in gift cards for bail.
 
 3
-00:00:10,743 --> 00:00:12,387
+00:00:10,754 --> 00:00:12,398
 Alexa: I'm glad you asked me first.
 
 4
-00:00:12,387 --> 00:00:16,262
+00:00:12,398 --> 00:00:16,273
 Alexa: The emergency story and the gift cards are common signs of a scam.
 
 5
-00:00:16,262 --> 00:00:20,079
+00:00:16,273 --> 00:00:20,090
 Alexa: Should I text Michael to check, and tell Sarah you got this call?
 
 6
-00:00:20,879 --> 00:00:21,599
+00:00:20,890 --> 00:00:21,610
 Ruth: Yes.
 
 7
-00:00:22,399 --> 00:00:25,231
+00:00:22,410 --> 00:00:25,242
 Alexa: Done. I'll tell you when Michael answers.
 
 8
-00:00:27,831 --> 00:00:31,997
+00:00:27,842 --> 00:00:32,008
 Alexa: Michael says he did not call you, so you did the right thing by checking.
 
 9
-00:00:31,997 --> 00:00:35,364
+00:00:32,008 --> 00:00:35,375
 Alexa: Please don't send any money, and hang up if they call back.
 
 10
-00:00:35,364 --> 00:00:37,647
+00:00:35,375 --> 00:00:37,658
 Alexa: Would you like help reporting this call?
 
 11
-00:00:37,997 --> 00:00:41,981
+00:00:38,008 --> 00:00:41,992
 Scam Guardian is an Alexa+ add-on for the moment right after a scary call.
 
 12
-00:00:42,197 --> 00:00:47,066
+00:00:42,208 --> 00:00:47,077
 The FTC's advice is simple: hang up, and check with your family on a number you know.
 
 13
-00:00:47,066 --> 00:00:50,045
+00:00:47,077 --> 00:00:50,056
 Scam Guardian turns that advice into a conversation.
 
 14
-00:00:50,447 --> 00:00:51,839
+00:00:50,443 --> 00:00:51,835
 Ruth: So can I pay him?
 
 15
-00:00:52,639 --> 00:00:57,631
+00:00:52,635 --> 00:00:57,627
 Alexa: Let's not send any money yet. First, call your family on a number you know.
 
 16
-00:00:58,431 --> 00:01:01,455
+00:00:58,427 --> 00:01:01,451
 Ruth: He's still on the other phone, he says I have to hurry.
 
 17
-00:01:02,255 --> 00:01:07,919
+00:01:02,251 --> 00:01:07,915
 Alexa: You can hang up now. A real family member will understand. Then tell me what happened.
 
 18
-00:01:08,719 --> 00:01:11,599
+00:01:08,715 --> 00:01:11,595
 Ruth: My card number is four one two two three three
 
 19
-00:01:12,399 --> 00:01:13,705
+00:01:12,395 --> 00:01:13,701
 Alexa: Let me stop you there.
 
 20
-00:01:13,705 --> 00:01:18,927
+00:01:13,701 --> 00:01:18,923
 Alexa: Please don't share numbers like that with me or anyone on the phone. We don't need them.
 
 21
-00:01:19,727 --> 00:01:22,847
+00:01:19,723 --> 00:01:22,843
 Ruth: There's a man at my door, he says he's here for the money.
 
 22
-00:01:23,647 --> 00:01:29,143
+00:01:23,643 --> 00:01:29,139
 Alexa: Don't open the door and don't hand over money. If you feel unsafe, call 911 now.
 
 23
-00:01:29,793 --> 00:01:33,495
+00:01:29,789 --> 00:01:33,491
 It never says a payment is safe. It never contacts the caller.
 
 24
-00:01:33,495 --> 00:01:37,017
+00:01:33,491 --> 00:01:37,013
 It never takes card numbers. And it never records the call.
 
 25
-00:01:37,042 --> 00:01:38,866
+00:01:37,043 --> 00:01:38,867
 Ruth: Yes, help me report it.
 
 26
-00:01:39,666 --> 00:01:44,610
+00:01:39,667 --> 00:01:44,611
 Alexa: I put a summary on the screen with where to report it. Nothing was sent to any agency.
 
 27
-00:01:46,984 --> 00:01:49,576
+00:01:47,011 --> 00:01:49,603
 Ruth: I already bought the cards and read him the numbers.
 
 28
-00:01:50,376 --> 00:01:54,866
+00:01:50,403 --> 00:01:54,893
 Alexa: Thank you for telling me. Call the company that sold the gift card right away.
 
 29
-00:01:54,866 --> 00:01:58,032
+00:01:54,893 --> 00:01:58,059
 Alexa: Should I tell Sarah you got this call, so she can help?
 
 30
-00:01:58,832 --> 00:01:59,552
+00:01:58,859 --> 00:01:59,579
 Ruth: Yes.
 
 31
-00:02:00,352 --> 00:02:02,209
+00:02:00,379 --> 00:02:02,236
 Alexa: Done, I let Sarah know.
 
 32
-00:02:02,209 --> 00:02:08,426
+00:02:02,236 --> 00:02:08,453
 Alexa: The National Elder Fraud Hotline at 833 372 8311 gives free help on weekdays.
 
 33
-00:02:08,426 --> 00:02:11,656
+00:02:08,453 --> 00:02:11,683
 Alexa: Would you like help reporting this call?
 
 34
-00:02:13,306 --> 00:02:16,450
+00:02:13,333 --> 00:02:16,477
 No blame, one first step, and the family knows.
 
 35
-00:02:16,750 --> 00:02:21,622
+00:02:16,777 --> 00:02:21,649
 A grandchild sets it up from their phone: who Alexa can check with, and who gets a heads up.
 
 36
-00:02:21,622 --> 00:02:24,694
+00:02:21,649 --> 00:02:24,721
 An optional family password, and a history of every check.
 
 37
-00:02:27,764 --> 00:02:31,858
+00:02:27,757 --> 00:02:31,851
 Under the hood is a real MCP server with eight tools, on AWS Lambda.
 
 38
-00:02:31,858 --> 00:02:34,207
+00:02:31,851 --> 00:02:34,200
 The safety rules live inside the tools.
 
 39
-00:02:34,207 --> 00:02:41,372
+00:02:34,200 --> 00:02:41,365
 Rules answer what must be exact, and Claude Haiku on Amazon Bedrock answers the open questions, through the same guard.
 
 40
-00:02:41,764 --> 00:02:47,687
+00:02:41,757 --> 00:02:47,680
 Seventy five adversarial phrases run on every push, and the scam patterns are open source.
 
 41
-00:02:47,687 --> 00:02:50,188
+00:02:47,680 --> 00:02:50,181
 Hang up. Ask Alexa. Check with family.
