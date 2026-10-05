@@ -5,20 +5,34 @@ Statistics: only the ones listed in docs/number-audit.md. Measurements: only the
 
 ## Submission checklist (deadline 2026-10-23, 12:00 PDT)
 
-1. Video: watch `video-out/scam-guardian-demo.mp4` (`pnpm video:compose` rebuilds it; see
-   docs/video/README.md), or record a new take with `pnpm demo:play`. Upload it to YouTube or
-   Vimeo as public or unlisted, under 3 minutes, and paste the link below and in the form.
+Requirements checked against the official rules (amazonappdev2026.devpost.com/rules) on
+2026-10-05.
+
+1. Video: `video-out/scam-guardian-demo.mp4`, 2 min 50 s (`pnpm video:compose` rebuilds it;
+   see docs/video/README.md). The rules ask for less than 3 minutes, **publicly visible** on
+   YouTube or Vimeo (not unlisted). Upload with the title "Scam Guardian for Alexa+", paste
+   the link in Links below and in the form; captions: docs/video/captions.srt.
 2. Live site: open the demo link from a clean browser; run `pnpm smoke <web url> <mcp url>`.
-3. Repository: every pull request merged into main, CI green on main.
+3. Repository: public with the MIT license, every pull request merged into main, CI green on
+   main. The runtime use of the track technology is in the code: the MCP server
+   (apps/mcp-server) and the simulated Alexa+ that calls it through the official MCP client
+   (apps/web/src/agent).
 4. Form: paste each section below; images from the Images list; links from Links.
-5. Mini challenges, if entered: AWS Builder (README section "AWS") and Open Source (the
-   dataset repository, MIT).
-6. After judging: delete the IAM user used to deploy, or run `pnpm --filter @asg/infra destroy`.
+5. Category: Alexa+ track (simulated Alexa+ experience calling a self-hosted MCP server over
+   Streamable HTTP, MCP 2025-11-25 and 2026-07-28).
+6. Product feedback form: one entry per tool from FEEDBACK.md (what worked well, what needs
+   work, onboarding, would you build with it again). Feature requests: the table at the end of
+   FEEDBACK.md (request, why it matters, priority).
+7. Friction log (scoring bonus up to 10%): the ten entries of FRICTION_LOG.md, each with task,
+   steps, expected, actual, severity, workaround and suggestion.
+8. Mini challenges: see the Mini challenges section below.
+9. After judging: delete the IAM user used to deploy, or run `pnpm --filter @asg/infra destroy`.
 
 ## Images
 
 - Thumbnail and first gallery image: [video/devpost-cover.png](video/devpost-cover.png)
-- Gallery: [images/echo-warning-signs.png](images/echo-warning-signs.png),
+- Gallery: [images/home.png](images/home.png),
+  [images/echo-warning-signs.png](images/echo-warning-signs.png),
   [images/echo-relative-answered.png](images/echo-relative-answered.png),
   [images/family-phone.png](images/family-phone.png),
   [video/04-architecture.png](video/04-architecture.png)
@@ -118,9 +132,13 @@ someone who starts reading one out), and never records anything.
 - Zero WCAG 2.2 AA violations from axe on every page, in light and dark, and a keyboard only
   walkthrough of the Echo.
 - Measured on AWS: 302 ms median answer per turn, about 1.3 seconds for a free question the
-  model answers, the three MCP tools of the main flow under 300 ms at p95. The red team against the real model:
-  151 of 151.
+  model answers, the three MCP tools of the main flow under 300 ms at p95. The red team against
+  the real model (75 attacks, each as a first sentence and again after a check): 150 of 150
+  handled.
 - Every warning sign and every number links to an official source.
+- A visual language older adults already read on the road: yellow diamonds for warning
+  signs, green for the next step, blue for where to report, red only for 911. Body text never
+  below 20 px, and the Echo answers in short sentences, one question at a time.
 - Robust by test, not by hope: 120 malformed MCP tool calls and 20 malformed web requests
   end cleanly, one household can never read or act on another's check, and the Echo's
   screen cards are audited for accessibility inside their sandboxed frames.
@@ -141,10 +159,24 @@ only into the prompt, made the model's job smaller and the product easier to tru
 alexa-plus, model-context-protocol, mcp-apps, amazon-bedrock, claude, aws-lambda, dynamodb,
 amazon-ses, amazon-polly, aws-cdk, typescript, hono, preact, playwright
 
+## Mini challenges
+
+- AWS Builder: Amazon Bedrock (Converse API with tool use, Claude Haiku 4.5) for the full
+  mode, plus Lambda, DynamoDB, SES, Polly, Secrets Manager and CDK. Integrations documented in
+  README.md (section AWS) and docs/deploy.md.
+- Open Source: the scam pattern dataset, created during the hackathon under MIT.
+  - Contribution URL: https://github.com/Chinorab/us-scam-patterns
+  - Project repository URL: https://github.com/Chinorab/alexa-scam-guardian
+  - GitHub username: Chinorab
+  - Description: Common US phone scam patterns (family emergency, government impersonation,
+    tech support, romance, prize, courier, cryptocurrency and more), each warning sign written
+    only from FTC and FBI alerts with a link to its source, as versioned JSON with a schema.
+    Scam Guardian reads it to name the warning signs it heard.
+
 ## Links
 
 - Code: https://github.com/Chinorab/alexa-scam-guardian
 - Dataset: https://github.com/Chinorab/us-scam-patterns
 - Live demo (simulated Echo Show, no sign in): https://qsamsshulgn2ixg665ez3caziu0vvkku.lambda-url.us-east-1.on.aws/echo
 - MCP server (Streamable HTTP, household token required): https://r6jd3gasvhmgofaffa3ninxgpy0sewoc.lambda-url.us-east-1.on.aws/mcp
-- Video: (after recording)
+- Video: (paste the public YouTube or Vimeo link after upload)
