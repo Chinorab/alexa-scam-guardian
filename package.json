@@ -36,7 +36,8 @@
     "tool-latency": "pnpm --filter @asg/web tool-latency",
     "video:voices": "pnpm --filter @asg/web exec tsx scripts/video/voices.ts",
     "video:record": "pnpm --filter @asg/tests video:record",
-    "video:compose": "pnpm --filter @asg/web exec tsx scripts/video/compose.ts"
+    "video:compose": "pnpm --filter @asg/web exec tsx scripts/video/compose.ts",
+    "video:motion": "pnpm --filter @asg/tests video:motion"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

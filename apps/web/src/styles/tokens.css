@@ -69,6 +69,14 @@
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-sign: 420ms;
+  /* Headlights crossing retroreflective sheeting: the signs flare once, then rest. */
+  --duration-glint: 1100ms;
+  --glint: linear-gradient(
+    100deg,
+    transparent 0 40%,
+    rgb(255 255 255 / 0.62) 50%,
+    transparent 60% 100%
+  );
 
   color-scheme: light;
 }
@@ -107,6 +115,22 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-sign: 0ms;
+  }
+}
+
+/* The headlight sweep, shared by every sign that catches the light. */
+@keyframes headlights {
+  0% {
+    opacity: 0;
+    background-position: 130% 0;
+  }
+  18%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-position: -30% 0;
   }
 }
 

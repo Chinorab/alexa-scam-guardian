@@ -84,6 +84,19 @@
   text-wrap: pretty;
 }
 
+/* Each new line Alexa says settles in from just below, quickly: a turn, not a show. */
+.echo-caption-text {
+  display: block;
+  animation: caption-in 280ms var(--ease-out) both;
+}
+
+@keyframes caption-in {
+  from {
+    opacity: 0;
+    translate: 0 0.3em;
+  }
+}
+
 .echo-cards {
   display: grid;
   gap: var(--space-4);
@@ -143,9 +156,29 @@
   }
 }
 
+@keyframes message-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.75rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .light-bar {
     animation: none !important;
+  }
+
+  /* No movement; the new line and the new message still fade in, so the change is seen. */
+  .echo-caption-text,
+  .phone-message {
+    animation-name: fade-in;
+    animation-duration: 160ms;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -258,7 +291,9 @@
   text-align: center;
 }
 
+/* A message arrives at the top of the phone, like a notification sliding in. */
 .phone-message {
+  animation: message-in 360ms var(--ease-out) both;
   background: #ffffff;
   border-radius: 14px;
   padding: var(--space-3) var(--space-4);

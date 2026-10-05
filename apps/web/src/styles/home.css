@@ -101,30 +101,109 @@
   background: linear-gradient(90deg, #6f777c, var(--pole) 40%, #b9c0c4 55%, var(--pole) 70%);
 }
 
+/*
+ * The focal moment of the site: the post goes up from the ground, the three signs are bolted
+ * on top to bottom, then one pass of headlights makes their sheeting flare, once.
+ */
+.signpost-pole {
+  transform-origin: 50% 100%;
+  animation: pole-rise 520ms var(--ease-out) both;
+}
+
 .signpost > :not(.signpost-pole) {
   position: relative;
   z-index: 1;
   animation: sign-raise var(--duration-sign) var(--ease-out) both;
+  animation-delay: 200ms;
 }
 
 .signpost > :nth-child(2) {
-  animation-delay: 120ms;
+  animation-delay: 320ms;
 }
 
 .signpost > :nth-child(3) {
-  animation-delay: 240ms;
+  animation-delay: 440ms;
+}
+
+/* The glint layer: on the guide and services panels it covers the panel; on the diamond it
+   takes the diamond's own rotated square. */
+.signpost-guide::after,
+.signpost-services::after,
+.guide-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--glint) no-repeat;
+  background-size: 260% 100%;
+  opacity: 0;
+}
+
+.signpost-diamond::after {
+  content: "";
+  grid-area: 1 / 1;
+  width: 70.7%;
+  aspect-ratio: 1;
+  rotate: 45deg;
+  border-radius: 0.7em;
+  pointer-events: none;
+  /* Rotated with the square, so the beam still crosses the page level. */
+  background: linear-gradient(
+      55deg,
+      transparent 0 40%,
+      rgb(255 255 255 / 0.62) 50%,
+      transparent 60% 100%
+    )
+    no-repeat;
+  background-size: 260% 260%;
+  opacity: 0;
+}
+
+.signpost-diamond::after,
+.signpost-guide::after,
+.signpost-services::after {
+  animation: headlights var(--duration-glint) var(--ease-out) 1 both;
+  animation-delay: 1000ms;
+}
+
+.signpost-guide::after {
+  animation-delay: 1120ms;
+}
+
+.signpost-services::after {
+  animation-delay: 1240ms;
+}
+
+/* The sign you are about to take catches the light. */
+.guide-link {
+  position: relative;
+}
+
+.guide-link:hover::after,
+.guide-link:focus-visible::after {
+  animation: headlights 800ms var(--ease-out) 1 both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .signpost > * {
-    animation: none;
+  .signpost > *,
+  .signpost-pole,
+  .signpost > *::after,
+  .guide-link::after {
+    animation: none !important;
   }
 }
 
 @keyframes sign-raise {
   from {
     opacity: 0;
-    translate: 0 0.75em;
+    translate: 0 -0.6em;
+  }
+}
+
+@keyframes pole-rise {
+  from {
+    scale: 1 0;
   }
 }
 

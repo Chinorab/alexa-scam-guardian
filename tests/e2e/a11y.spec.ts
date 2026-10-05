@@ -203,3 +203,20 @@ for (const width of [640, 320]) {
     await overflow("member form");
   });
 }
+
+test("reduced motion: the signs are simply there, and new lines only fade in", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const home = await page.evaluate(() =>
+    document.getAnimations().map((a) => (a as CSSAnimation).animationName),
+  );
+  expect(home).toEqual([]);
+  await openEcho(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await say(page, OPENING);
+  await expect(caption(page)).toContainText("Should I text Michael");
+  const echo = await page.evaluate(() =>
+    document.getAnimations().map((a) => (a as CSSAnimation).animationName),
+  );
+  expect(echo.filter((name) => name !== "fade-in")).toEqual([]);
+});

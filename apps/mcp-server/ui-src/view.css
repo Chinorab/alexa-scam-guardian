@@ -66,6 +66,77 @@ body {
   filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.35));
 }
 
+/* Headlights cross each diamond once, just after it lands, top sign first. */
+.diamond .glint {
+  opacity: 0;
+  animation: glint-pass 900ms cubic-bezier(0.16, 1, 0.3, 1) 380ms both;
+}
+
+.sign:nth-child(2) .glint {
+  animation-delay: 500ms;
+}
+.sign:nth-child(3) .glint {
+  animation-delay: 620ms;
+}
+.sign:nth-child(4) .glint {
+  animation-delay: 740ms;
+}
+
+@keyframes glint-pass {
+  0% {
+    opacity: 0;
+    transform: translateX(-22px) skewX(-20deg);
+  }
+  25%,
+  65% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(74px) skewX(-20deg);
+  }
+}
+
+/* A yellow row or panel catches the same light as it lands. */
+.status-row.warning,
+.sign-panel.warning {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-row.warning::after,
+.sign-panel.warning::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+      100deg,
+      transparent 0 40%,
+      rgb(255 255 255 / 0.55) 50%,
+      transparent 60% 100%
+    )
+    no-repeat;
+  background-size: 260% 100%;
+  opacity: 0;
+  animation: sheet-glint 1000ms cubic-bezier(0.16, 1, 0.3, 1) 380ms both;
+}
+
+@keyframes sheet-glint {
+  0% {
+    opacity: 0;
+    background-position: 130% 0;
+  }
+  20%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-position: -30% 0;
+  }
+}
+
 .sign h2 {
   font-size: 34px;
   font-weight: 800;
@@ -131,7 +202,10 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .sign,
-  .status-row {
+  .status-row,
+  .diamond .glint,
+  .status-row.warning::after,
+  .sign-panel.warning::after {
     animation: none;
   }
 }
